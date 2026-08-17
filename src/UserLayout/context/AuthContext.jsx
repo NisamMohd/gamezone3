@@ -15,7 +15,9 @@ export function AuthProvider({ children }) {
       return null;
     }
   });
+//   ==================================================================================================
 
+// register function
   const register = async (userinfo) => {
     setIsLoading(true);
 
@@ -42,7 +44,26 @@ export function AuthProvider({ children }) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }
+//   ==================================================================================================
+
+// login function 
+    const login = async (email,passwd) => {
+      const {data : loggedUser} = await api.get(`/users?email=${email}&password=${passwd}`)
+    
+
+    if(loggedUser.length == 0){
+      setError("invalid credentials")
+      return {success : false}
+
+    }
+
+    setUser(loggedUser[0])
+    localStorage.setItem("user",JSON.stringify(loggedUser[0]))
+
+    return { success: true }
+  }
+  
   return (
     <AuthContext.Provider
       value={{
@@ -52,6 +73,7 @@ export function AuthProvider({ children }) {
         setError,
         isLoading,
         register,
+        login,
       }}
     >
       {children}

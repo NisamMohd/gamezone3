@@ -1,0 +1,282 @@
+{
+  "users": [
+    {
+      "name": "Nisam Mohd",
+      "email": "nisammohd514@gmail.com",
+      "password": "nisam123",
+      "createdAt": "2026-08-03T13:05:59.939Z",
+      "role": "user",
+      "id": "ODYOA6i7HMM"
+    }
+  ],
+  "products": [
+    {
+      "id": "1",
+      "category": "playstation",
+      "title": "PlayStaion 4 with console x 1",
+      "image": "https://i5.walmartimages.com/asr/94cb84a2-2e1f-4688-bc1c-300cf0de9843.5b3b6feb8172bb2dd1ebc78fc3bc2ea0.jpeg",
+      "price": 12599,
+      "stock": 0
+    },
+    {
+      "id": "2",
+      "category": "playstation",
+      "title": "PS5 Slim + console x 1",
+      "image": "https://i.pinimg.com/1200x/89/47/5d/89475d9a656d38564cd6d02ce9abd48d.jpg",
+      "price": 24999,
+      "stock": 3
+    },
+    {
+      "id": "3",
+      "category": "playstation",
+      "title": "PS6 + console x 1",
+      "image": "https://i.pinimg.com/736x/38/fc/8b/38fc8bed8af35de6e2b7c86a2bde70f0.jpg",
+      "price": 32999,
+      "stock": 10
+    },
+    {
+      "id": "4",
+      "category": "playstation",
+      "title": "PS6 Neon lightning effect + console x 1",
+      "image": "https://i.pinimg.com/736x/b5/91/eb/b591eb5785f75999986f21ea0ea13310.jpg",
+      "price": 34999,
+      "stock": 10
+    },
+    {
+      "id": "5",
+      "category": "playstation",
+      "title": "Sony PS6 Special Edition + special Edition Console",
+      "image": "https://i.pinimg.com/736x/b6/27/38/b62738c3ba2aba4b3294dafbf6da9050.jpg",
+      "price": 74599,
+      "stock": 9
+    },
+    {
+      "id": "6",
+      "category": "playstation",
+      "title": "PlayStation5 PRO + console x 1",
+      "image": "https://i.pinimg.com/736x/fd/88/ac/fd88ac67d6d2b89121d2e608fdfad66f.jpg",
+      "price": 49999,
+      "stock": 1
+    },
+    {
+      "id": "7",
+      "category": "playstation",
+      "title": "PS5 Gold Edition + Console x 1 + HeadPhone x 1",
+      "image": "https://i.pinimg.com/1200x/66/4e/6c/664e6c53a670bc3498da19bc310ac795.jpg",
+      "price": 52999,
+      "stock": 10
+    },
+    {
+      "id": "8",
+      "category": "playstation",
+      "title": "PlayStation 4 Black + Console x 1",
+      "image": "https://i.pinimg.com/1200x/04/64/b9/0464b93c4efb72b50d11e0855c2c1ac0.jpg",
+      "price": 16499,
+      "stock": 0
+    },
+    {
+      "id": "9",
+      "category": "playstation",
+      "title": "PS 4 Limited Edition + console x 1",
+      "image": "https://i.pinimg.com/1200x/88/10/94/881094d342327c9aaa592466b75edc75.jpg",
+      "price": 19999,
+      "stock": 2
+    },
+    {
+      "id": "10",
+      "category": "playstation",
+      "title": "PlayStation 5 white",
+      "image": "https://i.pinimg.com/736x/b4/6b/92/b46b92edaeaebd9d923ab1ba3303179c.jpg",
+      "price": 22000,
+      "stock": 5
+    },
+    {
+      "id": "11",
+      "category": "console",
+      "title": "Sony DualSense PS5 x 1",
+      "image": "https://i.pinimg.com/1200x/57/3a/73/573a7380c93c857209258a963ecdc10e.jpg",
+      "price": 2599,
+      "stock": 6
+    },
+    {
+      "id": "12",
+      "category": "console",
+      "title": "Controller PS5 Dual Sense x 1",
+      "image": "https://i.pinimg.com/vwebp/1200x/44/ba/07/44ba070e3ce7f45a73634342bf57191f.webp",
+      "price": 4999,
+      "stock": 3
+    },
+    {
+      "id": "13",
+      "category": "console",
+      "title": "xbox controller x 1",
+      "image": "https://i.pinimg.com/1200x/0d/f7/10/0df71081262490df9213c2a118ad99b8.jpg",
+      "price": 4999,
+      "stock": 1
+    },
+    {
+      "id": "14",
+      "category": "console",
+      "title": "POPeArt NAVY FAS-830 controller x 1",
+      "image": "https://i.pinimg.com/1200x/0f/60/b7/0f60b776411fd2d35b6ff987cba7ec5f.jpg",
+      "price": 5999,
+      "stock": 8
+    },
+    {
+      "id": "15",
+      "category": "console",
+      "title": "POPeArt IRON_MAN Edition",
+      "image": "https://i.pinimg.com/1200x/da/70/49/da70494c93553e2fc44477dbf247978a.jpg",
+      "price": 5599,
+      "stock": 3
+    },
+    {
+      "id": "16",
+      "category": "console",
+      "title": "POPeArt Avatar Edition x 1",
+      "image": "https://i.pinimg.com/1200x/b3/f2/04/b3f204a374d52a19ae50f3866de0982e.jpg",
+      "price": 5599,
+      "stock": 10
+    },
+    {
+      "id": "17",
+      "category": "console",
+      "title": "POPeArt CyberPunk x 1",
+      "image": "https://i.pinimg.com/1200x/d6/7d/bb/d67dbbc8075b215d7be1574c15da2608.jpg",
+      "price": 6999,
+      "stock": 0
+    },
+    {
+      "id": "18",
+      "category": "console",
+      "title": "POPeArt SYPRO-THE-DRAGON x 1",
+      "image": "https://i.pinimg.com/1200x/77/3d/1e/773d1ec9599eb24752bdb8454c5d5aa0.jpg",
+      "price": 6499,
+      "stock": 2
+    },
+    {
+      "id": "19",
+      "category": "console",
+      "title": "POPeArt Rainbow console x 1",
+      "image": "https://i.pinimg.com/1200x/0f/48/a9/0f48a9e0f0a2526ddce3d08d55b14432.jpg",
+      "price": 5999,
+      "stock": 7
+    },
+    {
+      "id": "20",
+      "category": "console",
+      "title": "POPeArt Hello Kitty",
+      "image": "https://i.pinimg.com/1200x/0f/c3/9a/0fc39ab5740d94b5a81e1a968ee70eed.jpg",
+      "price": 7499,
+      "stock": 5
+    },
+    {
+      "id": "21",
+      "category": "accessories",
+      "title": "ASUS Radeon RX 9060 XT Prime 8GB OC Graphics Card",
+      "image": "https://i.pinimg.com/736x/b9/18/34/b91834ef8d95336319f1927211e7186b.jpg",
+      "price": 2599,
+      "stock": 6
+    },
+    {
+      "id": "22",
+      "category": "accessories",
+      "title": "Asus Prime GeForce RTX 5060 Ti",
+      "image": "https://i.pinimg.com/736x/5a/b7/7f/5ab77f258d01975ebf523e760882c96f.jpg",
+      "price": 4999,
+      "stock": 3
+    },
+    {
+      "id": "23",
+      "category": "accessories",
+      "title": "ASUS ROG Strix GeForce RTX 4090 OC Edition 24GB GDDR6X High‑Performance GPU",
+      "image": "https://i.pinimg.com/736x/75/1b/66/751b665a59b34dffe195e04057aab0c3.jpg",
+      "price": 4999,
+      "stock": 1
+    },
+    {
+      "id": "24",
+      "category": "accessories",
+      "title": "Mac Gaming Headset",
+      "image": "https://i.pinimg.com/1200x/94/e8/ec/94e8ece378b24b9f966b8b66501d9250.jpg",
+      "description": "A beautiful gaming headset with microphone, gaming headphones stereo 7.1 surround sound PS4 headset 50mm Drivers, 3.5mm audio jack over ear wired headphones for PC, Switch, Xbox, PS4, PS5, Laptop.",
+      "price": 5999,
+      "stock": 8
+    },
+    {
+      "id": "25",
+      "category": "accessories",
+      "title": "Ultimate PlayStation Gaming Accessories Kit",
+      "image": "https://i.pinimg.com/736x/7a/98/65/7a9865ff1b77a1208a0d3cacbc1bb6af.jpg",
+      "description": "A premium collection of **PlayStation DualSense Wireless Controller accessories including headset, charging gear, and gaming essentials. Perfect setup for PlayStation gamers",
+      "price": 5599,
+      "stock": 3
+    },
+    {
+      "id": "26",
+      "category": "accessories",
+      "title": "JBL Tune 720BT - Wireless",
+      "image": "https://i.pinimg.com/1200x/57/71/2f/57712f7c1014b09b3a76437adb471a98.jpg",
+      "description": "Turn up the bass without the wires! 🎶 The JBL Tune 720BT delivers 50hrs of playtime, deep JBL Pure Bass, and all-day comfort. Perfect for workouts, travel, or just jamming out. Pin now to upgrade your sound!",
+      "price": 5599,
+      "stock": 10
+    },
+    {
+      "id": "27",
+      "category": "accessories",
+      "title": "Thrustmaster Ferrari Red Legend | Racing Game Wheel | PC/PS3",
+      "image": "https://i.pinimg.com/1200x/12/1d/da/121ddaace20845f6549dc8e10745ef9c.jpg",
+      "price": 6999,
+      "stock": 9
+    },
+    {
+      "id": "28",
+      "category": "accessories",
+      "title": "Hyper x quadcast",
+      "image": "https://i.pinimg.com/736x/71/10/f1/7110f1fa46cc882ce8096000312f36eb.jpg",
+      "description": "The HyperX QuadCast is a versatile and high-quality USB microphone designed to cater to the needs of content creators, streamers, and gamers alike. With its sleek and modern design, this microphone not only looks great but also delivers exceptional audio performance.",
+      "price": 6499,
+      "stock": 2
+    },
+    {
+      "id": "29",
+      "category": "accessories",
+      "title": "Kingston Fury RGB Beast 16GB DDR5 RGB Desktop UDIMM RAM Kit 2x 8GB - 5600MT/s - CL40 - DIMM Intel XMP [KF556C40BBAK2-16]",
+      "image": "https://i.pinimg.com/1200x/23/3c/49/233c499b9f8313213262c2d44ab9e518.jpg",
+      "description": "Dispatched within 2 business days via DHL Express. Estimated delivery after dispatch: • 1-3 business days (NSW, VIC, ACT, QLD, SA) • 1-4 business days (WA, TAS, NT) Delivery timeframes are estimates and may vary for remote areas or during peak periods. No delivery to PO Boxes and Parcel Locker. Please note that this item is located outside Australia. Product complies with Australian standards. Kingston Fury RGB Beast 16GB DDR5 RGB Desktop UDIMM RAM Kit 2x 8GB - 5600MT/s - CL40 - DIMM Intel XMP Kingston FURY Beast DDR5 RGB Memory up to 6000MT/s* Kingston FURY™ Beast DDR5 RGB lets you overclock in style on next-gen gaming platforms with cutting-edge technology. Experience the superior speed advancements of DDR5 with double the banks and double the burst length. Vibrant RGB lighting customisa",
+      "price": 5999,
+      "stock": 7
+    },
+    {
+      "id": "30",
+      "category": "accessories",
+      "title": "Samsung Odyssey OLED G8: 34-inch curved gaming monitor presented with 175 Hz refresh rate and Samsung Gaming Hub",
+      "image": "https://i.pinimg.com/1200x/08/9d/6d/089d6da77b3d43bf12aa54c4d9111550.jpg",
+      "description": "Samsung Odyssey OLED G8: 34-inch curved gaming monitor presented with 175 Hz refresh rate and Samsung Gaming Hub ",
+      "price": 7499,
+      "stock": 5
+    }
+  ],
+  "orders": [],
+  "carts": [
+    {
+      "userId": "ODYOA6i7HMM",
+      "productId": "1",
+      "title": "PlayStaion 4 with console x 1",
+      "price": 12599,
+      "image": "https://i5.walmartimages.com/asr/94cb84a2-2e1f-4688-bc1c-300cf0de9843.5b3b6feb8172bb2dd1ebc78fc3bc2ea0.jpeg",
+      "quantity": 2,
+      "id": "Y1vlv07AJpY"
+    },
+    {
+      "userId": "ODYOA6i7HMM",
+      "productId": "2",
+      "title": "PS5 Slim + console x 1",
+      "price": 24999,
+      "image": "https://i.pinimg.com/1200x/89/47/5d/89475d9a656d38564cd6d02ce9abd48d.jpg",
+      "quantity": 2,
+      "id": "DmVqmep_m-o"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

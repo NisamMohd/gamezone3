@@ -1,39 +1,21 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { formValidation } from "../utils/register";
-import { User, Mail, Lock, ShieldCheck, Gamepad2 } from "lucide-react";
+import { Mail, Lock, Gamepad2 } from "lucide-react";
 
-function Register() {
-  const { register, error, setError, isLoading } = useAuth();
-  const [cpasswd, setCPasswd] = useState("");
-  const [userInfo, setUserInfo] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
+function Login() {
+  const [email, setEmail] = useState("");
+  const [passwd, setPasswd] = useState("");
+  const { login, error, setError, isLoading } = useAuth();
 
   const navigate = useNavigate();
-
-  const handleChange = (e) => {
-    setUserInfo({
-      ...userInfo,
-      [e.target.name]: e.target.value,
-    });
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError && setError(null);
 
-    const validate = formValidation(userInfo, cpasswd);
-    if (!validate.valid) {
-      setError(validate.message);
-      return;
-    }
-
-    const res = await register(userInfo);
-    if (res.success) {
+    const response = await login(email, passwd);
+    if (response.success) {
       navigate("/");
     }
   };
@@ -102,7 +84,7 @@ function Register() {
           <Gamepad2 size={40} className="text-cyan-400 mb-6" strokeWidth={1.5} />
 
           <p className="font-tech text-xs tracking-[0.3em] text-gray-400 mb-3">
-            NEW PLAYER
+            WELCOME BACK, CHAMP
           </p>
 
           <h1 className="font-display font-700 text-6xl text-white tracking-wide">
@@ -119,8 +101,8 @@ function Register() {
         </div>
       </div>
 
-      {/* RIGHT — REGISTER FORM */}
-      <div className="flex flex-col items-center justify-center w-full lg:w-1/2 min-h-screen px-6 py-12 relative">
+      {/* RIGHT — LOGIN FORM */}
+      <div className="flex flex-col items-center justify-center w-full lg:w-1/2 min-h-screen px-6 relative">
         <div className="lg:hidden absolute inset-0 grid-bg" />
 
         <div className="relative w-full max-w-sm clip-panel bg-[#0B0F17] border border-cyan-500/20 px-8 py-10">
@@ -130,10 +112,10 @@ function Register() {
           <span className="corner corner-br" />
 
           <p className="font-tech text-[11px] tracking-[0.25em] text-cyan-400 mb-1 text-center">
-            CREATE ACCOUNT
+            PLAYER ACCESS
           </p>
           <h3 className="font-display font-700 text-3xl text-white text-center tracking-wide mb-8">
-            Register
+            Login
           </h3>
 
           <form
@@ -141,27 +123,13 @@ function Register() {
             className="flex flex-col gap-4 w-full font-body"
           >
             <div className="relative">
-              <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
-              <input
-                type="text"
-                name="name"
-                autoComplete="name"
-                value={userInfo.name}
-                onChange={handleChange}
-                placeholder="Name"
-                required
-                className="hud-input w-full pl-10 pr-3 py-2.5 text-sm"
-              />
-            </div>
-
-            <div className="relative">
               <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
               <input
                 type="email"
                 name="email"
                 autoComplete="email"
-                value={userInfo.email}
-                onChange={handleChange}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
                 required
                 className="hud-input w-full pl-10 pr-3 py-2.5 text-sm"
@@ -173,24 +141,10 @@ function Register() {
               <input
                 type="password"
                 name="password"
-                autoComplete="new-password"
-                value={userInfo.password}
-                onChange={handleChange}
+                autoComplete="current-password"
+                value={passwd}
+                onChange={(e) => setPasswd(e.target.value)}
                 placeholder="Password"
-                required
-                className="hud-input w-full pl-10 pr-3 py-2.5 text-sm"
-              />
-            </div>
-
-            <div className="relative">
-              <ShieldCheck size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
-              <input
-                type="password"
-                name="cpasswd"
-                autoComplete="new-password"
-                value={cpasswd}
-                onChange={(e) => setCPasswd(e.target.value)}
-                placeholder="Confirm Password"
                 required
                 className="hud-input w-full pl-10 pr-3 py-2.5 text-sm"
               />
@@ -221,15 +175,8 @@ function Register() {
               "
               style={{ background: "linear-gradient(120deg, #00E5FF, #FF3D8A)" }}
             >
-              {isLoading ? "Creating account…" : "Register"}
+              {isLoading ? "Signing in…" : "Login"}
             </button>
-
-            <p className="text-xs text-gray-500 text-center mt-1 font-body">
-              Already have an account?{" "}
-              <a href="/login" className="text-cyan-400 hover:text-cyan-300">
-                Login
-              </a>
-            </p>
           </form>
         </div>
       </div>
@@ -237,4 +184,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default Login;

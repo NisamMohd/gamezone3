@@ -1,9 +1,17 @@
-import React from 'react'
+import React from "react";
+import Navbar from "../components/Navbar";
+import { Outlet } from "react-router-dom";
 
 function Home() {
   return (
-    <div>Home</div>
-  )
+    <div className="min-h-screen bg-black">
+      <Navbar />
+
+      <main>
+        <Outlet />
+      </main>
+    </div>
+  );
 }
 
-export default Home
+export default Home;
