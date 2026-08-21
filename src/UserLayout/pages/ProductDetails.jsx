@@ -11,18 +11,37 @@ import {
   RotateCcw,
 } from "lucide-react";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { addToCart } from "../redux/features/thunks/cartThunk";
+import { useAuth } from "../context/AuthContext";
 
 function ProductDetails() {
   const { products, loading, error } = useSelector((state) => state.products);
   const { id } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user } = useAuth()
+  
 
   const [qty, setQty] = useState(1);
   const [wishlisted, setWishlisted] = useState(false);
 
   const item = products.find((product) => product.id.toString() === id);
+
+  const handleAddToCart = () => {
+      if (!user) {
+        navigate("/login");
+        return;
+      }
+  
+      dispatch(
+        addToCart({
+          userId: user.id,
+          product: item,
+        }),
+      );
+    };
 
   if (loading) {
     return (
@@ -50,7 +69,7 @@ function ProductDetails() {
     );
   }
 
-  const mrp = item.mrp || Math.round(item.price * 1.18);
+  const mrp = Math.round(item.price * 1.18);
   const discount = Math.round(100 - (item.price / mrp) * 100);
 
   return (
@@ -212,7 +231,9 @@ function ProductDetails() {
             </div>
 
             <div className="flex gap-3 mt-4">
-              <button className="clip-btn flex-1 flex items-center justify-center gap-2 px-6 py-3.5 border border-cyan-400/60 text-cyan-300 font-display font-600 text-lg tracking-wide hover:bg-cyan-400/10 transition">
+              <button 
+                onClick={handleAddToCart}
+                className="clip-btn flex-1 flex items-center justify-center gap-2 px-6 py-3.5 border border-cyan-400/60 text-cyan-300 font-display font-600 text-lg tracking-wide hover:bg-cyan-400/10 transition">
                 <ShoppingCart size={18} />
                 Add to Cart
               </button>
