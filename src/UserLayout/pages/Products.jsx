@@ -6,8 +6,8 @@ import { fetchCarts } from "../redux/features/thunks/cartThunk";
 import { useAuth } from "../context/AuthContext";
 
 function Products() {
-  const dispatch = useDispatch();
   const { user } = useAuth();
+  const dispatch = useDispatch();
 
   const { products, loading, error } = useSelector(
     (state) => state.products
