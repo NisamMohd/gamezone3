@@ -18,9 +18,7 @@ export const addToCart = createAsyncThunk(
   async ({ product, userId }, { getState }) => {
     const { items } = getState().cart;
 
-    console.log("CART ITEMS:", items);
-    console.log("PRODUCT ID:", product.id);
-
+    
     const existing = items.find(
       (i) => i.productId === product.id
     );
@@ -34,7 +32,6 @@ export const addToCart = createAsyncThunk(
         quantity: existing.quantity + 1
       });
 
-      console.log("PATCH RESPONSE:", res.data);
 
       return res.data;
     }
@@ -53,3 +50,38 @@ export const addToCart = createAsyncThunk(
     return res.data;
   }
 );
+
+export const incrementQty = createAsyncThunk(
+  "carts/incrementQty",
+  async (item) => {
+    const res = await api.patch(`/carts/${item.id}`, {
+      quantity: item.quantity + 1
+    });
+
+    return res.data;
+  }
+)
+
+
+export const decrementQty = createAsyncThunk(
+  "carts/decrementQty",
+  async (item) => {
+    if(item.quantity == 0){
+      return;
+    }
+    const res = await api.patch(`/carts/${item.id}`, {
+      quantity: item.quantity - 1
+    });
+
+    return res.data;
+  }
+)
+
+export const remove = createAsyncThunk(
+  "carts/remove",
+  async (id) => {
+    await api.delete(`/carts/${id}`)
+    return id;
+  }
+)
+

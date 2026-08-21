@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addToCart, fetchCarts } from "./thunks/cartThunk";
+import { addToCart, fetchCarts, incrementQty, decrementQty, remove } from "./thunks/cartThunk";
 import { calculatedTotal } from "./thunks/cartThunk";
 const cartSlice = createSlice({
     name: "cart",
@@ -42,7 +42,62 @@ const cartSlice = createSlice({
                     }
             })
 
-    }
-})
+            //Increment Qty
+            .addCase(incrementQty.fulfilled, (state, action) => {
+                    state.status = "succeeded";
+
+                    const updatedItem = action.payload;
+
+                    const index = state.items.findIndex(
+                        (item) => item.id === updatedItem.id
+                    );
+
+                    if (index !== -1) {
+                        state.items[index] = updatedItem;
+                    }
+
+                    state.total = calculatedTotal(state.items);
+                    })
+
+            .addCase(incrementQty.rejected, (state, action) => {
+                    state.status = "failed";
+                    state.error = action.payload || action.error.message;
+                    })
+
+            // Decrement Qty
+            .addCase(decrementQty.fulfilled, (state, action) => {
+                    state.status = "succeeded";
+
+                    const updatedItem = action.payload;
+
+                    const index = state.items.findIndex(
+                        (item) => item.id === updatedItem.id
+                    );
+
+                    if (index !== -1) {
+                        state.items[index] = updatedItem;
+                    }
+
+                    state.total = calculatedTotal(state.items);
+                    })
+
+            .addCase(decrementQty.rejected, (state, action) => {
+                    state.status = "failed";
+                    state.error = action.payload || action.error.message;
+                    })
+
+            //Remove
+            .addCase(remove.fulfilled, (state, action) => {
+                state.status = "succeeded";
+                state.items = state.items.filter((i) => i.id !== action.payload)
+                state.total = calculatedTotal(state.items)
+            })
+
+            .addCase(remove.rejected, (state, action) => {
+                state.status = "failed"
+                state.error = action.payload || action.error.message
+            })
+
+}})
 
 export default cartSlice.reducer;

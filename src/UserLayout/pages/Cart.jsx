@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { IndianRupee, ShoppingCart, Minus, Plus, Trash2 } from "lucide-react";
 
 import { useAuth } from "../context/AuthContext";
-import { fetchCarts } from "../redux/features/thunks/cartThunk";
+import { decrementQty, fetchCarts, incrementQty, remove } from "../redux/features/thunks/cartThunk";
 
 function Cart() {
   const { user } = useAuth();
@@ -20,6 +20,7 @@ function Cart() {
     }
   }, [user, dispatch]);
 
+  
   const themeStyles = `
     @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 
@@ -246,7 +247,7 @@ function Cart() {
                       {/* QUANTITY */}
                       <div className="flex items-center border border-white/15">
                         <button
-                          // TODO: dispatch quantity decrease thunk for item.id
+                          onClick={() => dispatch(decrementQty(item))}
                           className="w-9 h-9 flex items-center justify-center text-gray-300 hover:bg-white/5 transition"
                         >
                           <Minus size={15} />
@@ -271,7 +272,7 @@ function Cart() {
                         </span>
 
                         <button
-                          // TODO: dispatch quantity increase thunk for item.id
+                          onClick={() => dispatch(incrementQty(item))}
                           className="w-9 h-9 flex items-center justify-center text-gray-300 hover:bg-white/5 transition"
                         >
                           <Plus size={15} />
@@ -280,7 +281,7 @@ function Cart() {
 
                       {/* REMOVE */}
                       <button
-                        // TODO: dispatch removeFromCart thunk for item.id
+                        onClick={() => dispatch(remove(item.id))}
                         className="
                           flex
                           items-center
