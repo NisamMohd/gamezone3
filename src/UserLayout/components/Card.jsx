@@ -1,5 +1,5 @@
-import React from "react";
-import { IndianRupee, ShoppingCart } from "lucide-react";
+import React, { useState } from "react";
+import { IndianRupee, ShoppingCart, Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useDispatch } from "react-redux";
@@ -11,6 +11,8 @@ function Card({ value }) {
   const navigate = useNavigate();
   const { user } = useAuth();
   const dispatch = useDispatch();
+  const [wishlisted, setWishlisted] = useState(false);
+  
 
   const handleAddToCart = () => {
     if (!user) {
@@ -122,13 +124,34 @@ function Card({ value }) {
         </div>
 
         {/* PRICE */}
+        <div className="flex justify-between">
         <div className="flex items-center mt-3">
+          
           <IndianRupee className="w-4 h-4 text-white" strokeWidth={2.5} />
 
           <span className="font-display font-700 text-xl text-white">
             {item.price}
           </span>
+
         </div>
+
+          <div>
+          <button
+                onClick={(e) => {
+                  setWishlisted((w) => !w);
+                  e.stopPropagation()
+                }}
+                className={`p-3 clip-btn border transition ${
+                  wishlisted
+                    ? "border-pink-500 text-pink-500 bg-pink-500/10"
+                    : "border-white/15 text-gray-400 hover:text-pink-400 hover:border-pink-400/50"
+                }`}
+                aria-label="Toggle wishlist"
+              >
+                <Heart size={16} fill={wishlisted ? "currentColor" : "none"} />
+              </button>
+            </div>
+          </div>
 
         {/* DISCOUNT */}
         <div className="text-xs text-pink-400 font-tech mt-1">

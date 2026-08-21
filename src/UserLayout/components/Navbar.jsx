@@ -2,12 +2,15 @@ import React from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Search, ShoppingCart, User } from "lucide-react";
 import logo from "../../assets/logo.png";
+import { useAuth } from "../context/AuthContext";
 
 function Navbar() {
   const links = ["home", "products", "wishlists"];
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  const { user } = useAuth()
 
   return (
     <div className="fixed top-0 left-0 right-0 bg-black/90 backdrop-blur-md border-b border-cyan-500/10 z-50">
@@ -153,7 +156,30 @@ function Navbar() {
             <span className="hidden sm:block">Cart</span>
           </Link>
 
-          <button
+          {user 
+          ? <button
+            className="
+              hidden
+              sm:flex
+              items-center
+              gap-2
+              clip-btn
+              text-black
+              px-6
+              py-2.5
+              font-display
+              font-600
+              text-sm
+              tracking-wide
+              transition
+              hover:brightness-110
+              whitespace-nowrap
+            "
+            style={{ background: "linear-gradient(120deg, #00E5FF, #FF3D8A)" }}
+          >
+            {user.name}
+          </button>
+          :<button
             onClick={() => navigate("/login")}
             className="
               hidden
@@ -176,7 +202,7 @@ function Navbar() {
           >
             <User size={18} />
             Login
-          </button>
+          </button> }
 
         </div>
 
