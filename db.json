@@ -261,21 +261,21 @@
   "carts": [
     {
       "userId": "ODYOA6i7HMM",
-      "productId": "1",
-      "title": "PlayStaion 4 with console x 1",
-      "price": 12599,
-      "image": "https://i5.walmartimages.com/asr/94cb84a2-2e1f-4688-bc1c-300cf0de9843.5b3b6feb8172bb2dd1ebc78fc3bc2ea0.jpeg",
-      "quantity": 2,
-      "id": "Y1vlv07AJpY"
+      "productId": "30",
+      "title": "Samsung Odyssey OLED G8: 34-inch curved gaming monitor presented with 175 Hz refresh rate and Samsung Gaming Hub",
+      "price": 7499,
+      "image": "https://i.pinimg.com/1200x/08/9d/6d/089d6da77b3d43bf12aa54c4d9111550.jpg",
+      "quantity": 3,
+      "id": "q_1ygCM3Ras"
     },
     {
       "userId": "ODYOA6i7HMM",
-      "productId": "2",
-      "title": "PS5 Slim + console x 1",
-      "price": 24999,
-      "image": "https://i.pinimg.com/1200x/89/47/5d/89475d9a656d38564cd6d02ce9abd48d.jpg",
-      "quantity": 2,
-      "id": "DmVqmep_m-o"
+      "productId": "18",
+      "title": "POPeArt SYPRO-THE-DRAGON x 1",
+      "price": 6499,
+      "image": "https://i.pinimg.com/1200x/77/3d/1e/773d1ec9599eb24752bdb8454c5d5aa0.jpg",
+      "quantity": 3,
+      "id": "WsTh-KsL0qA"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
