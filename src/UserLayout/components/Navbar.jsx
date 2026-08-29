@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Search, ShoppingCart, User } from "lucide-react";
 import logo from "../../assets/logo.png";
@@ -6,11 +6,12 @@ import { useAuth } from "../context/AuthContext";
 
 function Navbar() {
   const links = ["home", "products", "wishlists"];
+  const [searchTerm, setSearchTerm] = useState("");
 
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { user } = useAuth()
+  const { user } = useAuth();
 
   return (
     <div className="fixed top-0 left-0 right-0 bg-black/90 backdrop-blur-md border-b border-cyan-500/10 z-50">
@@ -58,11 +59,22 @@ function Navbar() {
         </Link>
 
         {/* SEARCH BAR */}
-        <div className="hidden md:flex flex-1 max-w-2xl relative">
-
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (searchTerm.trim()) {
+              navigate(`/products?search=${encodeURIComponent(searchTerm.trim())}`);
+            } else {
+              navigate("/products");
+            }
+          }}
+          className="hidden md:flex flex-1 max-w-2xl relative"
+        >
           <input
             type="text"
-            placeholder="Search for products, brands and more"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search for gear, consoles, controllers and more..."
             className="
               w-full
               h-10
@@ -83,6 +95,7 @@ function Navbar() {
           />
 
           <button
+            type="submit"
             className="
               absolute
               right-0
@@ -96,11 +109,11 @@ function Navbar() {
               hover:text-cyan-300
               transition
             "
+            aria-label="Search"
           >
             <Search size={20} />
           </button>
-
-        </div>
+        </form>
 
         {/* NAVIGATION */}
         <div className="hidden lg:flex items-center gap-8">

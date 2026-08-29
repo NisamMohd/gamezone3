@@ -81,6 +81,7 @@ function Card({ value }) {
       {/* PRODUCT IMAGE */}
       <div
         className="
+          relative
           w-full
           h-52
           bg-white/[0.02]
@@ -93,10 +94,16 @@ function Card({ value }) {
           p-5
         "
       >
+        {item.stock === 0 && (
+          <div className="absolute top-2 left-2 px-2 py-0.5 bg-pink-500/20 border border-pink-500/50 text-pink-400 font-tech text-[10px] tracking-wider uppercase clip-btn backdrop-blur-sm z-10">
+            OUT OF STOCK
+          </div>
+        )}
+
         <img
           src={item.image}
           alt={item.title}
-          className="
+          className={`
             max-w-full
             max-h-full
             object-contain
@@ -104,7 +111,8 @@ function Card({ value }) {
             transition-transform
             duration-300
             drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]
-          "
+            ${item.stock === 0 ? "opacity-60 grayscale-[30%]" : ""}
+          `}
         />
       </div>
 
@@ -186,35 +194,66 @@ function Card({ value }) {
         </div>
 
         {/* ADD TO CART */}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            handleAddToCart();
-          }}
-          className="
-            clip-btn
-            w-full
-            mt-4
-            flex
-            items-center
-            justify-center
-            gap-2
-            border
-            border-cyan-400/60
-            text-cyan-300
-            hover:bg-cyan-400/10
-            active:scale-[0.98]
-            text-sm
-            font-display
-            font-600
-            tracking-wide
-            py-2.5
-            transition
-          "
-        >
-          <ShoppingCart className="w-4 h-4" />
-          Add to Cart
-        </button>
+        {item.stock === 0 ? (
+          <button
+            type="button"
+            disabled
+            onClick={(e) => e.stopPropagation()}
+            className="
+              clip-btn
+              w-full
+              mt-4
+              flex
+              items-center
+              justify-center
+              gap-2
+              border
+              border-white/10
+              bg-white/5
+              text-gray-500
+              cursor-not-allowed
+              text-sm
+              font-display
+              font-600
+              tracking-wide
+              py-2.5
+            "
+          >
+            <ShoppingCart className="w-4 h-4 opacity-40" />
+            Out of Stock
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleAddToCart();
+            }}
+            className="
+              clip-btn
+              w-full
+              mt-4
+              flex
+              items-center
+              justify-center
+              gap-2
+              border
+              border-cyan-400/60
+              text-cyan-300
+              hover:bg-cyan-400/10
+              active:scale-[0.98]
+              text-sm
+              font-display
+              font-600
+              tracking-wide
+              py-2.5
+              transition
+            "
+          >
+            <ShoppingCart className="w-4 h-4" />
+            Add to Cart
+          </button>
+        )}
       </div>
     </div>
   );
