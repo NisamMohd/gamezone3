@@ -85,3 +85,17 @@ export const remove = createAsyncThunk(
   }
 )
 
+export const clearCartAsync = createAsyncThunk(
+  "carts/clearCartAsync",
+  async (userId, { getState, rejectWithValue }) => {
+    try {
+      const { items } = getState().cart;
+      await Promise.all(items.map((item) => api.delete(`/carts/${item.id}`)));
+      return true;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || err.message);
+    }
+  }
+);
+
+

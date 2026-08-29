@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addToCart, fetchCarts, incrementQty, decrementQty, remove } from "./thunks/cartThunk";
+import { addToCart, fetchCarts, incrementQty, decrementQty, remove, clearCartAsync } from "./thunks/cartThunk";
 import { calculatedTotal } from "./thunks/cartThunk";
 const cartSlice = createSlice({
     name: "cart",
@@ -100,9 +100,15 @@ const cartSlice = createSlice({
                 state.total = calculatedTotal(state.items)
             })
 
-            .addCase(remove.rejected, (state, action) => {
-                state.status = "failed"
-                state.error = action.payload || action.error.message
+            // Clear Cart Async
+            .addCase(clearCartAsync.fulfilled, (state) => {
+                state.status = "succeeded";
+                state.items = [];
+                state.total = 0;
+            })
+            .addCase(clearCartAsync.rejected, (state, action) => {
+                state.status = "failed";
+                state.error = action.payload || action.error?.message;
             })
 
 }})

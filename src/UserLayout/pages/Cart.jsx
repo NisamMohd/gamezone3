@@ -5,7 +5,7 @@ import { IndianRupee, ShoppingCart, Minus, Plus, Trash2 } from "lucide-react";
 
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
-import { decrementQty, fetchCarts, incrementQty, remove } from "../redux/features/thunks/cartThunk";
+import { decrementQty, fetchCarts, incrementQty, remove, clearCartAsync } from "../redux/features/thunks/cartThunk";
 
 function Cart() {
   const { user } = useAuth();
@@ -21,6 +21,12 @@ function Cart() {
       dispatch(fetchCarts(user.id));
     }
   }, [user, dispatch]);
+
+  const handleClearCart = () => {
+    if (items.length === 0) return;
+    dispatch(clearCartAsync(user?.id));
+    toast.info("Cart Cleared", "All items have been removed from your loadout.");
+  };
 
   
   const themeStyles = `
@@ -176,17 +182,31 @@ function Cart() {
 
       <div className="relative max-w-[1200px] mx-auto px-4 py-6">
         {/* PAGE TITLE */}
-        <div className="mb-4">
-          <p className="font-tech text-[11px] tracking-[0.2em] text-cyan-400 mb-1">
-            YOUR LOADOUT
-          </p>
-          <h1 className="font-display font-700 text-2xl text-white tracking-wide">
-            My Cart
-          </h1>
+        {/* PAGE TITLE & CLEAR CART */}
+        <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p className="font-tech text-[11px] tracking-[0.2em] text-cyan-400 mb-1">
+              YOUR LOADOUT
+            </p>
+            <h1 className="font-display font-700 text-2xl sm:text-3xl text-white tracking-wide uppercase">
+              My Cart
+            </h1>
 
-          <p className="text-sm text-gray-500 mt-1 font-body">
-            {items.length} item{items.length !== 1 ? "s" : ""}
-          </p>
+            <p className="text-sm text-gray-400 mt-1 font-body">
+              {items.length} item{items.length !== 1 ? "s" : ""} in loadout
+            </p>
+          </div>
+
+          {items.length > 0 && (
+            <button
+              type="button"
+              onClick={handleClearCart}
+              className="clip-btn flex items-center gap-2 px-4 py-2 bg-pink-500/10 border border-pink-500/30 text-pink-400 hover:bg-pink-500/20 hover:border-pink-500/50 font-tech text-xs tracking-wider uppercase transition cursor-pointer"
+            >
+              <Trash2 size={14} />
+              <span>Clear Cart</span>
+            </button>
+          )}
         </div>
 
         {/* MAIN CART LAYOUT */}

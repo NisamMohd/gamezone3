@@ -4,6 +4,7 @@ import {
   fetchWishlist,
   removeFromWishList,
   toggleWishlist,
+  clearWishlistAsync,
 } from "./thunks/wishlistThunk";
 
 const wishlistSlice = createSlice({
@@ -95,6 +96,18 @@ const wishlistSlice = createSlice({
       })
       .addCase(toggleWishlist.rejected, (state, action) => {
         state.status = "failed";
+        state.error = action.payload || action.error?.message;
+      })
+
+      // CLEAR WISHLIST ASYNC
+      .addCase(clearWishlistAsync.fulfilled, (state) => {
+        state.status = "succeeded";
+        state.items = [];
+        state.loading = false;
+      })
+      .addCase(clearWishlistAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.loading = false;
         state.error = action.payload || action.error?.message;
       });
   },

@@ -92,3 +92,16 @@ export const toggleWishlist = createAsyncThunk(
     }
   }
 );
+
+export const clearWishlistAsync = createAsyncThunk(
+  "wishlist/clearWishlistAsync",
+  async (userId, { getState, rejectWithValue }) => {
+    try {
+      const { items } = getState().wishlist;
+      await Promise.all(items.map((item) => api.delete(`/wishlists/${item.id}`)));
+      return true;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || err.message);
+    }
+  }
+);
