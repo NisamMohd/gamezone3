@@ -265,7 +265,7 @@
       "title": "Samsung Odyssey OLED G8: 34-inch curved gaming monitor presented with 175 Hz refresh rate and Samsung Gaming Hub",
       "price": 7499,
       "image": "https://i.pinimg.com/1200x/08/9d/6d/089d6da77b3d43bf12aa54c4d9111550.jpg",
-      "quantity": 3,
+      "quantity": 2,
       "id": "q_1ygCM3Ras"
     },
     {
@@ -278,5 +278,6 @@
       "id": "WsTh-KsL0qA"
     }
   ],
+  "wishlists": [],
   "$schema": "./node_modules/json-server/schema.json"
 }

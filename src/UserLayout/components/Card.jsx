@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../redux/features/thunks/cartThunk";
+import { addToWishlist, removeFromWishList } from "../redux/features/thunks/wishlistThunk";
 
 function Card({ value }) {
   const item = value;
@@ -139,6 +140,7 @@ function Card({ value }) {
           <button
                 onClick={(e) => {
                   setWishlisted((w) => !w);
+                  !user ? navigate('/login') : wishlisted ? dispatch(removeFromWishList(item.id)) : dispatch(addToWishlist(item , user.id))
                   e.stopPropagation()
                 }}
                 className={`p-3 clip-btn border transition ${

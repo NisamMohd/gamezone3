@@ -8,6 +8,7 @@ import Login from "./UserLayout/pages/Login";
 import Cart from "./UserLayout/pages/Cart";
 import Index from "./UserLayout/pages/Index";
 import ProductDetails from "./UserLayout/pages/ProductDetails";
+import CheckOut from "./UserLayout/pages/CheckOut";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
 
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/checkout" element={<CheckOut />} />
 
       </Routes>
     </div>
