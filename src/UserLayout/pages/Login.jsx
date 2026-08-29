@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Mail, Lock, Gamepad2 } from "lucide-react";
 
 function Login() {
@@ -11,6 +11,8 @@ function Login() {
   const { toast } = useToast();
 
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,7 +21,7 @@ function Login() {
     const response = await login(email, passwd);
     if (response.success) {
       toast.loginSuccess(response.user?.name || "Player");
-      navigate("/");
+      navigate(from, { replace: true });
     }
   };
 

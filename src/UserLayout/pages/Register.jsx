@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { formValidation } from "../utils/register";
 import { User, Mail, Lock, ShieldCheck, Gamepad2 } from "lucide-react";
 
@@ -16,6 +16,8 @@ function Register() {
   });
 
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
 
   const handleChange = (e) => {
     setUserInfo({
@@ -37,7 +39,7 @@ function Register() {
     const res = await register(userInfo);
     if (res.success) {
       toast.registerSuccess(userInfo.name || "Player");
-      navigate("/");
+      navigate(from, { replace: true });
     }
   };
 

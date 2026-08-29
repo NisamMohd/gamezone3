@@ -8,6 +8,13 @@ const cartSlice = createSlice({
         status : "idle",
         total : 0
     },
+    reducers: {
+        clearCart: (state) => {
+            state.items = [];
+            state.total = 0;
+            state.status = "idle";
+        }
+    },
 
     extraReducers: (builder) => {
         builder
@@ -100,4 +107,5 @@ const cartSlice = createSlice({
 
 }})
 
+export const { clearCart } = cartSlice.actions;
 export default cartSlice.reducer;

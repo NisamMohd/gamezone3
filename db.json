@@ -6,7 +6,16 @@
       "password": "nisam123",
       "createdAt": "2026-08-03T13:05:59.939Z",
       "role": "user",
-      "id": "ODYOA6i7HMM"
+      "id": "ODYOA6i7HMM",
+      "address": {
+        "name": "Nisam Mohd",
+        "phone": "8921991635",
+        "address": "bridgeon,kinfra kakkanchery",
+        "city": "ramanattukara",
+        "state": "kerala",
+        "zip": "678601",
+        "country": "India"
+      }
     }
   ],
   "products": [
@@ -257,25 +266,70 @@
       "stock": 5
     }
   ],
-  "orders": [],
+  "orders": [
+    {
+      "userId": "ODYOA6i7HMM",
+      "items": [
+        {
+          "productId": "18",
+          "title": "POPeArt SYPRO-THE-DRAGON x 1",
+          "price": 6499,
+          "quantity": 3,
+          "image": "https://i.pinimg.com/1200x/77/3d/1e/773d1ec9599eb24752bdb8454c5d5aa0.jpg",
+          "category": ""
+        },
+        {
+          "productId": "2",
+          "title": "PS5 Slim + console x 1",
+          "price": 24999,
+          "quantity": 1,
+          "image": "https://i.pinimg.com/1200x/89/47/5d/89475d9a656d38564cd6d02ce9abd48d.jpg",
+          "category": ""
+        }
+      ],
+      "shippingAddress": {
+        "name": "Nisam Mohd",
+        "phone": "8921991635",
+        "address": "bridgeon,kinfra kakkanchery",
+        "city": "ramanattukara",
+        "state": "kerala",
+        "zip": "678601",
+        "country": "India"
+      },
+      "totalAmount": 44496,
+      "paymentMethod": "Cash on Delivery",
+      "status": "Order Confirmed",
+      "createdAt": "2026-08-29T22:58:54.206Z",
+      "id": "2C06JOTtUTs"
+    }
+  ],
   "carts": [
     {
       "userId": "ODYOA6i7HMM",
-      "productId": "18",
-      "title": "POPeArt SYPRO-THE-DRAGON x 1",
-      "price": 6499,
-      "image": "https://i.pinimg.com/1200x/77/3d/1e/773d1ec9599eb24752bdb8454c5d5aa0.jpg",
-      "quantity": 3,
-      "id": "WsTh-KsL0qA"
+      "productId": "3",
+      "title": "PS6 + console x 1",
+      "price": 32999,
+      "image": "https://i.pinimg.com/736x/38/fc/8b/38fc8bed8af35de6e2b7c86a2bde70f0.jpg",
+      "quantity": 1,
+      "id": "lB6WojyA_2U"
     },
     {
       "userId": "ODYOA6i7HMM",
-      "productId": "2",
-      "title": "PS5 Slim + console x 1",
-      "price": 24999,
-      "image": "https://i.pinimg.com/1200x/89/47/5d/89475d9a656d38564cd6d02ce9abd48d.jpg",
+      "productId": "12",
+      "title": "Controller PS5 Dual Sense x 1",
+      "price": 4999,
+      "image": "https://i.pinimg.com/vwebp/1200x/44/ba/07/44ba070e3ce7f45a73634342bf57191f.webp",
       "quantity": 1,
-      "id": "34YLIRAoQE4"
+      "id": "peB5Gm_0F7g"
+    },
+    {
+      "userId": "ODYOA6i7HMM",
+      "productId": "14",
+      "title": "POPeArt NAVY FAS-830 controller x 1",
+      "price": 5999,
+      "image": "https://i.pinimg.com/1200x/0f/60/b7/0f60b776411fd2d35b6ff987cba7ec5f.jpg",
+      "quantity": 1,
+      "id": "D3oKE_0HJFE"
     }
   ],
   "wishlists": [

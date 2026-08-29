@@ -13,11 +13,36 @@ function Products() {
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
   const searchParam = searchParams.get("search") || "";
+  const categoryParam = searchParams.get("category") || "";
 
   const { products, loading, error } = useSelector((state) => state.products);
 
+  // Normalize category string
+  const normalizeCategory = (cat) => {
+    if (!cat) return "";
+    const lower = cat.toLowerCase();
+    if (
+      lower === "controllers" ||
+      lower === "controller" ||
+      lower === "console" ||
+      lower === "consoles"
+    ) {
+      return "console";
+    }
+    if (lower === "playstations" || lower === "playstation") {
+      return "playstation";
+    }
+    if (lower === "accessories" || lower === "accessory") {
+      return "accessories";
+    }
+    return lower;
+  };
+
   // Filter States
-  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState(() => {
+    const initial = normalizeCategory(searchParams.get("category"));
+    return initial ? [initial] : [];
+  });
   const [minPrice, setMinPrice] = useState(2000);
   const [maxPrice, setMaxPrice] = useState(80000);
   const [inStock, setInStock] = useState(false);
@@ -25,6 +50,16 @@ function Products() {
   const [minRating, setMinRating] = useState(0);
   const [sortBy, setSortBy] = useState("relevance");
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+
+  // Sync category param whenever URL changes
+  useEffect(() => {
+    if (categoryParam) {
+      const normalized = normalizeCategory(categoryParam);
+      if (normalized) {
+        setSelectedCategories([normalized]);
+      }
+    }
+  }, [categoryParam]);
 
   useEffect(() => {
     dispatch(fetchProducts());
@@ -64,11 +99,21 @@ function Products() {
 
   // Toggle category
   const handleCategoryToggle = (category) => {
-    setSelectedCategories((prev) =>
-      prev.includes(category)
+    setSelectedCategories((prev) => {
+      const updated = prev.includes(category)
         ? prev.filter((c) => c !== category)
-        : [...prev, category]
-    );
+        : [...prev, category];
+
+      const newParams = new URLSearchParams(searchParams);
+      if (updated.length === 1) {
+        newParams.set("category", updated[0]);
+      } else {
+        newParams.delete("category");
+      }
+      setSearchParams(newParams);
+
+      return updated;
+    });
   };
 
   const isPriceFiltered =

@@ -64,7 +64,13 @@ function ProductDetails() {
 
   const handleAddToCart = () => {
     if (!user) {
+      toast.info("Authentication Required", "Please log in to add items to your cart.");
       navigate("/login");
+      return;
+    }
+
+    if (item.stock === 0) {
+      toast.error("Out of Stock", "This item is currently out of stock.");
       return;
     }
 
@@ -75,6 +81,30 @@ function ProductDetails() {
       }),
     );
     toast.cartAdd("Added to Cart", item.title);
+  };
+
+  const handleBuyNow = () => {
+    if (!user) {
+      toast.info("Authentication Required", "Please log in to proceed to checkout.");
+      navigate("/login");
+      return;
+    }
+    if (item.stock === 0) {
+      toast.error("Item Out of Stock", "This gear is currently out of stock.");
+      return;
+    }
+    const directItem = {
+      id: item.id,
+      productId: item.id,
+      title: item.title,
+      price: item.price,
+      quantity: qty,
+      image: item.image,
+      category: item.category,
+      description: item.description,
+      stock: item.stock,
+    };
+    navigate("/checkout", { state: { directBuyItem: directItem } });
   };
 
   if (loading) {
@@ -275,7 +305,9 @@ function ProductDetails() {
               </button>
 
               <button
-                className="clip-btn flex-1 flex items-center justify-center gap-2 px-6 py-3.5 font-display font-600 text-lg tracking-wide text-black transition hover:brightness-110"
+                type="button"
+                onClick={handleBuyNow}
+                className="clip-btn flex-1 flex items-center justify-center gap-2 px-6 py-3.5 font-display font-600 text-lg tracking-wide text-black transition hover:brightness-110 cursor-pointer"
                 style={{ background: "linear-gradient(120deg, #00E5FF, #FF3D8A)" }}
               >
                 <Zap size={18} />
