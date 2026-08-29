@@ -10,38 +10,63 @@ import {
   ShieldCheck,
   RotateCcw,
 } from "lucide-react";
-import React, { useState } from "react";
-import { useSelector,useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { addToCart } from "../redux/features/thunks/cartThunk";
+import { toggleWishlist, fetchWishlist } from "../redux/features/thunks/wishlistThunk";
 import { useAuth } from "../context/AuthContext";
+import React, { useState, useEffect } from "react";
 
 function ProductDetails() {
   const { products, loading, error } = useSelector((state) => state.products);
+  const { items: wishlistItems } = useSelector((state) => state.wishlist);
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user } = useAuth()
-  
+  const { user } = useAuth();
 
   const [qty, setQty] = useState(1);
-  const [wishlisted, setWishlisted] = useState(false);
 
   const item = products.find((product) => product.id.toString() === id);
 
+  const isWishlisted = Boolean(
+    user &&
+      item &&
+      wishlistItems.some(
+        (w) =>
+          String(w.productId) === String(item.id) &&
+          String(w.userId) === String(user.id)
+      )
+  );
+
+  useEffect(() => {
+    if (user) {
+      dispatch(fetchWishlist(user.id));
+    }
+  }, [user, dispatch]);
+
+  const handleToggleWishlist = () => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+    if (item) {
+      dispatch(toggleWishlist({ product: item, userId: user.id }));
+    }
+  };
+
   const handleAddToCart = () => {
-      if (!user) {
-        navigate("/login");
-        return;
-      }
-  
-      dispatch(
-        addToCart({
-          userId: user.id,
-          product: item,
-        }),
-      );
-    };
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+
+    dispatch(
+      addToCart({
+        userId: user.id,
+        product: item,
+      }),
+    );
+  };
 
   if (loading) {
     return (
@@ -218,15 +243,17 @@ function ProductDetails() {
               </div>
 
               <button
-                onClick={() => setWishlisted((w) => !w)}
+                type="button"
+                onClick={handleToggleWishlist}
                 className={`p-3 clip-btn border transition ${
-                  wishlisted
-                    ? "border-pink-500 text-pink-500 bg-pink-500/10"
+                  isWishlisted
+                    ? "border-pink-500 text-pink-500 bg-pink-500/10 shadow-[0_0_15px_rgba(255,61,138,0.25)]"
                     : "border-white/15 text-gray-400 hover:text-pink-400 hover:border-pink-400/50"
                 }`}
-                aria-label="Toggle wishlist"
+                aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
+                title={isWishlisted ? "In Wishlist (Click to remove)" : "Add to Wishlist"}
               >
-                <Heart size={18} fill={wishlisted ? "currentColor" : "none"} />
+                <Heart size={18} fill={isWishlisted ? "currentColor" : "none"} />
               </button>
             </div>
 

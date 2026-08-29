@@ -278,6 +278,18 @@
       "id": "WsTh-KsL0qA"
     }
   ],
-  "wishlists": [],
+  "wishlists": [
+    {
+      "userId": "ODYOA6i7HMM",
+      "productId": "7",
+      "title": "PS5 Gold Edition + Console x 1 + HeadPhone x 1",
+      "price": 52999,
+      "image": "https://i.pinimg.com/1200x/66/4e/6c/664e6c53a670bc3498da19bc310ac795.jpg",
+      "category": "playstation",
+      "stock": 10,
+      "description": "",
+      "id": "zZZzunUel9E"
+    }
+  ],
   "$schema": "./node_modules/json-server/schema.json"
 }

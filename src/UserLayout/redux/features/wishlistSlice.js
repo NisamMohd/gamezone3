@@ -1,47 +1,104 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addToWishlist, fetchWishlist, removeFromWishList } from "./thunks/wishlistThunk";
-
+import {
+  addToWishlist,
+  fetchWishlist,
+  removeFromWishList,
+  toggleWishlist,
+} from "./thunks/wishlistThunk";
 
 const wishlistSlice = createSlice({
-    name: "wishlist",
-    initialState: {
-        items:[],
-        loading: false,
-        error: null
+  name: "wishlist",
+  initialState: {
+    items: [],
+    loading: false,
+    status: "idle",
+    error: null,
+  },
+  reducers: {
+    clearWishlist: (state) => {
+      state.items = [];
+      state.status = "idle";
+      state.error = null;
     },
-    extraReducers: (builder) => {
-        builder
-            .addCase(fetchWishlist.pending, (state) => {
-                state.loading = true;
-            })
+  },
+  extraReducers: (builder) => {
+    builder
+      // FETCH WISHLIST
+      .addCase(fetchWishlist.pending, (state) => {
+        state.loading = true;
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(fetchWishlist.fulfilled, (state, action) => {
+        state.loading = false;
+        state.status = "succeeded";
+        state.items = action.payload || [];
+      })
+      .addCase(fetchWishlist.rejected, (state, action) => {
+        state.loading = false;
+        state.status = "failed";
+        state.error = action.payload || action.error?.message;
+      })
 
-            .addCase(fetchWishlist.fulfilled, (state, action) => {
-                state.loading = false;
-                state.items = action.payload;
-            })
+      // ADD TO WISHLIST
+      .addCase(addToWishlist.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        const item = action.payload;
+        if (!item) return;
+        const exists = state.items.some(
+          (i) =>
+            String(i.id) === String(item.id) ||
+            String(i.productId) === String(item.productId)
+        );
+        if (!exists) {
+          state.items.push(item);
+        }
+      })
+      .addCase(addToWishlist.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || action.error?.message;
+      })
 
-            .addCase(fetchWishlist.rejected, (state, action)=> {
-                state.loading = false;
-                state.error = action.payload
-            })
+      // REMOVE FROM WISHLIST
+      .addCase(removeFromWishList.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        const targetId = String(action.payload);
+        state.items = state.items.filter(
+          (i) => String(i.id) !== targetId && String(i.productId) !== targetId
+        );
+      })
+      .addCase(removeFromWishList.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || action.error?.message;
+      })
 
-            .addCase(addToWishlist.fulfilled,(state,action) => {
-                const index = state.items.findIndex(
-                    (i) => String(i.id) === String(action.payload.id)
-                );
-                if(index !== -1){
-                    state.items[index] = action.payload;
-                }else{
-                    state.items.push(action.payload);
-                }
-            })
+      // TOGGLE WISHLIST
+      .addCase(toggleWishlist.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        const { action: toggleAction, id, productId, item } = action.payload;
+        if (toggleAction === "remove") {
+          state.items = state.items.filter(
+            (i) =>
+              String(i.id) !== String(id) &&
+              String(i.productId) !== String(productId)
+          );
+        } else if (toggleAction === "add" && item) {
+          const exists = state.items.some(
+            (i) =>
+              String(i.id) === String(item.id) ||
+              String(i.productId) === String(item.productId)
+          );
+          if (!exists) {
+            state.items.push(item);
+          }
+        }
+      })
+      .addCase(toggleWishlist.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || action.error?.message;
+      });
+  },
+});
 
-            .addCase(removeFromWishList.fulfilled, (state, action) => {
-                state.items = state.items.filter(
-                (i) => String(i.id) !== String(action.payload)
-                );
-             });
-    }
-})
-
+export const { clearWishlist } = wishlistSlice.actions;
 export default wishlistSlice.reducer;

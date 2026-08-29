@@ -3,6 +3,7 @@ import { fetchProducts } from "../redux/features/thunks/productThunks";
 import { useDispatch, useSelector } from "react-redux";
 import Card from "../components/Card";
 import { fetchCarts } from "../redux/features/thunks/cartThunk";
+import { fetchWishlist } from "../redux/features/thunks/wishlistThunk";
 import { useAuth } from "../context/AuthContext";
 
 function Products() {
@@ -20,6 +21,7 @@ function Products() {
   useEffect(() => {
     if (user) {
       dispatch(fetchCarts(user.id));
+      dispatch(fetchWishlist(user.id));
     }
   }, [user, dispatch]);
 
