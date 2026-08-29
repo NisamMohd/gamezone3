@@ -10,11 +10,13 @@ import {
   ShieldCheck,
   RotateCcw,
 } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { addToCart } from "../redux/features/thunks/cartThunk";
 import { toggleWishlist, fetchWishlist } from "../redux/features/thunks/wishlistThunk";
 import { useAuth } from "../context/AuthContext";
-import React, { useState, useEffect } from "react";
+import { useToast } from "../context/ToastContext";
 
 function ProductDetails() {
   const { products, loading, error } = useSelector((state) => state.products);
@@ -23,6 +25,7 @@ function ProductDetails() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useAuth();
+  const { toast } = useToast();
 
   const [qty, setQty] = useState(1);
 
@@ -50,6 +53,11 @@ function ProductDetails() {
       return;
     }
     if (item) {
+      if (isWishlisted) {
+        toast.wishlistRemove("Removed from Wishlist", item.title);
+      } else {
+        toast.wishlistAdd("Added to Wishlist", item.title);
+      }
       dispatch(toggleWishlist({ product: item, userId: user.id }));
     }
   };
@@ -66,6 +74,7 @@ function ProductDetails() {
         product: item,
       }),
     );
+    toast.cartAdd("Added to Cart", item.title);
   };
 
   if (loading) {

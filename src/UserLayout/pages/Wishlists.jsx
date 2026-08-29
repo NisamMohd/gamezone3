@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useToast } from "../context/ToastContext";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchWishlist, removeFromWishList } from "../redux/features/thunks/wishlistThunk";
 import { addToCart } from "../redux/features/thunks/cartThunk";
@@ -8,6 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 function Wishlists() {
   const { user } = useAuth();
+  const { toast } = useToast();
   const { items, loading, status } = useSelector((state) => state.wishlist);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -39,10 +41,12 @@ function Wishlists() {
         product,
       })
     );
+    toast.cartAdd("Added to Cart", item.title);
   };
 
-  const handleRemove = (wishlistId) => {
-    dispatch(removeFromWishList(wishlistId));
+  const handleRemove = (item) => {
+    dispatch(removeFromWishList(item.id));
+    toast.wishlistRemove("Removed from Wishlist", item.title);
   };
 
   return (
@@ -199,7 +203,7 @@ function Wishlists() {
                       type="button"
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleRemove(item.id);
+                        handleRemove(item);
                       }}
                       className="absolute top-3 right-3 p-2 bg-black/60 backdrop-blur-md border border-white/10 text-gray-400 hover:text-pink-500 hover:border-pink-500/50 clip-btn transition-colors"
                       title="Remove from wishlist"
@@ -251,7 +255,7 @@ function Wishlists() {
 
                         <button
                           type="button"
-                          onClick={() => handleRemove(item.id)}
+                          onClick={() => handleRemove(item)}
                           className="p-2.5 clip-btn border border-pink-500/40 text-pink-400 hover:bg-pink-500/10 transition"
                           title="Remove item"
                         >

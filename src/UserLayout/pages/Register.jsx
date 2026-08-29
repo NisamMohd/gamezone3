@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useToast } from "../context/ToastContext";
 import { useNavigate } from "react-router-dom";
 import { formValidation } from "../utils/register";
 import { User, Mail, Lock, ShieldCheck, Gamepad2 } from "lucide-react";
 
 function Register() {
   const { register, error, setError, isLoading } = useAuth();
+  const { toast } = useToast();
   const [cpasswd, setCPasswd] = useState("");
   const [userInfo, setUserInfo] = useState({
     name: "",
@@ -34,6 +36,7 @@ function Register() {
 
     const res = await register(userInfo);
     if (res.success) {
+      toast.registerSuccess(userInfo.name || "Player");
       navigate("/");
     }
   };

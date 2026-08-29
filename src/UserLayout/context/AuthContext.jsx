@@ -33,18 +33,17 @@ export function AuthProvider({ children }) {
         role: "user",
       });
 
-      
-        setUser(res.data);
-        localStorage.setItem("user", JSON.stringify(res.data));
+      setUser(res.data);
+      localStorage.setItem("user", JSON.stringify(res.data));
 
-        return res.data
-      
+      return { success: true, user: res.data };
     } catch (err) {
       setError(err.message);
+      return { success: false, error: err.message };
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 //   ==================================================================================================
 
 // login function 
@@ -61,7 +60,7 @@ export function AuthProvider({ children }) {
     setUser(loggedUser[0])
     localStorage.setItem("user",JSON.stringify(loggedUser[0]))
 
-    return { success: true }
+    return { success: true, user: loggedUser[0] }
   }
   
   return (

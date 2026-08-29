@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./UserLayout/context/AuthContext.jsx";
+import { ToastProvider } from "./UserLayout/context/ToastContext.jsx";
 import { Provider } from "react-redux";
 import { store } from "./UserLayout/redux/store.js";
 
@@ -12,7 +13,9 @@ createRoot(document.getElementById("root")).render(
     <BrowserRouter>
       <Provider store={store}>
         <AuthProvider>
-          <App />
+          <ToastProvider>
+            <App />
+          </ToastProvider>
         </AuthProvider>
       </Provider>
     </BrowserRouter>

@@ -2,6 +2,7 @@ import React from "react";
 import { IndianRupee, ShoppingCart, Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useToast } from "../context/ToastContext";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../redux/features/thunks/cartThunk";
 import { toggleWishlist } from "../redux/features/thunks/wishlistThunk";
@@ -11,6 +12,7 @@ function Card({ value }) {
 
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { toast } = useToast();
   const dispatch = useDispatch();
 
   const wishlistItems = useSelector((state) => state.wishlist.items);
@@ -29,6 +31,13 @@ function Card({ value }) {
       navigate("/login");
       return;
     }
+
+    if (isWishlisted) {
+      toast.wishlistRemove("Removed from Wishlist", item.title);
+    } else {
+      toast.wishlistAdd("Added to Wishlist", item.title);
+    }
+
     dispatch(toggleWishlist({ product: item, userId: user.id }));
   };
 
@@ -44,6 +53,7 @@ function Card({ value }) {
         product: item,
       }),
     );
+    toast.cartAdd("Added to Cart", item.title);
   };
 
   return (

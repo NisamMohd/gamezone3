@@ -4,10 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { IndianRupee, ShoppingCart, Minus, Plus, Trash2 } from "lucide-react";
 
 import { useAuth } from "../context/AuthContext";
+import { useToast } from "../context/ToastContext";
 import { decrementQty, fetchCarts, incrementQty, remove } from "../redux/features/thunks/cartThunk";
 
 function Cart() {
   const { user } = useAuth();
+  const { toast } = useToast();
 
   const { items, status, total } = useSelector((state) => state.cart);
 
@@ -281,7 +283,10 @@ function Cart() {
 
                       {/* REMOVE */}
                       <button
-                        onClick={() => dispatch(remove(item.id))}
+                        onClick={() => {
+                          dispatch(remove(item.id));
+                          toast.cartRemove("Removed from Cart", item.title);
+                        }}
                         className="
                           flex
                           items-center
