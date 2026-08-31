@@ -21,16 +21,25 @@ function Products() {
   const normalizeCategory = (cat) => {
     if (!cat) return "";
     const lower = cat.toLowerCase();
+    // PlayStations / Consoles
+    if (
+      lower === "playstation" ||
+      lower === "playstations" ||
+      lower === "console" ||
+      lower === "consoles" ||
+      lower === "ps5" ||
+      lower === "ps4" ||
+      lower === "ps6"
+    ) {
+      return "playstation";
+    }
+    // Controllers
     if (
       lower === "controllers" ||
       lower === "controller" ||
-      lower === "console" ||
-      lower === "consoles"
+      lower === "gamepad"
     ) {
       return "console";
-    }
-    if (lower === "playstations" || lower === "playstation") {
-      return "playstation";
     }
     if (lower === "accessories" || lower === "accessory") {
       return "accessories";

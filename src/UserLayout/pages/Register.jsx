@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { formValidation } from "../utils/register";
 import { User, Mail, Lock, ShieldCheck, Gamepad2 } from "lucide-react";
 
@@ -229,11 +229,11 @@ function Register() {
               {isLoading ? "Creating account…" : "Register"}
             </button>
 
-            <p className="text-xs text-gray-500 text-center mt-1 font-body">
+            <p className="text-xs text-gray-400 text-center mt-2 font-body">
               Already have an account?{" "}
-              <a href="/login" className="text-cyan-400 hover:text-cyan-300">
+              <Link to="/login" className="text-cyan-400 hover:text-cyan-300 font-semibold transition">
                 Login
-              </a>
+              </Link>
             </p>
           </form>
         </div>

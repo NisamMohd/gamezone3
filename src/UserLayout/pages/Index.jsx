@@ -1,445 +1,273 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, useScroll, useTransform, useSpring, useMotionValueEvent } from 'framer-motion'
+import { motion } from 'framer-motion'
+import Body from '../components/Body'
 import Footer from '../components/Footer'
-import { ChevronDown, Sparkles, Cpu, Zap, Shield, ArrowRight, Layers, Eye } from 'lucide-react'
+import {
+  ChevronDown,
+  Sparkles,
+  ArrowRight,
+  Gamepad2,
+  Tv,
+  Zap,
+  Radio,
+  Layers,
+} from 'lucide-react'
 
 function Index() {
-  const videoRef = useRef(null)
-  const containerRef = useRef(null)
-  const durationRef = useRef(0)
-  const targetProgress = useRef(0)
-  const currentProgress = useRef(0)
-  const rafId = useRef(null)
-  const [isVideoReady, setIsVideoReady] = useState(false)
-  const [scrollPercent, setScrollPercent] = useState(0)
+  const heroRef = useRef(null)
 
-  // Track scroll progress across the 450vh tall container for luxurious pacing
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start start', 'end end'],
-  })
-
-  // ============================================================
-  // DYNAMIC VIDEO MOTION TRANSFORMS (VIDEO MOVES ALONG WITH SCROLL)
-  // ============================================================
-  // Phase 1 (0-30%): Assembled Tour (slightly left to balance hero text)
-  // Phase 2 (30-75%): EXPLODED VIEW (centered & zoomed to showcase internal parts)
-  // Phase 3 (75-100%): Re-assembled final call to action
-  const videoXRaw = useTransform(
-    scrollYProgress,
-    [0, 0.3, 0.52, 0.75, 1],
-    ['0%', '-6%', '-2%', '-4%', '0%']
-  )
-  const videoYRaw = useTransform(
-    scrollYProgress,
-    [0, 0.35, 0.55, 0.8, 1],
-    ['0%', '-2%', '0%', '2%', '0%']
-  )
-  const videoScaleRaw = useTransform(
-    scrollYProgress,
-    [0, 0.32, 0.55, 0.78, 1],
-    [1, 1.06, 1.12, 1.06, 1.02]
-  )
-  const videoRotateRaw = useTransform(
-    scrollYProgress,
-    [0, 0.35, 0.6, 1],
-    [0, -1.2, 0.8, 0]
-  )
-
-  // Physics springs for organic video movement and camera momentum
-  const videoX = useSpring(videoXRaw, { stiffness: 100, damping: 22, mass: 0.5 })
-  const videoY = useSpring(videoYRaw, { stiffness: 100, damping: 22, mass: 0.5 })
-  const videoScale = useSpring(videoScaleRaw, { stiffness: 100, damping: 22, mass: 0.5 })
-  const videoRotate = useSpring(videoRotateRaw, { stiffness: 100, damping: 22, mass: 0.5 })
-
-  // Ambient glow parallax transforms
-  const glowX1 = useTransform(scrollYProgress, [0, 1], ['-30px', '70px'])
-  const glowY1 = useTransform(scrollYProgress, [0, 1], ['-30px', '120px'])
-  const glowX2 = useTransform(scrollYProgress, [0, 1], ['30px', '-70px'])
-  const glowY2 = useTransform(scrollYProgress, [0, 1], ['30px', '-120px'])
-
-  // ============================================================
-  // TEXT STORYTELLING TRANSFORMS ACROSS SCROLL
-  // ============================================================
-  // Phase 1 (0% - 30%): Hero introduction
-  const phase1Opacity = useTransform(scrollYProgress, [0, 0.24, 0.32], [1, 1, 0])
-  const phase1Y = useTransform(scrollYProgress, [0, 0.28], [0, -30])
-  const phase1Pointer = useTransform(scrollYProgress, (v) => (v < 0.3 ? 'auto' : 'none'))
-
-  // Phase 2 (30% - 75%): EXPLODED VIEW & Internal Schematics
-  const phase2Opacity = useTransform(
-    scrollYProgress,
-    [0.3, 0.38, 0.68, 0.76],
-    [0, 1, 1, 0]
-  )
-  const phase2Y = useTransform(
-    scrollYProgress,
-    [0.3, 0.38, 0.68, 0.76],
-    [40, 0, 0, -40]
-  )
-  const phase2Pointer = useTransform(
-    scrollYProgress,
-    (v) => (v >= 0.3 && v < 0.75 ? 'auto' : 'none')
-  )
-
-  // Phase 3 (75% - 100%): Final CTA
-  const phase3Opacity = useTransform(scrollYProgress, [0.74, 0.82, 1], [0, 1, 1])
-  const phase3Y = useTransform(scrollYProgress, [0.74, 0.82], [40, 0])
-  const phase3Pointer = useTransform(scrollYProgress, (v) => (v >= 0.75 ? 'auto' : 'none'))
-
-  // Scroll prompt opacity (fades out immediately upon scrolling)
-  const promptOpacity = useTransform(scrollYProgress, [0, 0.06], [1, 0])
-
-  // Update target progress on scroll
-  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
-    targetProgress.current = latest
-    setScrollPercent(Math.round(latest * 100))
-  })
-
-  // Ultra-smooth lerp animation loop for video scrubbing
-  useEffect(() => {
-    const video = videoRef.current
-    if (!video) return
-
-    video.pause()
-
-    const updateVideoFrame = () => {
-      const diff = targetProgress.current - currentProgress.current
-      currentProgress.current += diff * 0.085 // smooth damping factor
-
-      if (durationRef.current > 0 && !video.seeking) {
-        const targetTime = currentProgress.current * durationRef.current
-        if (Math.abs(video.currentTime - targetTime) > 0.012) {
-          if (video.fastSeek) {
-            video.fastSeek(targetTime)
-          } else {
-            video.currentTime = targetTime
-          }
-        }
-      }
-
-      rafId.current = requestAnimationFrame(updateVideoFrame)
+  const scrollToBody = () => {
+    const bodyEl = document.getElementById('body-section')
+    if (bodyEl) {
+      bodyEl.scrollIntoView({ behavior: 'smooth' })
     }
-
-    rafId.current = requestAnimationFrame(updateVideoFrame)
-
-    return () => {
-      if (rafId.current) {
-        cancelAnimationFrame(rafId.current)
-      }
-    }
-  }, [])
-
-  const handleLoadedMetadata = () => {
-    const video = videoRef.current
-    if (video) {
-      durationRef.current = video.duration || 0
-      video.currentTime = 0
-      setIsVideoReady(true)
-    }
-  }
-
-  const handleVideoError = (e) => {
-    console.error('Video failed to load:', e.target.error)
-  }
-
-  // Dynamic HUD status label based on current transition phase
-  let hudStatusLabel = 'ASSEMBLED 360° VIEW'
-  let hudBadgeColor = 'text-cyan-400 border-cyan-400/40 bg-cyan-500/10'
-  if (scrollPercent >= 30 && scrollPercent < 75) {
-    hudStatusLabel = 'EXPLODED VIEW // 12-PART DECONSTRUCTION'
-    hudBadgeColor = 'text-pink-400 border-pink-500/40 bg-pink-500/10'
-  } else if (scrollPercent >= 75) {
-    hudStatusLabel = 'ARMORY DEPLOYED // READY FOR ACTION'
-    hudBadgeColor = 'text-emerald-400 border-emerald-500/40 bg-emerald-500/10'
   }
 
   return (
-    <>
-      {/* Tall wrapper for smooth cinematic scroll scrubbing and explode inspection */}
-      <div ref={containerRef} className="relative h-[450vh] w-full bg-[#05070C]">
-        {/* Pinned section — stays fixed in view while the container scrolls past */}
-        <section className="sticky top-0 h-screen w-full overflow-hidden bg-[#05070C]">
+    <div className="bg-black text-gray-200 overflow-x-hidden">
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
-          {/* DYNAMIC SCROLLING & PANNING VIDEO WRAPPER */}
-          <motion.div
-            style={{
-              x: videoX,
-              y: videoY,
-              scale: videoScale,
-              rotate: videoRotate,
-              willChange: 'transform',
-            }}
-            className="absolute inset-0 h-full w-full pointer-events-none flex items-center justify-center z-0"
+        .font-display { font-family: 'Rajdhani', sans-serif; }
+        .font-body { font-family: 'Inter', sans-serif; }
+        .font-tech { font-family: 'JetBrains Mono', monospace; }
+
+        .clip-panel {
+          clip-path: polygon(0 16px, 16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%);
+        }
+        .clip-btn {
+          clip-path: polygon(0 10px, 10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
+        }
+        .corner {
+          position: absolute;
+          width: 14px;
+          height: 14px;
+          pointer-events: none;
+        }
+        .corner-tl { top: -1px; left: -1px; border-top: 2px solid #00E5FF; border-left: 2px solid #00E5FF; }
+        .corner-tr { top: -1px; right: -1px; border-top: 2px solid #00E5FF; border-right: 2px solid #00E5FF; }
+        .corner-bl { bottom: -1px; left: -1px; border-bottom: 2px solid #FF3D8A; border-left: 2px solid #FF3D8A; }
+        .corner-br { bottom: -1px; right: -1px; border-bottom: 2px solid #FF3D8A; border-right: 2px solid #FF3D8A; }
+
+        .grid-bg {
+          background-image:
+            linear-gradient(rgba(0,229,255,0.06) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0,229,255,0.06) 1px, transparent 1px);
+          background-size: 40px 40px;
+        }
+      `}</style>
+
+      {/* ============================================================ */}
+      {/* 1. CINEMATIC CONSOLE HERO PAGE (USING console.MP4) */}
+      {/* ============================================================ */}
+      <section
+        ref={heroRef}
+        className="relative min-h-screen w-full flex flex-col justify-between overflow-hidden bg-black pt-28 pb-12 px-4 sm:px-6 lg:px-12"
+      >
+        {/* BACKGROUND CONSOLE VIDEO */}
+        <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover object-center scale-[1.03] opacity-80"
           >
-            <video
-              ref={videoRef}
-              className="h-full w-full object-cover"
-              style={{
-                willChange: 'transform',
-                transform: 'translateZ(0)',
-              }}
-              muted
-              playsInline
-              preload="auto"
-              onError={handleVideoError}
-              onLoadedMetadata={handleLoadedMetadata}
-              onCanPlayThrough={() => setIsVideoReady(true)}
-            >
-              <source src="/video/controller-horizondal.mp4" type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
+            <source src="/video/console.MP4" type="video/mp4" />
+            <source src="/video/console.mp4" type="video/mp4" />
+          </video>
+
+          {/* AMBIENT LIGHTING OVERLAYS */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/80" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-black/85" />
+          <div className="grid-bg absolute inset-0 opacity-20" />
+
+          {/* GLOW ORBS */}
+          <div
+            className="absolute top-1/4 left-10 w-96 h-96 rounded-full opacity-20 blur-3xl pointer-events-none"
+            style={{ background: 'radial-gradient(circle, #00E5FF, transparent 70%)' }}
+          />
+          <div
+            className="absolute bottom-10 right-10 w-96 h-96 rounded-full opacity-20 blur-3xl pointer-events-none"
+            style={{ background: 'radial-gradient(circle, #FF3D8A, transparent 70%)' }}
+          />
+        </div>
+
+        {/* HERO TOP TECH TAG */}
+        <div className="relative z-10 max-w-7xl mx-auto w-full">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-400/40 text-cyan-300 font-tech text-xs tracking-widest uppercase mb-6 shadow-[0_0_20px_rgba(0,229,255,0.15)]"
+          >
+            <span className="h-2 w-2 rounded-full bg-cyan-400 animate-ping" />
+            <span>FLAGSHIP HARDWARE // NEXT-GEN CONSOLE ECOSYSTEM</span>
           </motion.div>
 
-          {/* Ambient Lighting & Contrast Overlays with Parallax Float */}
-          <motion.div
-            style={{
-              x: glowX1,
-              y: glowY1,
-              background: 'radial-gradient(circle, #00E5FF, transparent 70%)',
-            }}
-            className="absolute -top-40 -left-40 w-[32rem] h-[32rem] rounded-full opacity-20 blur-3xl pointer-events-none"
-          />
-          <motion.div
-            style={{
-              x: glowX2,
-              y: glowY2,
-              background: 'radial-gradient(circle, #FF3D8A, transparent 70%)',
-            }}
-            className="absolute -bottom-40 -right-40 w-[32rem] h-[32rem] rounded-full opacity-20 blur-3xl pointer-events-none"
-          />
-
-          {/* Balanced contrast overlays so exploded parts remain crystal clear */}
-          <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#05070C]/80 via-transparent to-[#05070C]/30 pointer-events-none" />
-          <div className="absolute inset-0 z-10 bg-gradient-to-r from-transparent via-[#05070C]/20 to-[#05070C]/80 pointer-events-none" />
-
-          {/* Cyber HUD Grid & Scanlines */}
-          <div className="grid-bg absolute inset-0 z-10 pointer-events-none opacity-25" />
-          <div className="absolute top-0 left-0 w-full h-[2px] z-10 bg-gradient-to-r from-transparent via-[#00E5FF] to-transparent opacity-70" />
-          <div className="absolute bottom-0 left-0 w-full h-[2px] z-10 bg-gradient-to-r from-transparent via-[#FF3D8A] to-transparent opacity-70" />
-
-          {/* HUD SIDEBAR SCRUB METER WITH LIVE DECONSTRUCTION BADGE (BOTTOM-LEFT) */}
-          <div className="absolute bottom-8 left-8 z-30 hidden sm:flex flex-col gap-2 pointer-events-none">
-            <div className={`flex items-center gap-2 font-mono text-[10px] tracking-[0.2em] px-2.5 py-1 border rounded ${hudBadgeColor} backdrop-blur-md`}>
-              <span className="h-1.5 w-1.5 rounded-full bg-current animate-ping" />
-              <span>{hudStatusLabel}</span>
-            </div>
-
-            <div className="flex items-center gap-2 font-mono text-[10px] tracking-[0.25em] text-gray-400 pl-1">
-              <span>ROTATION // {String(scrollPercent).padStart(2, '0')}%</span>
-            </div>
-
-            <div className="w-36 h-[3px] bg-white/10 rounded-full overflow-hidden border border-white/5">
-              <div
-                className="h-full bg-gradient-to-r from-[#00E5FF] to-[#FF3D8A] transition-all duration-75"
-                style={{ width: `${scrollPercent}%` }}
-              />
-            </div>
-          </div>
-
-          {/* BOTTOM CENTER SCROLL PROMPT */}
-          <motion.div
-            style={{ opacity: promptOpacity }}
-            className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 pointer-events-none"
-          >
-            <span className="font-mono text-[10px] tracking-[0.3em] text-gray-400 uppercase">
-              Scroll to Explore Exploded View
-            </span>
-            <div className="w-5 h-8 rounded-full border border-cyan-400/50 flex items-start justify-center p-1 bg-black/40">
-              <motion.div
-                animate={{ y: [0, 10, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-                className="w-1 h-2 rounded-full bg-cyan-400"
-              />
-            </div>
-          </motion.div>
-
-          {/* DYNAMIC RIGHT CONTENT CONTAINER */}
-          <div className="relative z-20 flex h-full w-full flex-col items-end justify-center px-8 md:px-16 lg:px-24">
-            {/* ============================================================ */}
-            {/* PHASE 1: HERO INTRODUCTION (0% - 30%) */}
-            {/* ============================================================ */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            {/* HERO MAIN COPY */}
             <motion.div
-              style={{
-                opacity: phase1Opacity,
-                y: phase1Y,
-                pointerEvents: phase1Pointer,
-              }}
-              className="absolute right-8 md:right-16 lg:right-24 flex flex-col items-start max-w-2xl text-left"
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="lg:col-span-8 max-w-3xl"
             >
-              {/* Technical label */}
-              <div className="font-mono text-xs tracking-[0.3em] text-[#00E5FF] mb-4 flex items-center gap-2">
-                <span className="h-2 w-2 bg-[#00E5FF] rounded-full animate-pulse" />
-                SYSTEM ONLINE — 360° HARDWARE TOUR
-              </div>
-
-              {/* Headline */}
-              <h1 className="font-rajdhani font-bold text-5xl md:text-7xl leading-[0.95] text-white uppercase tracking-tight">
-                Gear up for
-                <span className="block text-[#00E5FF]">every match</span>
+              <h1 className="font-display font-800 text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[0.92] text-white uppercase tracking-tight">
+                UNLEASH <br />
+                <span
+                  className="bg-clip-text text-transparent"
+                  style={{
+                    backgroundImage: 'linear-gradient(120deg, #00E5FF, #FF3D8A)',
+                  }}
+                >
+                  NEXT-GEN POWER
+                </span>
               </h1>
 
-              <p className="font-body text-gray-300 mt-4 max-w-md text-base md:text-lg">
-                Consoles, controllers, and accessories built for players who don't settle for lag, latency, or last season's gear.
+              <p className="font-body text-gray-300 text-base sm:text-lg md:text-xl mt-6 max-w-2xl leading-relaxed">
+                Experience ultra-high speed SSD loading, hyper-realistic ray tracing, and Tempest 3D spatial audio engineered for players who demand absolute perfection.
               </p>
 
-              <div className="flex flex-wrap gap-4 mt-8">
+              {/* ACTION BUTTONS */}
+              <div className="flex flex-wrap items-center gap-4 mt-8">
+                {/* EXPLORE CONSOLES (LEADS TO PLAYSTATIONS CATEGORY) */}
+                <Link
+                  to="/products?category=playstation"
+                  className="
+                    clip-btn
+                    px-8
+                    py-4
+                    font-display
+                    font-bold
+                    text-base
+                    tracking-wider
+                    uppercase
+                    text-black
+                    flex
+                    items-center
+                    gap-2.5
+                    transition
+                    hover:brightness-110
+                    shadow-[0_0_30px_rgba(0,229,255,0.3)]
+                  "
+                  style={{
+                    background: 'linear-gradient(120deg, #00E5FF, #FF3D8A)',
+                  }}
+                >
+                  <Gamepad2 size={20} />
+                  <span>Explore Consoles</span>
+                  <ArrowRight size={16} />
+                </Link>
+
                 <Link
                   to="/products"
-                  className="clip-btn inline-block bg-[#00E5FF] text-[#05070C] font-mono font-semibold text-sm tracking-wider px-8 py-3 uppercase hover:bg-white transition-colors cursor-pointer"
+                  className="
+                    clip-btn
+                    px-8
+                    py-4
+                    bg-white/5
+                    border
+                    border-white/20
+                    text-white
+                    hover:bg-white/10
+                    hover:border-cyan-400
+                    font-tech
+                    text-sm
+                    tracking-wider
+                    uppercase
+                    transition
+                  "
                 >
-                  Shop Now
+                  Browse Full Arsenal
                 </Link>
-                <Link
-                  to="/products"
-                  className="clip-btn inline-block bg-transparent border border-[#FF3D8A] text-[#FF3D8A] font-mono font-semibold text-sm tracking-wider px-8 py-3 uppercase hover:bg-[#FF3D8A]/10 transition-colors cursor-pointer"
+
+                <button
+                  type="button"
+                  onClick={scrollToBody}
+                  className="
+                    clip-btn
+                    px-6
+                    py-4
+                    bg-cyan-500/10
+                    border
+                    border-cyan-500/30
+                    text-cyan-300
+                    hover:bg-cyan-500/20
+                    font-tech
+                    text-xs
+                    tracking-wider
+                    uppercase
+                    flex
+                    items-center
+                    gap-2
+                    transition
+                    cursor-pointer
+                  "
                 >
-                  Explore Gear
-                </Link>
-              </div>
-
-              {/* Spec ticker */}
-              <div className="font-mono text-[10px] tracking-[0.2em] text-gray-400 mt-8 flex flex-wrap gap-6">
-                <span>4K // 120HZ</span>
-                <span>ULTRA-LOW LATENCY</span>
-                <span>FREE SHIPPING $75+</span>
-              </div>
-            </motion.div>
-
-            {/* ============================================================ */}
-            {/* PHASE 2: EXPLODED VIEW & DECONSTRUCTED PRECISION (30% - 75%) */}
-            {/* ============================================================ */}
-            <motion.div
-              style={{
-                opacity: phase2Opacity,
-                y: phase2Y,
-                pointerEvents: phase2Pointer,
-              }}
-              className="absolute right-8 md:right-16 lg:right-24 flex flex-col items-start max-w-2xl text-left bg-black/40 backdrop-blur-sm p-6 sm:p-8 rounded-xl border border-white/10"
-            >
-              {/* Technical label */}
-              <div className="font-mono text-xs tracking-[0.3em] text-[#FF3D8A] mb-3 flex items-center gap-2">
-                <Layers size={14} className="text-[#FF3D8A] animate-pulse" />
-                EXPLODED VIEW // INTERNAL SCHEMATICS
-              </div>
-
-              {/* Headline */}
-              <h2 className="font-rajdhani font-bold text-4xl md:text-5xl leading-[0.95] text-white uppercase tracking-tight">
-                Deconstructed
-                <span className="block text-[#FF3D8A]">Precision Anatomy</span>
-              </h2>
-
-              <p className="font-body text-gray-300 mt-3 max-w-md text-sm md:text-base">
-                Scroll to inspect the inner engineering: zero-drift magnetic hall sensors, dual haptic vibration engines, and hairpin trigger mechanisms.
-              </p>
-
-              {/* Exploded Component Feature Cards */}
-              <div className="grid grid-cols-2 gap-3 mt-5 w-full max-w-lg">
-                <div className="p-3 bg-white/5 border border-pink-500/30 clip-btn">
-                  <div className="flex items-center gap-2 text-pink-400 font-mono text-xs mb-1">
-                    <Shield size={13} /> ZERO-DRIFT SENSORS
-                  </div>
-                  <p className="text-[11px] text-gray-400 font-body">Magnetic Hall-Effect analog modules</p>
-                </div>
-
-                <div className="p-3 bg-white/5 border border-cyan-500/30 clip-btn">
-                  <div className="flex items-center gap-2 text-cyan-400 font-mono text-xs mb-1">
-                    <Zap size={13} /> 0.1MS RESPONSE
-                  </div>
-                  <p className="text-[11px] text-gray-400 font-body">Micro-switch tactical bumpers</p>
-                </div>
-
-                <div className="p-3 bg-white/5 border border-cyan-500/20 clip-btn">
-                  <div className="flex items-center gap-2 text-cyan-300 font-mono text-xs mb-1">
-                    <Cpu size={13} /> DUAL HAPTIC FORCE
-                  </div>
-                  <p className="text-[11px] text-gray-400 font-body">Sub-millisecond feedback motors</p>
-                </div>
-
-                <div className="p-3 bg-white/5 border border-pink-500/20 clip-btn">
-                  <div className="flex items-center gap-2 text-pink-300 font-mono text-xs mb-1">
-                    <Sparkles size={13} /> 40H POWER CORE
-                  </div>
-                  <p className="text-[11px] text-gray-400 font-body">1500mAh low-latency battery</p>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap gap-4 mt-6">
-                <Link
-                  to="/products?category=console"
-                  className="clip-btn inline-flex items-center gap-2 bg-[#FF3D8A] text-white font-mono font-semibold text-sm tracking-wider px-7 py-3 uppercase hover:bg-white hover:text-black transition-colors cursor-pointer"
-                >
-                  View Controllers <ArrowRight size={14} />
-                </Link>
-              </div>
-            </motion.div>
-
-            {/* ============================================================ */}
-            {/* PHASE 3: RE-ASSEMBLY & FINAL CALL TO ACTION (75% - 100%) */}
-            {/* ============================================================ */}
-            <motion.div
-              style={{
-                opacity: phase3Opacity,
-                y: phase3Y,
-                pointerEvents: phase3Pointer,
-              }}
-              className="absolute right-8 md:right-16 lg:right-24 flex flex-col items-start max-w-2xl text-left"
-            >
-              {/* Technical label */}
-              <div className="font-mono text-xs tracking-[0.3em] text-[#00E5FF] mb-4 flex items-center gap-2">
-                <Sparkles size={14} className="text-[#00E5FF]" />
-                ARMORY READY // SECURE CHECKOUT
-              </div>
-
-              {/* Headline */}
-              <h2 className="font-rajdhani font-bold text-4xl md:text-6xl leading-[0.95] text-white uppercase tracking-tight">
-                Dominate the
-                <span className="block text-[#00E5FF]">Leaderboards</span>
-              </h2>
-
-              <p className="font-body text-gray-300 mt-4 max-w-md text-base md:text-lg">
-                Join thousands of competitive gamers upgraded with pro-grade gear. Same-day dispatch and 1-year warranty on all consoles & controllers.
-              </p>
-
-              <div className="flex flex-wrap gap-4 mt-8">
-                <Link
-                  to="/products"
-                  className="clip-btn inline-flex items-center gap-2 bg-[#00E5FF] text-[#05070C] font-mono font-semibold text-sm tracking-wider px-8 py-3 uppercase hover:bg-white transition-colors cursor-pointer"
-                >
-                  Explore All Gear <ArrowRight size={15} />
-                </Link>
-                <Link
-                  to="/wishlists"
-                  className="clip-btn inline-block bg-transparent border border-white/20 text-white font-mono font-semibold text-sm tracking-wider px-8 py-3 uppercase hover:bg-white/10 transition-colors cursor-pointer"
-                >
-                  My Wishlist
-                </Link>
-              </div>
-
-              <div className="font-mono text-[10px] tracking-[0.2em] text-gray-400 mt-8 flex flex-wrap gap-6">
-                <span>AUTHENTIC PRODUCTS</span>
-                <span>SECURE PAYMENTS</span>
-                <span>24/7 SUPPORT</span>
+                  <Layers size={15} />
+                  <span>Inspect 3D Deconstruction</span>
+                </button>
               </div>
             </motion.div>
           </div>
+        </div>
 
-          <style>{`
-            .grid-bg {
-              background-image:
-                linear-gradient(rgba(0,229,255,0.08) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0,229,255,0.08) 1px, transparent 1px);
-              background-size: 40px 40px;
-            }
-            .clip-btn {
-              clip-path: polygon(0 8px, 8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
-            }
-          `}</style>
-        </section>
-      </div>
+        {/* HERO BOTTOM SPECS STRIP & SCROLL PROMPT */}
+        <div className="relative z-10 max-w-7xl mx-auto w-full mt-12 pt-8 border-t border-white/10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="p-4 clip-panel bg-[#0B0F17]/80 backdrop-blur-md border border-cyan-500/20">
+              <div className="flex items-center gap-2 text-cyan-400 font-tech text-xs mb-1">
+                <Tv size={15} /> 4K @ 120 FPS
+              </div>
+              <p className="font-body text-xs text-gray-400">Ultra-smooth high-refresh display</p>
+            </div>
+
+            <div className="p-4 clip-panel bg-[#0B0F17]/80 backdrop-blur-md border border-pink-500/20">
+              <div className="flex items-center gap-2 text-pink-400 font-tech text-xs mb-1">
+                <Sparkles size={15} /> RAY TRACING
+              </div>
+              <p className="font-body text-xs text-gray-400">Hardware-accelerated illumination</p>
+            </div>
+
+            <div className="p-4 clip-panel bg-[#0B0F17]/80 backdrop-blur-md border border-cyan-500/20">
+              <div className="flex items-center gap-2 text-cyan-300 font-tech text-xs mb-1">
+                <Zap size={15} /> CUSTOM GEN4 SSD
+              </div>
+              <p className="font-body text-xs text-gray-400">Near-instantaneous asset streaming</p>
+            </div>
+
+            <div className="p-4 clip-panel bg-[#0B0F17]/80 backdrop-blur-md border border-pink-500/20">
+              <div className="flex items-center gap-2 text-pink-300 font-tech text-xs mb-1">
+                <Radio size={15} /> 3D SPATIAL AUDIO
+              </div>
+              <p className="font-body text-xs text-gray-400">Pinpoint situational awareness</p>
+            </div>
+          </div>
+
+          {/* SCROLL DOWN ARROW */}
+          <div className="mt-8 flex flex-col items-center justify-center text-center">
+            <button
+              onClick={scrollToBody}
+              className="flex flex-col items-center gap-1.5 text-gray-400 hover:text-cyan-400 transition cursor-pointer"
+            >
+              <span className="font-tech text-[10px] tracking-[0.25em] uppercase">
+                Scroll to Explore 3D Controller Anatomy & Exploded View
+              </span>
+              <ChevronDown size={18} className="animate-bounce text-cyan-400" />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      
+
+      {/* ============================================================ */}
+      {/* 3. FOOTER */}
+      {/* ============================================================ */}
       <Footer />
-    </>
+    </div>
   )
 }
 

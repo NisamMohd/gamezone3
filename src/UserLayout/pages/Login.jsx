@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { Mail, Lock, Gamepad2 } from "lucide-react";
 
 function Login() {
@@ -182,6 +182,13 @@ function Login() {
             >
               {isLoading ? "Signing in…" : "Login"}
             </button>
+
+            <p className="text-xs text-gray-400 text-center mt-2 font-body">
+              Don't have an account?{" "}
+              <Link to="/register" className="text-cyan-400 hover:text-cyan-300 font-semibold transition">
+                Register
+              </Link>
+            </p>
           </form>
         </div>
       </div>
