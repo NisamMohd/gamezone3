@@ -17,6 +17,8 @@ import PublicRoute from "./UserLayout/services/PublicRoute";
 function App() {
   return (
     <Routes>
+      {/* User Routes  */}
+
       {/* MAIN APPLICATION LAYOUT (NAVBAR + OUTLET) */}
       <Route path="/" element={<Home />}>
         {/* PUBLIC OPEN ACCESS ROUTES */}
