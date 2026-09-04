@@ -1,4 +1,4 @@
-import api from "../../../services/api";
+import api from "../../../../services/api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const fetchWishlist = createAsyncThunk(

@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import api from "../../../services/api";
+import api from "../../../../services/api";
 import { clearCart } from "../cartSlice";
 import { updateProductStock } from "../productSlice";
 import { fetchProducts } from "./productThunks";
