@@ -22,7 +22,7 @@ import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
 import { createOrder } from "../redux/features/thunks/orderThunk";
 import { resetOrderStatus } from "../redux/features/orderSlice";
-import api from "../services/api";
+import api from "../../services/api";
 
 function CheckOut() {
   const { user, updateUser } = useAuth();

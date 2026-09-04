@@ -22,7 +22,7 @@ import { useToast } from "../context/ToastContext";
 import { clearCart } from "../redux/features/cartSlice";
 import { clearWishlist } from "../redux/features/wishlistSlice";
 import { clearOrders } from "../redux/features/orderSlice";
-import api from "../services/api";
+import api from "../../services/api";
 
 function Navbar() {
   const links = ["home", "products", "wishlists"];

@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
-import api from "../services/api";
+import api from "../../services/api";
 
 function Settings() {
   const { user, updateUser } = useAuth();
