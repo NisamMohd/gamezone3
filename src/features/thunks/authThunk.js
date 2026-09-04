@@ -3,18 +3,18 @@ import api from "../../UserLayout/services/api";
 
 export const register = createAsyncThunk(
     'auth/register',
-    async ({uname,email,passwd},{rejectWithValue}) =>{
+    async ({userinfo},{rejectWithValue}) =>{
         try{
-            const existing = await api.get(`/users?email=${encodeURIComponent(email)}`)
+            const existing = await api.get(`/users?email=${encodeURIComponent(userinfo.email)}`)
 
             if(existing.data.length > 0){
                 return rejectWithValue('An account with this email already exists')
             }
 
             const res = await api.post('/users',{
-                name : uname,
-                email,
-                password : passwd,
+                name : userinfo.name,
+                email : userinfo.email,
+                password : userinfo.password,
                 role : "customer",
                 createdAt : new Date().toISOString
             })
