@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { isUserExist } from "../utils/context";
-import api from "../services/api";
+import api from "../../services/api";
 
 const AuthContext = createContext();
 

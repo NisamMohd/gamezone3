@@ -1,4 +1,4 @@
-import api from "../services/api"
+import api from "../../services/api"
 
 export const isUserExist = async (email) => {
     const res = await api.get(`/users?email=${email}`)
