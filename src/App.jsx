@@ -13,7 +13,7 @@ import Register from "./UserLayout/pages/Register";
 import Login from "./UserLayout/pages/Login";
 import ProtectedRoute from "./UserLayout/services/ProtectedRoute";
 import PublicRoute from "./UserLayout/services/PublicRoute";
-
+import Admin from "./AdminLayout/pages/Admin"
 function App() {
   return (
     <Routes>
@@ -86,6 +86,12 @@ function App() {
           </PublicRoute>
         }
       />
+
+      <Route 
+        path="admin"
+        element={
+          <Admin/>
+        }/>
 
       {/* CATCH-ALL REDIRECT */}
       <Route path="*" element={<Navigate to="/" replace />} />
