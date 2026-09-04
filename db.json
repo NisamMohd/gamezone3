@@ -16,6 +16,14 @@
         "zip": "678601",
         "country": "India"
       }
+    },
+    {
+      "name": "Nisam Mohd",
+      "email": "nisamalr007@gmail.com",
+      "password": "nisam123",
+      "role": "customer",
+      "createdAt": "2026-09-04T11:58:51.620Z",
+      "id": "_BXweQO_HDI"
     }
   ],
   "products": [
