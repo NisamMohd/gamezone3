@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { register } from "./thunks/authThunk";
 
 const loadUser = () =>{
     try{
@@ -29,5 +30,28 @@ const authSlice = createSlice({
     },
     extraReducers : (builder) => {
         builder
+        // REGISTER
+        
+        .addCase(register.fulfilled,(state, action) => {
+            state.status = 'succeed'
+            state.user =action.payload
+            localStorage.setItem('gamezone_user', JSON.stringify(action.payload))
+        })
+
+        .addMatcher(
+            (action) => action.type.endsWith("/pending"),
+            (state) => {
+                state.status = 'loading';
+                state.error = null;
+            } 
+        )
+
+        .addMatcher(
+            (action) => action.type.endsWith('/rejected'),
+            (state, action) => {
+                state.status = 'failed';
+                state.error = action.payload
+            }
+        )
     }
 })
