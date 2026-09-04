@@ -1,14 +1,17 @@
 import React, { useState } from "react";
-import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { formValidation } from "../utils/register";
 import { User, Mail, Lock, ShieldCheck, Gamepad2 } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { register } from "../../features/thunks/authThunk";
 
 function Register() {
-  const { register, error, setError, isLoading } = useAuth();
+  // FIX #1 & #2: fixed "staet" typo, renamed to avoid clashing with local `error` state
+  const { status, error: authError } = useSelector((state) => state.auth);
   const { toast } = useToast();
   const [cpasswd, setCPasswd] = useState("");
+  const [error, setError] = useState(null);
   const [userInfo, setUserInfo] = useState({
     name: "",
     email: "",
@@ -17,6 +20,7 @@ function Register() {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
   const from = location.state?.from?.pathname || "/";
 
   const handleChange = (e) => {
@@ -28,7 +32,7 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError && setError(null);
+    setError(null);
 
     const validate = formValidation(userInfo, cpasswd);
     if (!validate.valid) {
@@ -36,10 +40,19 @@ function Register() {
       return;
     }
 
-    const res = await register(userInfo);
-    if (res.success) {
-      toast.registerSuccess(userInfo.name || "Player");
-      navigate(from, { replace: true });
+    const result = await dispatch(register(userInfo));
+
+    if (register.fulfilled.match(result)) {
+      // FIX #4: payload, not data
+      const newUser = result.payload;
+      toast.registerSuccess(newUser.name);
+
+      if (newUser.role === "customer") {
+        navigate(from, { replace: true });
+      }
+    } else {
+      // registration failed — show the rejection reason as a toast too
+      toast.error("Registration Failed", result.payload || "Please try again");
     }
   };
 
@@ -201,15 +214,15 @@ function Register() {
               />
             </div>
 
-            {error && (
+            {(error || authError) && (
               <p className="text-xs font-tech text-pink-400 bg-pink-500/10 border border-pink-500/20 px-3 py-2">
-                {error}
+                {error || authError}
               </p>
             )}
 
             <button
               type="submit"
-              disabled={isLoading}
+              disabled={status === "loading"}
               className="
                 clip-btn
                 mt-2
@@ -226,7 +239,7 @@ function Register() {
               "
               style={{ background: "linear-gradient(120deg, #00E5FF, #FF3D8A)" }}
             >
-              {isLoading ? "Creating account…" : "Register"}
+              {status === "loading" ? "Creating account…" : "Register"}
             </button>
 
             <p className="text-xs text-gray-400 text-center mt-2 font-body">
