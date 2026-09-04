@@ -6,7 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./UserLayout/context/AuthContext.jsx";
 import { ToastProvider } from "./UserLayout/context/ToastContext.jsx";
 import { Provider } from "react-redux";
-import { store } from "./UserLayout/redux/store.js";
+import { store } from "./store.js";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
