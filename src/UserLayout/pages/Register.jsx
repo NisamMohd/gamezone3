@@ -47,7 +47,9 @@ function Register() {
       const newUser = result.payload;
       toast.registerSuccess(newUser.name);
 
-      if (newUser.role === "customer") {
+      if (newUser.role === "admin") {
+        navigate("/admin", { replace: true });
+      } else {
         navigate(from, { replace: true });
       }
     } else {

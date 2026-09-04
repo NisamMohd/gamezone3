@@ -14,11 +14,11 @@ import {
   Truck,
   RotateCcw,
 } from "lucide-react";
-import { useAuth } from "../context/AuthContext";
+
 import { fetchOrders } from "../redux/features/thunks/orderThunk";
 
 function Orders() {
-  const { user } = useAuth();
+  const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

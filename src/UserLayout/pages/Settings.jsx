@@ -16,12 +16,13 @@ import {
   AlertCircle,
   RotateCcw,
 } from "lucide-react";
-import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
+import { updateUser } from "../../features/authSlice";
 import api from "../../services/api";
 
 function Settings() {
-  const { user, updateUser } = useAuth();
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -146,10 +147,8 @@ function Settings() {
         updatePayload
       );
 
-      // Update AuthContext & localStorage
-      if (updateUser) {
-        updateUser(updatedServerUser);
-      }
+      // Update Redux auth user & localStorage
+      dispatch(updateUser(updatedServerUser));
 
       setHasSavedAddress(Boolean(addressData.address.trim()));
       toast.success(

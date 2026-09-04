@@ -5,11 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import Card from "../components/Card";
 import { fetchCarts } from "../redux/features/thunks/cartThunk";
 import { fetchWishlist } from "../redux/features/thunks/wishlistThunk";
-import { useAuth } from "../context/AuthContext";
 import { Filter, X, RotateCcw, SlidersHorizontal, ArrowUpDown, Search } from "lucide-react";
 
 function Products() {
-  const { user } = useAuth();
+  const user = useSelector((state) => state.auth.user); 
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
   const searchParam = searchParams.get("search") || "";
@@ -223,7 +222,7 @@ function Products() {
   ]);
 
   // Sidebar Filter Component
-  const FilterContent = () => (
+  const filterContentNode = (
     <>
       <div className="px-5 py-4 border-b border-white/10 flex items-center justify-between">
         <div className="flex items-center gap-2">
@@ -545,7 +544,7 @@ function Products() {
           <aside className="fixed hidden md:block w-64 shrink-0 clip-panel bg-[#0B0F17] border border-cyan-500/20 max-h-[calc(100vh-7rem)] overflow-y-auto">
             <span className="corner corner-tl" />
             <span className="corner corner-bl" />
-            <FilterContent />
+            {filterContentNode}
           </aside>
 
           {/* MOBILE FILTER MODAL / DRAWER */}
@@ -562,7 +561,7 @@ function Products() {
                     <X size={18} />
                   </button>
                 </div>
-                <FilterContent />
+                {filterContentNode}
                 <div className="pt-4 mt-auto">
                   <button
                     type="button"

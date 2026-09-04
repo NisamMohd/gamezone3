@@ -1,6 +1,5 @@
-import React from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useSelector } from "react-redux";
 
 /**
  * ProtectedRoute Guard
@@ -8,7 +7,8 @@ import { useAuth } from "../context/AuthContext";
  * Redirects unauthenticated users to /login preserving the intended destination.
  */
 function ProtectedRoute({ children }) {
-  const { user, isLoading } = useAuth();
+  const { user, status } = useSelector((state) => state.auth);
+  const isLoading = status === "loading";
   const location = useLocation();
 
   if (isLoading) {

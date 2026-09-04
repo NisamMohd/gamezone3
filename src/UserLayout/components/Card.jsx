@@ -1,7 +1,6 @@
 import React from "react";
 import { IndianRupee, ShoppingCart, Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../redux/features/thunks/cartThunk";
@@ -11,7 +10,7 @@ function Card({ value }) {
   const item = value;
 
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const user = useSelector((state) => state.auth.user);
   const { toast } = useToast();
   const dispatch = useDispatch();
 

@@ -362,7 +362,26 @@
       "id": "xg_jtgkBLrk"
     }
   ],
-  "carts": [],
+  "carts": [
+    {
+      "userId": "_BXweQO_HDI",
+      "productId": "2",
+      "title": "PS5 Slim + console x 1",
+      "price": 24999,
+      "image": "https://i.pinimg.com/1200x/89/47/5d/89475d9a656d38564cd6d02ce9abd48d.jpg",
+      "quantity": 1,
+      "id": "fyAJyBfKTgw"
+    },
+    {
+      "userId": "_BXweQO_HDI",
+      "productId": "3",
+      "title": "PS6 + console x 1",
+      "price": 32999,
+      "image": "https://i.pinimg.com/736x/38/fc/8b/38fc8bed8af35de6e2b7c86a2bde70f0.jpg",
+      "quantity": 1,
+      "id": "B_B732EGL_A"
+    }
+  ],
   "wishlists": [
     {
       "userId": "ODYOA6i7HMM",
@@ -396,6 +415,17 @@
       "stock": 10,
       "description": "",
       "id": "WUFdg5euMBI"
+    },
+    {
+      "userId": "_BXweQO_HDI",
+      "productId": "2",
+      "title": "PS5 Slim + console x 1",
+      "price": 24999,
+      "image": "https://i.pinimg.com/1200x/89/47/5d/89475d9a656d38564cd6d02ce9abd48d.jpg",
+      "category": "playstation",
+      "stock": 3,
+      "description": "",
+      "id": "OjnTB5Zvo7w"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

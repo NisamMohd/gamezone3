@@ -1,27 +1,42 @@
-import React, { useState } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useToast } from "../context/ToastContext";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { Mail, Lock, Gamepad2 } from "lucide-react";
+import { login } from "../../features/thunks/authThunk";
+import { clearAuthError } from "../../features/authSlice";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [passwd, setPasswd] = useState("");
-  const { login, error, setError, isLoading } = useAuth();
+  const dispatch = useDispatch();
+  const { status, error } = useSelector((state) => state.auth);
+  const isLoading = status === "loading";
   const { toast } = useToast();
 
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
 
+  useEffect(() => {
+    dispatch(clearAuthError());
+  }, [dispatch]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError && setError(null);
+    dispatch(clearAuthError());
 
-    const response = await login(email, passwd);
-    if (response.success) {
-      toast.loginSuccess(response.user?.name || "Player");
-      navigate(from, { replace: true });
+    const result = await dispatch(login({ email, password: passwd }));
+    if (login.fulfilled.match(result)) {
+      const loggedUser = result.payload;
+      toast.loginSuccess(loggedUser?.name || "Player");
+      if (loggedUser?.role === "admin") {
+        navigate("/admin", { replace: true });
+      } else {
+        navigate(from, { replace: true });
+      }
+    } else {
+      toast.error("Login Failed", result.payload || "Invalid credentials");
     }
   };
 

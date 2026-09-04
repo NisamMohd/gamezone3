@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -21,18 +20,70 @@ import {
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
+const themeStyles = `
+  @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  .font-display { font-family: 'Rajdhani', sans-serif; }
+  .font-body { font-family: 'Inter', sans-serif; }
+  .font-tech { font-family: 'JetBrains Mono', monospace; }
+
+  .clip-panel {
+    clip-path: polygon(0 16px, 16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%);
+  }
+  .clip-btn {
+    clip-path: polygon(0 10px, 10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
+  }
+  .corner {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-color: #00E5FF;
+    pointer-events: none;
+  }
+  .corner-tl { top: -1px; left: -1px; border-top: 2px solid; border-left: 2px solid; }
+  .corner-tr { top: -1px; right: -1px; border-top: 2px solid; border-right: 2px solid; }
+  .corner-bl { bottom: -1px; left: -1px; border-bottom: 2px solid; border-left: 2px solid; }
+  .corner-br { bottom: -1px; right: -1px; border-bottom: 2px solid; border-right: 2px solid; }
+
+  .grid-bg {
+    background-image:
+      linear-gradient(rgba(0,229,255,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+`;
+
+const Backdrop = () => (
+  <>
+    <style>{themeStyles}</style>
+    <div className="fixed inset-0 grid-bg pointer-events-none" />
+    <div
+      className="fixed -top-40 -left-40 w-96 h-96 rounded-full opacity-[0.08] blur-3xl pointer-events-none"
+      style={{
+        background: "radial-gradient(circle, #00E5FF, transparent 70%)",
+      }}
+    />
+    <div
+      className="fixed -bottom-40 -right-40 w-96 h-96 rounded-full opacity-[0.08] blur-3xl pointer-events-none"
+      style={{
+        background: "radial-gradient(circle, #FF3D8A, transparent 70%)",
+      }}
+    />
+  </>
+);
+
 function Wishlists() {
-  const { user } = useAuth();
+  const user = useSelector((state) => state.auth.user); 
   const { toast } = useToast();
-  const { items, loading, status } = useSelector((state) => state.wishlist);
+  const { items, status } = useSelector((state) => state.wishlist);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user) {
+    if (user?.id) {
       dispatch(fetchWishlist(user.id));
     }
-  }, [user, dispatch]);
+  }, [user?.id, dispatch]);
 
   const handleAddToCart = (item) => {
     if (!user) {
@@ -111,60 +162,8 @@ function Wishlists() {
     (sum, item) => sum + (Number(item.price) || 0),
     0
   );
-
-  const themeStyles = `
-    @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
-
-    .font-display { font-family: 'Rajdhani', sans-serif; }
-    .font-body { font-family: 'Inter', sans-serif; }
-    .font-tech { font-family: 'JetBrains Mono', monospace; }
-
-    .clip-panel {
-      clip-path: polygon(0 16px, 16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%);
-    }
-    .clip-btn {
-      clip-path: polygon(0 10px, 10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
-    }
-    .corner {
-      position: absolute;
-      width: 14px;
-      height: 14px;
-      border-color: #00E5FF;
-      pointer-events: none;
-    }
-    .corner-tl { top: -1px; left: -1px; border-top: 2px solid; border-left: 2px solid; }
-    .corner-tr { top: -1px; right: -1px; border-top: 2px solid; border-right: 2px solid; }
-    .corner-bl { bottom: -1px; left: -1px; border-bottom: 2px solid; border-left: 2px solid; }
-    .corner-br { bottom: -1px; right: -1px; border-bottom: 2px solid; border-right: 2px solid; }
-
-    .grid-bg {
-      background-image:
-        linear-gradient(rgba(0,229,255,0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,229,255,0.05) 1px, transparent 1px);
-      background-size: 40px 40px;
-    }
-  `;
-
-  const Backdrop = () => (
-    <>
-      <style>{themeStyles}</style>
-      <div className="fixed inset-0 grid-bg pointer-events-none" />
-      <div
-        className="fixed -top-40 -left-40 w-96 h-96 rounded-full opacity-[0.08] blur-3xl pointer-events-none"
-        style={{
-          background: "radial-gradient(circle, #00E5FF, transparent 70%)",
-        }}
-      />
-      <div
-        className="fixed -bottom-40 -right-40 w-96 h-96 rounded-full opacity-[0.08] blur-3xl pointer-events-none"
-        style={{
-          background: "radial-gradient(circle, #FF3D8A, transparent 70%)",
-        }}
-      />
-    </>
-  );
-
   // Loading state
+
   if (status === "loading" && items.length === 0) {
     return (
       <div className="pt-28 min-h-screen bg-black flex items-center justify-center relative">

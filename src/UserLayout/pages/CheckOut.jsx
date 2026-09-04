@@ -18,14 +18,14 @@ import {
   Phone,
   User,
 } from "lucide-react";
-import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
 import { createOrder } from "../redux/features/thunks/orderThunk";
 import { resetOrderStatus } from "../redux/features/orderSlice";
+import { updateUser } from "../../features/authSlice";
 import api from "../../services/api";
 
 function CheckOut() {
-  const { user, updateUser } = useAuth();
+  const user = useSelector((state) => state.auth.user);
   const { toast } = useToast();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -162,13 +162,13 @@ function CheckOut() {
       const resultAction = await dispatch(createOrder(orderPayload));
 
       if (createOrder.fulfilled.match(resultAction)) {
-        // Update user address in context
-        if (updateUser) {
+        // Update user address in Redux
+        dispatch(
           updateUser({
             ...user,
             address: shipping,
-          });
-        }
+          })
+        );
         toast.success(
           "Order Placed Successfully!",
           "Your gaming equipment order has been confirmed and saved to server."
@@ -246,7 +246,7 @@ function CheckOut() {
               <div>
                 <span className="font-tech text-[10px] text-gray-500 uppercase block">ORDER ID</span>
                 <span className="font-tech text-xs text-cyan-300 font-bold">
-                  #{currentOrder.id || "ORD-" + Math.floor(100000 + Math.random() * 900000)}
+                  #{currentOrder?.id || "ORD-CONFIRMED"}
                 </span>
               </div>
 

@@ -1,6 +1,5 @@
-import React from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useSelector } from "react-redux";
 
 /**
  * PublicRoute Guard (Guest-Only)
@@ -8,7 +7,8 @@ import { useAuth } from "../context/AuthContext";
  * Redirects already logged-in users away to home or their previous intended destination.
  */
 function PublicRoute({ children }) {
-  const { user, isLoading } = useAuth();
+  const { user, status } = useSelector((state) => state.auth);
+  const isLoading = status === "loading";
   const location = useLocation();
 
   if (isLoading) {
@@ -25,6 +25,9 @@ function PublicRoute({ children }) {
   }
 
   if (user) {
+    if (user.role === "admin") {
+      return <Navigate to="/admin" replace />;
+    }
     const destination = location.state?.from?.pathname || "/";
     return <Navigate to={destination} replace />;
   }

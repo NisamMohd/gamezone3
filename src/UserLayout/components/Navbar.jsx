@@ -17,7 +17,7 @@ import {
   Sliders,
 } from "lucide-react";
 import logo from "../../assets/logo.png";
-import { useAuth } from "../context/AuthContext";
+import { logout } from "../../features/authSlice";
 import { useToast } from "../context/ToastContext";
 import { clearCart } from "../redux/features/cartSlice";
 import { clearWishlist } from "../redux/features/wishlistSlice";
@@ -40,7 +40,7 @@ function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-  const { user, logout } = useAuth();
+  const user = useSelector((state) => state.auth.user);
   const { toast } = useToast();
 
   const cartItems = useSelector((state) => state.cart.items || []);
@@ -138,7 +138,7 @@ function Navbar() {
 
   const handleLogout = () => {
     setUserDropdownOpen(false);
-    if (logout) logout();
+    dispatch(logout());
     dispatch(clearCart());
     dispatch(clearWishlist());
     dispatch(clearOrders());

@@ -15,7 +15,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { addToCart } from "../redux/features/thunks/cartThunk";
 import { toggleWishlist, fetchWishlist } from "../redux/features/thunks/wishlistThunk";
-import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
 
 function ProductDetails() {
@@ -24,7 +23,7 @@ function ProductDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user } = useAuth();
+  const user = useSelector((state) => state.auth.user);
   const { toast } = useToast();
 
   const [qty, setQty] = useState(1);

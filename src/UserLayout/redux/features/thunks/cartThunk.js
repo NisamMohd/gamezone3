@@ -65,17 +65,17 @@ export const incrementQty = createAsyncThunk(
 
 export const decrementQty = createAsyncThunk(
   "carts/decrementQty",
-  async (item) => {
-    if(item.quantity == 0){
-      return;
+  async (item, { rejectWithValue }) => {
+    if (item.quantity <= 1) {
+      return rejectWithValue("Minimum quantity reached");
     }
     const res = await api.patch(`/carts/${item.id}`, {
-      quantity: item.quantity - 1
+      quantity: item.quantity - 1,
     });
 
     return res.data;
   }
-)
+);
 
 export const remove = createAsyncThunk(
   "carts/remove",

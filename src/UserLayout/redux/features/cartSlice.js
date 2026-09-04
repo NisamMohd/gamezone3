@@ -76,6 +76,7 @@ const cartSlice = createSlice({
                     state.status = "succeeded";
 
                     const updatedItem = action.payload;
+                    if (!updatedItem) return;
 
                     const index = state.items.findIndex(
                         (item) => item.id === updatedItem.id

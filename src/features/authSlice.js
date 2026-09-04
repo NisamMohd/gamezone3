@@ -1,12 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { register } from "./thunks/authThunk";
+import { register, login } from "./thunks/authThunk";
 
 const loadUser = () => {
   try {
-    const stored = localStorage.getItem("gamezone_user");
+    const stored = localStorage.getItem("gamezone_user") || localStorage.getItem("user");
     return stored ? JSON.parse(stored) : null;
   } catch {
     return null;
+  }
+};
+
+const saveUserToStorage = (user) => {
+  if (user) {
+    localStorage.setItem("gamezone_user", JSON.stringify(user));
+    localStorage.setItem("user", JSON.stringify(user));
+  } else {
+    localStorage.removeItem("gamezone_user");
+    localStorage.removeItem("user");
   }
 };
 
@@ -22,7 +32,11 @@ const authSlice = createSlice({
       state.user = null;
       state.status = "idle";
       state.error = null;
-      localStorage.removeItem("gamezone_user");
+      saveUserToStorage(null);
+    },
+    updateUser: (state, action) => {
+      state.user = action.payload;
+      saveUserToStorage(action.payload);
     },
     clearAuthError: (state) => {
       state.error = null;
@@ -32,13 +46,20 @@ const authSlice = createSlice({
     builder
       // REGISTER
       .addCase(register.fulfilled, (state, action) => {
-        state.status = "succeeded"; // FIX #8: was "succeed"
+        state.status = "succeeded";
         state.user = action.payload;
-        localStorage.setItem("gamezone_user", JSON.stringify(action.payload));
+        state.error = null;
+        saveUserToStorage(action.payload);
       })
 
-      // FIX #9: scoped matchers to auth/* actions only, so other slices'
-      // thunks don't clobber this state
+      // LOGIN
+      .addCase(login.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.user = action.payload;
+        state.error = null;
+        saveUserToStorage(action.payload);
+      })
+
       .addMatcher(
         (action) => action.type.startsWith("auth/") && action.type.endsWith("/pending"),
         (state) => {
@@ -56,5 +77,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout, clearAuthError } = authSlice.actions;
+export const { logout, updateUser, clearAuthError } = authSlice.actions;
 export default authSlice.reducer;
