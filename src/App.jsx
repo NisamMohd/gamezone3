@@ -13,41 +13,44 @@ import Register from "./UserLayout/pages/Register";
 import Login from "./UserLayout/pages/Login";
 import ProtectedRoute from "./UserLayout/services/ProtectedRoute";
 import PublicRoute from "./UserLayout/services/PublicRoute";
-import Admin from "./AdminLayout/pages/Admin"
-import Dashboard from "./AdminLayout/pages/Dashboard"
+import Admin from "./AdminLayout/pages/Admin";
+import Dashboard from "./AdminLayout/pages/Dashboard";
 import AdminRoute from "./services/AdminRoute";
+import UserRoutes from "./UserLayout/services/UserRoutes";
 function App() {
   return (
     <Routes>
       {/* User Routes  */}
 
       {/* MAIN APPLICATION LAYOUT (NAVBAR + OUTLET) */}
-      <Route path="/" element={<Home />}>
-        {/* PUBLIC OPEN ACCESS ROUTES */}
-        <Route index element={<Index />} />
-        <Route path="products" element={<Products />} />
-        <Route path="products/:id" element={<ProductDetails />} />
+      <Route element={<UserRoutes/>}>
+        <Route path="/" element={<Home />}>
+          {/* PUBLIC OPEN ACCESS ROUTES */}
+          <Route index element={<Index />} />
+          <Route path="products" element={<Products />} />
+          <Route path="products/:id" element={<ProductDetails />} />
 
-        {/* PROTECTED AUTHENTICATED ROUTES */}
-      <Route element={<ProtectedRoute/>}>
-          <Route path="wishlists"  element={<Wishlists/>}/>
-          <Route path="cart"  element={<Cart/>}/>
-          <Route path="checkout"  element={<CheckOut/>}/>
-          <Route path="orders"  element={<Orders/>}/>
-          <Route path="settings"  element={<Settings/>}/>
-      </Route>
+          {/* PROTECTED AUTHENTICATED ROUTES */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="wishlists" element={<Wishlists />} />
+            <Route path="cart" element={<Cart />} />
+            <Route path="checkout" element={<CheckOut />} />
+            <Route path="orders" element={<Orders />} />
+            <Route path="settings" element={<Settings />} />
+          </Route>
+        </Route>
       </Route>
 
       {/* GUEST-ONLY PUBLIC ROUTES (BLOCKED WHEN LOGGED IN) */}
-      <Route element={<PublicRoute/>}>
-        <Route path="/login" element={<Login/>}/>
-        <Route path="/register" element={<Register/>}/>
+      <Route element={<PublicRoute />}>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
       </Route>
 
-     {/* ADMIN PROTECTED ROUTES */}
-      <Route  element={<AdminRoute/>}>
-        <Route path="/admin" element={<Admin/>}> 
-          <Route path="dashboard" element={<Dashboard/>}/>
+      {/* ADMIN PROTECTED ROUTES */}
+      <Route element={<AdminRoute />}>
+        <Route path="/admin" element={<Admin />}>
+          <Route path="dashboard" element={<Dashboard />} />
         </Route>
       </Route>
 
