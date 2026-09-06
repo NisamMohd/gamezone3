@@ -14,6 +14,8 @@ import Login from "./UserLayout/pages/Login";
 import ProtectedRoute from "./UserLayout/services/ProtectedRoute";
 import PublicRoute from "./UserLayout/services/PublicRoute";
 import Admin from "./AdminLayout/pages/Admin"
+import Dashboard from "./AdminLayout/pages/Dashboard"
+import AdminRoute from "./services/AdminRoute";
 function App() {
   return (
     <Routes>
@@ -27,71 +29,27 @@ function App() {
         <Route path="products/:id" element={<ProductDetails />} />
 
         {/* PROTECTED AUTHENTICATED ROUTES */}
-        <Route
-          path="wishlists"
-          element={
-            <ProtectedRoute>
-              <Wishlists />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="cart"
-          element={
-            <ProtectedRoute>
-              <Cart />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="checkout"
-          element={
-            <ProtectedRoute>
-              <CheckOut />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="orders"
-          element={
-            <ProtectedRoute>
-              <Orders />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="settings"
-          element={
-            <ProtectedRoute>
-              <Settings />
-            </ProtectedRoute>
-          }
-        />
+      <Route element={<ProtectedRoute/>}>
+          <Route path="wishlists"  element={<Wishlists/>}/>
+          <Route path="cart"  element={<Cart/>}/>
+          <Route path="checkout"  element={<CheckOut/>}/>
+          <Route path="orders"  element={<Orders/>}/>
+          <Route path="settings"  element={<Settings/>}/>
+      </Route>
       </Route>
 
       {/* GUEST-ONLY PUBLIC ROUTES (BLOCKED WHEN LOGGED IN) */}
-      <Route
-        path="/login"
-        element={
-          <PublicRoute>
-            <Login />
-          </PublicRoute>
-        }
-      />
-      <Route
-        path="/register"
-        element={
-          <PublicRoute>
-            <Register />
-          </PublicRoute>
-        }
-      />
+      <Route element={<PublicRoute/>}>
+        <Route path="/login" element={<Login/>}/>
+        <Route path="/register" element={<Register/>}/>
+      </Route>
 
-      <Route 
-        path="/admin"
-        element={
-          <Admin/>
-        }/>
+     {/* ADMIN PROTECTED ROUTES */}
+      <Route  element={<AdminRoute/>}>
+        <Route path="/admin" element={<Admin/>}> 
+          <Route path="dashboard" element={<Dashboard/>}/>
+        </Route>
+      </Route>
 
       {/* CATCH-ALL REDIRECT */}
       <Route path="*" element={<Navigate to="/" replace />} />
