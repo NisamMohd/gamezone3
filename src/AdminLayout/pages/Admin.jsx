@@ -1,8 +1,11 @@
 import React from 'react'
+import { Outlet } from 'react-router-dom'
 
 function Admin() {
   return (
-    <div>Admin</div>
+    <div>
+      <Outlet/>
+    </div>
   )
 }
 

@@ -5,7 +5,7 @@
       "email": "nisammohd514@gmail.com",
       "password": "nisam123",
       "createdAt": "2026-08-03T13:05:59.939Z",
-      "role": "customer",
+      "role": "admin",
       "id": "ODYOA6i7HMM",
       "address": {
         "name": "Nisam Mohd",
@@ -23,7 +23,16 @@
       "password": "nisam123",
       "role": "customer",
       "createdAt": "2026-09-04T11:58:51.620Z",
-      "id": "_BXweQO_HDI"
+      "id": "_BXweQO_HDI",
+      "address": {
+        "name": "Nisam Mohd",
+        "phone": "8921993625",
+        "address": "neospace",
+        "city": "ramanattukara",
+        "state": "Kerala",
+        "zip": "673635",
+        "country": "India"
+      }
     }
   ],
   "products": [
@@ -41,7 +50,7 @@
       "title": "PS5 Slim + console x 1",
       "image": "https://i.pinimg.com/1200x/89/47/5d/89475d9a656d38564cd6d02ce9abd48d.jpg",
       "price": 24999,
-      "stock": 3
+      "stock": 2
     },
     {
       "id": "3",
@@ -49,7 +58,7 @@
       "title": "PS6 + console x 1",
       "image": "https://i.pinimg.com/736x/38/fc/8b/38fc8bed8af35de6e2b7c86a2bde70f0.jpg",
       "price": 32999,
-      "stock": 8
+      "stock": 6
     },
     {
       "id": "4",
@@ -105,7 +114,7 @@
       "title": "PlayStation 5 white",
       "image": "https://i.pinimg.com/736x/b4/6b/92/b46b92edaeaebd9d923ab1ba3303179c.jpg",
       "price": 22000,
-      "stock": 5
+      "stock": 4
     },
     {
       "id": "11",
@@ -209,7 +218,7 @@
       "title": "ASUS ROG Strix GeForce RTX 4090 OC Edition 24GB GDDR6X High‑Performance GPU",
       "image": "https://i.pinimg.com/736x/75/1b/66/751b665a59b34dffe195e04057aab0c3.jpg",
       "price": 4999,
-      "stock": 1
+      "stock": 0
     },
     {
       "id": "24",
@@ -360,72 +369,82 @@
       "status": "Order Confirmed",
       "createdAt": "2026-09-04T09:40:56.719Z",
       "id": "xg_jtgkBLrk"
-    }
-  ],
-  "carts": [
-    {
-      "userId": "_BXweQO_HDI",
-      "productId": "2",
-      "title": "PS5 Slim + console x 1",
-      "price": 24999,
-      "image": "https://i.pinimg.com/1200x/89/47/5d/89475d9a656d38564cd6d02ce9abd48d.jpg",
-      "quantity": 1,
-      "id": "fyAJyBfKTgw"
     },
     {
       "userId": "_BXweQO_HDI",
-      "productId": "3",
-      "title": "PS6 + console x 1",
-      "price": 32999,
-      "image": "https://i.pinimg.com/736x/38/fc/8b/38fc8bed8af35de6e2b7c86a2bde70f0.jpg",
-      "quantity": 1,
-      "id": "B_B732EGL_A"
+      "items": [
+        {
+          "productId": "2",
+          "title": "PS5 Slim + console x 1",
+          "price": 24999,
+          "quantity": 1,
+          "image": "https://i.pinimg.com/1200x/89/47/5d/89475d9a656d38564cd6d02ce9abd48d.jpg",
+          "category": ""
+        },
+        {
+          "productId": "3",
+          "title": "PS6 + console x 1",
+          "price": 32999,
+          "quantity": 2,
+          "image": "https://i.pinimg.com/736x/38/fc/8b/38fc8bed8af35de6e2b7c86a2bde70f0.jpg",
+          "category": ""
+        },
+        {
+          "productId": "10",
+          "title": "PlayStation 5 white",
+          "price": 22000,
+          "quantity": 1,
+          "image": "https://i.pinimg.com/736x/b4/6b/92/b46b92edaeaebd9d923ab1ba3303179c.jpg",
+          "category": ""
+        },
+        {
+          "productId": "23",
+          "title": "ASUS ROG Strix GeForce RTX 4090 OC Edition 24GB GDDR6X High‑Performance GPU",
+          "price": 4999,
+          "quantity": 1,
+          "image": "https://i.pinimg.com/736x/75/1b/66/751b665a59b34dffe195e04057aab0c3.jpg",
+          "category": ""
+        }
+      ],
+      "shippingAddress": {
+        "name": "Nisam Mohd",
+        "phone": "8921993625",
+        "address": "neospace",
+        "city": "ramanattukara",
+        "state": "Kerala",
+        "zip": "673635",
+        "country": "India"
+      },
+      "totalAmount": 117996,
+      "paymentMethod": "Cash on Delivery",
+      "status": "Order Confirmed",
+      "createdAt": "2026-09-05T15:53:53.436Z",
+      "id": "sv1qLlyBykY"
     }
   ],
+  "carts": [],
   "wishlists": [
     {
-      "userId": "ODYOA6i7HMM",
-      "productId": "7",
-      "title": "PS5 Gold Edition + Console x 1 + HeadPhone x 1",
-      "price": 52999,
-      "image": "https://i.pinimg.com/1200x/66/4e/6c/664e6c53a670bc3498da19bc310ac795.jpg",
-      "category": "playstation",
-      "stock": 10,
-      "description": "",
-      "id": "zZZzunUel9E"
-    },
-    {
-      "userId": "ODYOA6i7HMM",
-      "productId": "2",
-      "title": "PS5 Slim + console x 1",
-      "price": 24999,
-      "image": "https://i.pinimg.com/1200x/89/47/5d/89475d9a656d38564cd6d02ce9abd48d.jpg",
-      "category": "playstation",
-      "stock": 3,
-      "description": "",
-      "id": "ReZU21uSSXQ"
-    },
-    {
-      "userId": "ODYOA6i7HMM",
+      "userId": "_BXweQO_HDI",
       "productId": "3",
       "title": "PS6 + console x 1",
       "price": 32999,
       "image": "https://i.pinimg.com/736x/38/fc/8b/38fc8bed8af35de6e2b7c86a2bde70f0.jpg",
       "category": "playstation",
-      "stock": 10,
+      "stock": 8,
       "description": "",
-      "id": "WUFdg5euMBI"
+      "id": "TbpQWOkh1dU"
     },
     {
       "userId": "_BXweQO_HDI",
-      "productId": "2",
-      "title": "PS5 Slim + console x 1",
-      "price": 24999,
-      "image": "https://i.pinimg.com/1200x/89/47/5d/89475d9a656d38564cd6d02ce9abd48d.jpg",
+      "productId": "4",
+      "title": "PS6 Neon lightning effect + console x 1",
+      "price": 34999,
+      "image": "https://i.pinimg.com/736x/b5/91/eb/b591eb5785f75999986f21ea0ea13310.jpg",
       "category": "playstation",
-      "stock": 3,
+      "stock": 10,
       "description": "",
-      "id": "OjnTB5Zvo7w"
+      "id": "EedI1nEBmbA"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
