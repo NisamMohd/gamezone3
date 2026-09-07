@@ -36,3 +36,5 @@ const userManagementSlice = createSlice({
             )
     }
 })
+
+export default userManagementSlice.reducer;
