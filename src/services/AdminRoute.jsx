@@ -13,7 +13,7 @@ function AdminRoute() {
         return <Navigate to='/' replace />
     }
 
-    if (isLoading) {
+    if (status === 'loading') {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="p-8 clip-panel bg-[#0B0F17] border border-cyan-500/30 text-center">
