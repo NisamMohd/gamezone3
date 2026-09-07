@@ -4,13 +4,15 @@ import cartReducer from './UserLayout/redux/features/cartSlice'
 import wishlistReducer from './UserLayout/redux/features/wishlistSlice'
 import orderReducer from './UserLayout/redux/features/orderSlice'
 import authReducer from './features/authSlice'
-
+import UserManagmentReducer from "./AdminLayout/redux/features/userManagementSlice";
 export const store = configureStore({
     reducer: {
         products: productReducer,
         cart: cartReducer,
         wishlist: wishlistReducer,
         orders: orderReducer,
-        auth: authReducer
+        auth: authReducer,
+        users: UserManagmentReducer,
+
     }
 })
