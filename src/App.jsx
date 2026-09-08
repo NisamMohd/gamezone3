@@ -17,6 +17,7 @@ import Admin from "./AdminLayout/pages/Admin";
 import Dashboard from "./AdminLayout/pages/Dashboard";
 import AdminRoute from "./services/AdminRoute";
 import UserRoutes from "./UserLayout/services/UserRoutes";
+import UserManagement from "./AdminLayout/pages/UserManagment"
 function App() {
   return (
     <Routes>
@@ -50,7 +51,8 @@ function App() {
       {/* ADMIN PROTECTED ROUTES */}
       <Route element={<AdminRoute />}>
         <Route path="/admin" element={<Admin />}>
-          <Route path="dashboard" element={<Dashboard />} />
+          <Route index element={<Dashboard />} />
+          <Route path="usermanagment" element={<UserManagement/>} />
         </Route>
       </Route>
 
