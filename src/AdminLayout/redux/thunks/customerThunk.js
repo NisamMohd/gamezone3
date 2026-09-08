@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../../services/api";
 
 export const customerList = createAsyncThunk(
-    "users/customerlist",
+    "users/customerList",
     async (_,{ rejectWithValue }) => {
         try{
             const res = await api.get(`/users?role=customer`)
