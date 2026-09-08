@@ -13,7 +13,7 @@ function UserManagment() {
     <div>
         {items.map((item) => (
             <span key={item.id}>{item.name}</span>
-        ))}
+))}
     </div>
   )
 }
