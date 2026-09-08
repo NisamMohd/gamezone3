@@ -58,7 +58,7 @@
       "title": "PS6 + console x 1",
       "image": "https://i.pinimg.com/736x/38/fc/8b/38fc8bed8af35de6e2b7c86a2bde70f0.jpg",
       "price": 32999,
-      "stock": 6
+      "stock": 5
     },
     {
       "id": "4",
@@ -420,6 +420,33 @@
       "status": "Order Confirmed",
       "createdAt": "2026-09-05T15:53:53.436Z",
       "id": "sv1qLlyBykY"
+    },
+    {
+      "userId": "_BXweQO_HDI",
+      "items": [
+        {
+          "productId": "3",
+          "title": "PS6 + console x 1",
+          "price": 32999,
+          "quantity": 1,
+          "image": "https://i.pinimg.com/736x/38/fc/8b/38fc8bed8af35de6e2b7c86a2bde70f0.jpg",
+          "category": ""
+        }
+      ],
+      "shippingAddress": {
+        "name": "Nisam Mohd",
+        "phone": "8921993625",
+        "address": "neospace",
+        "city": "ramanattukara",
+        "state": "Kerala",
+        "zip": "673635",
+        "country": "India"
+      },
+      "totalAmount": 32999,
+      "paymentMethod": "Cash on Delivery",
+      "status": "Order Confirmed",
+      "createdAt": "2026-09-08T09:34:28.066Z",
+      "id": "OSXhReeT_jY"
     }
   ],
   "carts": [],
