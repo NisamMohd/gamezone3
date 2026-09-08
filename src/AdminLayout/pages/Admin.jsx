@@ -3,11 +3,12 @@ import { Outlet, useNavigate } from "react-router-dom";
 import NavbarAdmin from "../components/NavbarAdmin";
 
 function Admin() {
- 
   return (
     <div>
-      <NavbarAdmin/>
-      <Outlet />
+      <NavbarAdmin />
+      <div className="mt-15">
+        <Outlet/>
+      </div>
     </div>
   );
 }
