@@ -1,12 +1,10 @@
 import React from 'react'
 import logo from "../../assets/logo.png";
-import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../features/authSlice";
-import { useNavigate } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
 
 function NavbarAdmin() {
-  const { state } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handlelogout = (e) => {
@@ -15,7 +13,7 @@ function NavbarAdmin() {
     navigate("/");
   };
   return (
-    <div className="fixed top-0 left-0 right-0 bg-black/90 backdrop-blur-md border-b border-cyan-500/10 z-50">
+    <div className="fixed top-0 left-0 right-0 bg-black/90 backdrop-blur-md border-b border-cyan-500/10 z-50 ">
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 
@@ -61,12 +59,14 @@ function NavbarAdmin() {
         }
       `}</style>
       <nav>
-        <div className="flex justify-between">
+        <div className="flex justify-between items-center">
           <img
             src={logo}
             alt=""
             className="h-11 sm:h-12 w-auto object-contain drop-shadow-[0_0_12px_rgba(0,229,255,0.25)] ml-5"
           />
+
+          <Link to="usermanagment" className='text-white items-center'>User-Management</Link>
           <button
             onClick={handlelogout}
             className="
