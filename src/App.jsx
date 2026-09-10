@@ -18,6 +18,8 @@ import Dashboard from "./AdminLayout/pages/Dashboard";
 import AdminRoute from "./services/AdminRoute";
 import UserRoutes from "./UserLayout/services/UserRoutes";
 import UserManagement from "./AdminLayout/pages/UserManagment"
+import ProductsManagement from "./AdminLayout/pages/ProductsManagement";
+import OrderDetails from "./AdminLayout/pages/OrderDetails";
 function App() {
   return (
     <Routes>
@@ -53,6 +55,8 @@ function App() {
         <Route path="/admin" element={<Admin />}>
           <Route index element={<Dashboard />} />
           <Route path="usermanagment" element={<UserManagement/>} />
+          <Route path="productmanagement" element={<ProductsManagement/>} />
+          <Route path="orderdetails" element={<OrderDetails/>} />
         </Route>
       </Route>
 
