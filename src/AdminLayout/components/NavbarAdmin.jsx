@@ -1,8 +1,8 @@
-import React from 'react'
+import React from "react";
 import logo from "../../assets/logo.png";
 import { logout } from "../../features/authSlice";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux";
 
 function NavbarAdmin() {
   const dispatch = useDispatch();
@@ -57,6 +57,14 @@ function NavbarAdmin() {
         .nav-link.active::after {
           transform: scaleX(1);
         }
+        .logout-btn {
+            background-size: 150% 150%;
+            background-position: left center;
+        }
+        .logout-btn:hover {
+            background-position: right center;
+            filter: brightness(1.1);
+        }
       `}</style>
       <nav>
         <div className="flex justify-between items-center">
@@ -66,36 +74,38 @@ function NavbarAdmin() {
             className="h-11 sm:h-12 w-auto object-contain drop-shadow-[0_0_12px_rgba(0,229,255,0.25)] ml-5"
           />
 
-          <Link to="usermanagment" className='text-white items-center'>User-Management</Link>
           <button
             onClick={handlelogout}
             className="
-                  flex
-                  items-center
-                  gap-2.5
-                  clip-btn
-                  px-4
-                  sm:px-5
-                  py-2.5
-                  font-display
-                  font-700
-                  text-sm
-                  tracking-wider
-                  transition
-                  cursor-pointer
-                  whitespace-nowrap
-                  border
-                  mr-5
-                  my-2"
-                  style={{background : "linear-gradient(120deg, #00E5FF, #FF3D8A)"}}
+              logout-btn
+              flex
+              items-center
+              gap-2.5
+              clip-btn
+              px-4
+              sm:px-5
+              py-2.5
+              font-display
+              font-700
+              text-sm
+              tracking-wider
+              transition-all
+              duration-200
+              cursor-pointer  
+              whitespace-nowrap
+              border
+              mr-5
+              my-2
+              hover:scale-105
+              hover:shadow-[0_0_16px_rgba(255,61,138,0.4)]"
+            style={{ background: "linear-gradient(120deg, #00E5FF, #FF3D8A)" }}
           >
             Logout
           </button>
         </div>
       </nav>
-
     </div>
-  )
+  );
 }
 
-export default NavbarAdmin
+export default NavbarAdmin;
