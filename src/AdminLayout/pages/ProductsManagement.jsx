@@ -1,11 +1,7 @@
 import React from 'react'
 
-function ProductsManagement() {
+export default function ProductsManagement() {
   return (
-    <div className='text-white'>
-      
-    </div>
+    <div className='text-white'>ProductsManagement</div>
   )
 }
-
-export default ProductsManagement

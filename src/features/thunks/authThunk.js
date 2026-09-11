@@ -16,7 +16,8 @@ export const register = createAsyncThunk(
         email: userinfo.email,
         password: userinfo.password,
         role: "customer",
-        createdAt: new Date().toISOString(), // FIX #6: was missing ()
+        createdAt: new Date().toISOString(), 
+        status : "online",
       });
 
       return res.data;
@@ -36,6 +37,13 @@ export const login = createAsyncThunk(
 
       if (!res.data || res.data.length === 0) {
         return rejectWithValue("Invalid email or password");
+      }
+
+      const status = await api.patch(`/users?${res.data?.id}`,{
+        status : "online"
+      })
+      if(!status.data || status.data.length === 0){
+        return rejectWithValue("can.t update status")
       }
 
       return res.data[0];
