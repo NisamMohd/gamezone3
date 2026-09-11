@@ -7,6 +7,7 @@
       "createdAt": "2026-08-03T13:05:59.939Z",
       "role": "admin",
       "id": "ODYOA6i7HMM",
+      "status": "offline",
       "address": {
         "name": "Nisam Mohd",
         "phone": "8921991635",
@@ -24,6 +25,7 @@
       "role": "customer",
       "createdAt": "2026-09-04T11:58:51.620Z",
       "id": "_BXweQO_HDI",
+      "status": "offline",
       "address": {
         "name": "Nisam Mohd",
         "phone": "8921993625",
@@ -33,6 +35,33 @@
         "zip": "673635",
         "country": "India"
       }
+    },
+    {
+      "name": "sinan v",
+      "email": "sinanv@gmail.com",
+      "password": "sinanv123",
+      "role": "customer",
+      "createdAt": "2026-09-10T04:48:18.545Z",
+      "id": "xn20212Kp6I",
+      "status": "offline",
+      "address": {
+        "name": "sinan v",
+        "phone": "8954632145",
+        "address": "neospace",
+        "city": "ramanattukara",
+        "state": "Kerala",
+        "zip": "673635",
+        "country": "India"
+      }
+    },
+    {
+      "name": "moosa sarji",
+      "email": "sarji@gmail.com",
+      "password": "sarji123",
+      "role": "customer",
+      "createdAt": "2026-09-10T04:48:59.706Z",
+      "id": "n8rF63Yl7hs",
+      "status": "offline"
     }
   ],
   "products": [
@@ -50,7 +79,7 @@
       "title": "PS5 Slim + console x 1",
       "image": "https://i.pinimg.com/1200x/89/47/5d/89475d9a656d38564cd6d02ce9abd48d.jpg",
       "price": 24999,
-      "stock": 2
+      "stock": 0
     },
     {
       "id": "3",
@@ -447,6 +476,87 @@
       "status": "Order Confirmed",
       "createdAt": "2026-09-08T09:34:28.066Z",
       "id": "OSXhReeT_jY"
+    },
+    {
+      "userId": "xn20212Kp6I",
+      "items": [
+        {
+          "productId": "2",
+          "title": "PS5 Slim + console x 1",
+          "price": 24999,
+          "quantity": 1,
+          "image": "https://i.pinimg.com/1200x/89/47/5d/89475d9a656d38564cd6d02ce9abd48d.jpg",
+          "category": ""
+        }
+      ],
+      "shippingAddress": {
+        "name": "sinan v",
+        "phone": "8954632145",
+        "address": "neospace",
+        "city": "ramanattukara",
+        "state": "Kerala",
+        "zip": "673635",
+        "country": "India"
+      },
+      "totalAmount": 24999,
+      "paymentMethod": "Cash on Delivery",
+      "status": "Order Confirmed",
+      "createdAt": "2026-09-11T04:09:59.797Z",
+      "id": "etOf7JxUrso"
+    },
+    {
+      "userId": "xn20212Kp6I",
+      "items": [
+        {
+          "productId": "2",
+          "title": "PS5 Slim + console x 1",
+          "price": 24999,
+          "quantity": 1,
+          "image": "https://i.pinimg.com/1200x/89/47/5d/89475d9a656d38564cd6d02ce9abd48d.jpg",
+          "category": "playstation"
+        }
+      ],
+      "shippingAddress": {
+        "name": "sinan v",
+        "phone": "8954632145",
+        "address": "neospace",
+        "city": "ramanattukara",
+        "state": "Kerala",
+        "zip": "673635",
+        "country": "India"
+      },
+      "totalAmount": 24999,
+      "paymentMethod": "Cash on Delivery",
+      "status": "Order Confirmed",
+      "createdAt": "2026-09-11T04:10:19.673Z",
+      "id": "VFv8qgthhqQ"
+    },
+    {
+      "userId": "xn20212Kp6I",
+      "items": [
+        {
+          "productId": "2",
+          "title": "PS5 Slim + console x 1",
+          "price": 24999,
+          "quantity": 1,
+          "image": "https://i.pinimg.com/1200x/89/47/5d/89475d9a656d38564cd6d02ce9abd48d.jpg",
+          "category": "playstation"
+        }
+      ],
+      "shippingAddress": {
+        "name": "sinan v",
+        "phone": "8954632145",
+        "address": "neospace",
+        "city": "ramanattukara",
+        "state": "Kerala",
+        "zip": "673635",
+        "country": "India"
+      },
+      "totalAmount": 24999,
+      "paymentMethod": "Cash on Delivery",
+      "status": "Order Confirmed",
+      "createdAt": "2026-09-11T04:10:40.144Z",
+      "id": "AHQvzdBRXDY"
     }
   ],
   "carts": [],
