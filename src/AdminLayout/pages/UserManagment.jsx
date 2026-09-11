@@ -19,6 +19,9 @@ function UserManagement() {
           <thead>
             <tr className="border-b border-cyan-500/20 bg-slate-800/50">
               <th className="px-4 py-3 text-sm font-semibold text-cyan-400 uppercase tracking-wide">
+                Id
+              </th>
+              <th className="px-4 py-3 text-sm font-semibold text-cyan-400 uppercase tracking-wide">
                 Name
               </th>
               <th className="px-4 py-3 text-sm font-semibold text-cyan-400 uppercase tracking-wide">
@@ -28,10 +31,12 @@ function UserManagement() {
                 Role
               </th>
               <th className="px-4 py-3 text-sm font-semibold text-cyan-400 uppercase tracking-wide">
-                Orders
-              </th><th className="px-4 py-3 text-sm font-semibold text-cyan-400 uppercase tracking-wide">
                 status
-              </th><th className="px-4 py-3 text-sm font-semibold text-cyan-400 uppercase tracking-wide">
+              </th>
+              <th className="px-4 py-3 text-sm font-semibold text-cyan-400 uppercase tracking-wide">
+                Orders
+              </th>
+              <th className="px-4 py-3 text-sm font-semibold text-cyan-400 uppercase tracking-wide">
                 Actions
               </th>
             </tr>
@@ -42,12 +47,22 @@ function UserManagement() {
                 key={item.id}
                 className="border-b border-slate-700/50 hover:bg-cyan-500/5 transition-colors duration-150"
               >
+                <td className="px-4 py-3">{item.id}</td>
                 <td className="px-4 py-3">{item.name}</td>
                 <td className="px-4 py-3 text-slate-300">{item.email}</td>
                 <td className="px-4 py-3">{item.role}</td>
-                <td className="px-4 py-3">View</td>
-                <td className="px-4 py-3"><button>Block</button></td>
-                <td className="px-4 py-3"><button>Block</button></td>
+                <td className="px-4 py-3">{item.status}</td>
+                <td className="px-4 py-3">
+                  <button className="px-4 py-1 bg-blue-500 clip-btn">View</button>
+                </td>
+                <td className="px-3 py-2 flex gap-2">
+                  <button className="px-4 py-1 bg-amber-500 clip-btn">
+                    Block
+                  </button>
+                  <button className="px-4 py-1 bg-red-500 clip-btn">
+                    Delete
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
