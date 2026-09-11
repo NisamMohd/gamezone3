@@ -3,6 +3,7 @@ import logo from "../../assets/logo.png";
 import { logout } from "../../features/authSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { updateStatus } from "../../utils/logout";
 
 function NavbarAdmin() {
   const dispatch = useDispatch();
@@ -10,62 +11,11 @@ function NavbarAdmin() {
   const handlelogout = (e) => {
     e.preventDefault();
     dispatch(logout());
+    updateStatus()
     navigate("/");
   };
   return (
     <div className="fixed top-0 left-0 right-0 bg-black/90 backdrop-blur-md border-b border-cyan-500/10 z-50 ">
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
-
-        .font-display { font-family: 'Rajdhani', sans-serif; }
-        .font-body { font-family: 'Inter', sans-serif; }
-        .font-tech { font-family: 'JetBrains Mono', monospace; }
-
-        .clip-btn {
-          clip-path: polygon(0 10px, 10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
-        }
-        .clip-panel {
-          clip-path: polygon(0 14px, 14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%);
-        }
-        .corner {
-          position: absolute;
-          width: 10px;
-          height: 10px;
-          border-color: #00E5FF;
-          pointer-events: none;
-        }
-        .corner-tl { top: -1px; left: -1px; border-top: 1.5px solid; border-left: 1.5px solid; }
-        .corner-br { bottom: -1px; right: -1px; border-bottom: 1.5px solid; border-right: 1.5px solid; }
-
-        .nav-link {
-          position: relative;
-          padding-bottom: 4px;
-        }
-        .nav-link::after {
-          content: '';
-          position: absolute;
-          left: 0;
-          bottom: 0;
-          height: 2px;
-          width: 100%;
-          background: linear-gradient(90deg, #00E5FF, #FF3D8A);
-          transform: scaleX(0);
-          transform-origin: left;
-          transition: transform 0.2s ease;
-        }
-        .nav-link:hover::after,
-        .nav-link.active::after {
-          transform: scaleX(1);
-        }
-        .logout-btn {
-            background-size: 150% 150%;
-            background-position: left center;
-        }
-        .logout-btn:hover {
-            background-position: right center;
-            filter: brightness(1.1);
-        }
-      `}</style>
       <nav>
         <div className="flex justify-between items-center">
           <img
