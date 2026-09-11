@@ -23,6 +23,7 @@ import { clearCart } from "../redux/features/cartSlice";
 import { clearWishlist } from "../redux/features/wishlistSlice";
 import { clearOrders } from "../redux/features/orderSlice";
 import api from "../../services/api";
+import { updateStatus } from "../../utils/logout"; 
 
 function Navbar() {
   const links = ["home", "products", "wishlists"];
@@ -142,6 +143,7 @@ function Navbar() {
     dispatch(clearCart());
     dispatch(clearWishlist());
     dispatch(clearOrders());
+    updateStatus();
     toast.info("Logged Out", "You have been safely disconnected from your session.");
     navigate("/login");
   };
