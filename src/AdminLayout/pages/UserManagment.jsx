@@ -10,6 +10,10 @@ function UserManagement() {
     dispatch(customerList());
   }, [dispatch]);
 
+  const handleView = (e) => {
+    e.preventDefault()
+  }
+
   if (loading) return <div className="text-white p-4">Loading...</div>;
 
   return (
@@ -47,13 +51,16 @@ function UserManagement() {
                 key={item.id}
                 className="border-b border-slate-700/50 hover:bg-cyan-500/5 transition-colors duration-150"
               >
-                <td className="px-4 py-3">{item.id}</td>
+                <td className="px-4 py-3 flex gap-2 items-center"><span className={`h-2 w-2  rounded-full ${item.status === "online" ? "bg-green-600" : "bg-red-600"} animate-pulse`}/>{item.id}</td>
                 <td className="px-4 py-3">{item.name}</td>
                 <td className="px-4 py-3 text-slate-300">{item.email}</td>
                 <td className="px-4 py-3">{item.role}</td>
                 <td className="px-4 py-3">{item.status}</td>
                 <td className="px-4 py-3">
-                  <button className="px-4 py-1 bg-blue-500 clip-btn">View</button>
+                  <button 
+                    className="px-4 py-1 bg-blue-500 clip-btn"
+                    onClick={handleView}
+                  >View</button>
                 </td>
                 <td className="px-3 py-2 flex gap-2">
                   <button className="px-4 py-1 bg-amber-500 clip-btn">
