@@ -39,7 +39,7 @@ export const login = createAsyncThunk(
         return rejectWithValue("Invalid email or password");
       }
 
-      const status = await api.patch(`/users?${res.data?.id}`,{
+      const status = await api.patch(`/users/${res.data[0]?.id}`,{
         status : "online"
       })
       if(!status.data || status.data.length === 0){
