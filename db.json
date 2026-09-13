@@ -16,7 +16,8 @@
         "state": "kerala",
         "zip": "678601",
         "country": "India"
-      }
+      },
+      "isOnline": true
     },
     {
       "name": "Nisam Mohd",
@@ -25,7 +26,7 @@
       "role": "customer",
       "createdAt": "2026-09-04T11:58:51.620Z",
       "id": "_BXweQO_HDI",
-      "status": "offline",
+      "isOnline": false,
       "address": {
         "name": "Nisam Mohd",
         "phone": "8921993625",
@@ -34,7 +35,8 @@
         "state": "Kerala",
         "zip": "673635",
         "country": "India"
-      }
+      },
+      "islocked": false
     },
     {
       "name": "sinan v",
@@ -43,7 +45,7 @@
       "role": "customer",
       "createdAt": "2026-09-10T04:48:18.545Z",
       "id": "xn20212Kp6I",
-      "status": "offline",
+      "isOnline": false,
       "address": {
         "name": "sinan v",
         "phone": "8954632145",
@@ -52,7 +54,8 @@
         "state": "Kerala",
         "zip": "673635",
         "country": "India"
-      }
+      },
+      "islocked": false
     },
     {
       "name": "moosa sarji",
@@ -61,7 +64,8 @@
       "role": "customer",
       "createdAt": "2026-09-10T04:48:59.706Z",
       "id": "n8rF63Yl7hs",
-      "status": "offline"
+      "isOnline": false,
+      "isBlocked": true
     }
   ],
   "products": [
