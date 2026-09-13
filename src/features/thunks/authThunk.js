@@ -17,7 +17,8 @@ export const register = createAsyncThunk(
         password: userinfo.password,
         role: "customer",
         createdAt: new Date().toISOString(), 
-        status : "online",
+        isOnline : true,
+        isBlocked : false
       });
 
       return res.data;
@@ -39,8 +40,12 @@ export const login = createAsyncThunk(
         return rejectWithValue("Invalid email or password");
       }
 
+      if(res.data[0]?.isBlocked === true){
+        return rejectWithValue("Sorry...You are blocked by admin")
+      }
+
       const status = await api.patch(`/users/${res.data[0]?.id}`,{
-        status : "online"
+        isOnline : true
       })
       if(!status.data || status.data.length === 0){
         return rejectWithValue("can.t update status")
