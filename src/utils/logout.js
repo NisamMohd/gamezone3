@@ -5,7 +5,7 @@ const user = userData ? JSON.parse(userData) : null;
 export const updateStatus = async () => {
     try {
         const res = await api.patch(`/user?${user.id}`,{
-            status : "offline"
+            isOnline : true
         })
 
         return res.data;
