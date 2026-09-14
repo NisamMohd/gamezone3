@@ -17,13 +17,9 @@ import {
   Sliders,
 } from "lucide-react";
 import logo from "../../assets/logo.png";
-import { logout } from "../../features/authSlice";
 import { useToast } from "../context/ToastContext";
-import { clearCart } from "../redux/features/cartSlice";
-import { clearWishlist } from "../redux/features/wishlistSlice";
-import { clearOrders } from "../redux/features/orderSlice";
 import api from "../../services/api";
-import { updateStatus } from "../../utils/logout"; 
+import { Logout } from "../../utils/onlineStatusUpdate";
 
 function Navbar() {
   const links = ["home", "products", "wishlists"];
@@ -137,13 +133,9 @@ function Navbar() {
     setIsDropdownOpen(false);
   };
 
-  const handleLogout = () => {
+    const handleLogout = async () => {
     setUserDropdownOpen(false);
-    dispatch(logout());
-    dispatch(clearCart());
-    dispatch(clearWishlist());
-    dispatch(clearOrders());
-    updateStatus();
+    await Logout(dispatch, user?.id);    
     toast.info("Logged Out", "You have been safely disconnected from your session.");
     navigate("/login");
   };

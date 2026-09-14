@@ -1,26 +1,27 @@
 import React from "react";
 import logo from "../../assets/logo.png";
-import { logout } from "../../features/authSlice";
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { updateStatus } from "../../utils/logout";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Logout } from "../../utils/onlineStatusUpdate";
 
 function NavbarAdmin() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const handlelogout = (e) => {
+  const user = useSelector((state) => state.auth.user);
+
+  const handlelogout = async (e) => {
     e.preventDefault();
-    dispatch(logout());
-    updateStatus()
+    await Logout(dispatch, user?.id);
     navigate("/");
   };
+
   return (
     <div className="fixed top-0 left-0 right-0 bg-black/90 backdrop-blur-md border-b border-cyan-500/10 z-50 ">
       <nav>
         <div className="flex justify-between items-center">
           <img
             src={logo}
-            alt=""
+            alt="Gamezone Admin"
             className="h-11 sm:h-12 w-auto object-contain drop-shadow-[0_0_12px_rgba(0,229,255,0.25)] ml-5"
           />
 
