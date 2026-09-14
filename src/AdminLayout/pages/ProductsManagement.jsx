@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { IndianRupee, Package, EyeOff, Trash2, Plus } from "lucide-react";
-import { fetchProducts } from "../../UserLayout/redux/features/thunks/productThunks";
+import { fetchProducts } from "../redux/thunks/adminProductsThunk";
 
 const themeStyles = `
   @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -56,7 +56,7 @@ const Backdrop = () => (
 );
 
 export default function ProductsManagement() {
-  const { products, status } = useSelector((state) => state.products);
+  const { items, status } = useSelector((state) => state.adminProducts);
   const dispatch = useDispatch();
   const [isHovered, setIsHovered] = useState(false);
 
@@ -107,7 +107,7 @@ export default function ProductsManagement() {
   }
 
   // Empty
-  if (!products || products.length === 0) {
+  if (!items || items.length === 0) {
     return (
       <div className="pt-24 min-h-screen bg-black relative">
         <Backdrop />
@@ -152,7 +152,7 @@ export default function ProductsManagement() {
               Manage Products
             </h1>
             <p className="text-sm text-gray-400 mt-1 font-body">
-              {products.length} product{products.length !== 1 ? "s" : ""} in
+              {items.length} product{items.length !== 1 ? "s" : ""} in
               catalog
             </p>
           </div>
@@ -177,7 +177,7 @@ export default function ProductsManagement() {
 
         {/* PRODUCT LIST */}
         <div className="w-full">
-          {products.map((item) => (
+          {items.map((item) => (
             <div
               key={item.id}
               className="relative clip-panel bg-[#0B0F17] border border-white/10 mb-3 p-5 hover:border-cyan-400/30 transition"
