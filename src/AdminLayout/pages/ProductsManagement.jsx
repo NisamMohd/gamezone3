@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { IndianRupee, Package, EyeOff, Trash2, Plus } from "lucide-react";
 import { fetchProducts } from "../redux/thunks/adminProductsThunk";
+import { toggleDisable } from "../redux/thunks/toggleIsDisabledThunk";
 
 const themeStyles = `
   @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -138,13 +139,13 @@ export default function ProductsManagement() {
   }
 
   return (
-    <div className=" min-h-screen bg-black relative">
+    <div className=" min-h-screen bg-black relative ">
       <Backdrop />
 
       <div className="relative max-w-[1200px] mx-auto px-4 py-6">
         {/* PAGE TITLE */}
-        <div className="flex justify-between">
-          <div className="mb-6">
+        <div className="flex justify-between sticky top-30 z-40 grid-bg">
+          <div className="mb-6 flex-wrap">
             <p className="font-tech text-[11px] tracking-[0.2em] text-cyan-400 mb-1">
               ADMIN CONSOLE
             </p>
@@ -174,9 +175,8 @@ export default function ProductsManagement() {
             </button>
           </div>
         </div>
-
         {/* PRODUCT LIST */}
-        <div className="w-full">
+        <div className="w-full max-h-[calc(100vh-240px)] overflow-y-auto pr-2">
           {items.map((item) => (
             <div
               key={item.id}
@@ -230,17 +230,24 @@ export default function ProductsManagement() {
                   {/* ACTIONS */}
                   <div className="flex items-center gap-6 mt-5">
                     <button
+                      type="button"
                       className={`flex items-center gap-1.5 text-sm font-medium transition ${
                         item.isDisabled
                           ? "text-cyan-400 hover:text-gray-400"
                           : "text-gray-400 hover:text-cyan-400"
                       }`}
+                      onClick={() => {
+                        dispatch(toggleDisable(item))
+                      }}
                     >
                       <EyeOff size={16} />
                       Hide
                     </button>
 
-                    <button className="flex items-center gap-1.5 text-sm font-medium text-gray-400 hover:text-pink-400 transition">
+                    <button 
+                      className="flex items-center gap-1.5 text-sm font-medium text-gray-400 hover:text-pink-400 transition"
+                      type="button"
+                    >
                       <Trash2 size={16} />
                       Delete
                     </button>
