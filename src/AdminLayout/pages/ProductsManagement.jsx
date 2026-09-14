@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { IndianRupee, Package, EyeOff, Trash2 } from "lucide-react";
+import { IndianRupee, Package, EyeOff, Trash2, Plus } from "lucide-react";
 import { fetchProducts } from "../../UserLayout/redux/features/thunks/productThunks";
 
 const themeStyles = `
@@ -58,6 +58,7 @@ const Backdrop = () => (
 export default function ProductsManagement() {
   const { products, status } = useSelector((state) => state.products);
   const dispatch = useDispatch();
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     dispatch(fetchProducts());
@@ -157,11 +158,20 @@ export default function ProductsManagement() {
           </div>
           <div className="items-center">
             <button
-           className="text-white  clip-btn px-2 py-1"
-           style={{
-                      background: "linear-gradient(120deg, #fefefe7e, #f9f7f5)",
-                    }}
-          >Add +</button>
+              className="text-cyan-400 clip-btn px-2 py-1 border border-cyan-400/50 hover:bg-cyan-400/10 transition-colors"
+              style={{
+                background: isHovered
+                  ? "linear-gradient(120deg, #00bbff, #f70063)"
+                  : "transparent",
+              }}
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+            >
+              <span className="flex gap-1 items-center">
+                Add
+                <Plus size={16} />
+              </span>
+            </button>
           </div>
         </div>
 
@@ -219,7 +229,13 @@ export default function ProductsManagement() {
 
                   {/* ACTIONS */}
                   <div className="flex items-center gap-6 mt-5">
-                    <button className="flex items-center gap-1.5 text-sm font-medium text-gray-400 hover:text-cyan-400 transition">
+                    <button
+                      className={`flex items-center gap-1.5 text-sm font-medium transition ${
+                        item.isDisabled
+                          ? "text-cyan-400 hover:text-gray-400"
+                          : "text-gray-400 hover:text-cyan-400"
+                      }`}
+                    >
                       <EyeOff size={16} />
                       Hide
                     </button>
