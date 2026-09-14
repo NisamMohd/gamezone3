@@ -5,6 +5,8 @@ import wishlistReducer from './UserLayout/redux/features/wishlistSlice'
 import orderReducer from './UserLayout/redux/features/orderSlice'
 import authReducer from './features/authSlice'
 import UserManagmentReducer from "./AdminLayout/redux/features/userManagementSlice";
+import productManageReducer from "./AdminLayout/redux/features/ProductManageSlice"
+
 export const store = configureStore({
     reducer: {
         products: productReducer,
@@ -13,6 +15,7 @@ export const store = configureStore({
         orders: orderReducer,
         auth: authReducer,
         users: UserManagmentReducer,
+        adminProducts : productManageReducer,
 
     }
 })
