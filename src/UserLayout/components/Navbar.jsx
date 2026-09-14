@@ -19,7 +19,7 @@ import {
 import logo from "../../assets/logo.png";
 import { useToast } from "../context/ToastContext";
 import api from "../../services/api";
-import { Logout } from "../../utils/onlineStatusUpdate";
+import { Logout } from "../../utils/Logout";
 
 function Navbar() {
   const links = ["home", "products", "wishlists"];

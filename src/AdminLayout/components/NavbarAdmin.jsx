@@ -2,7 +2,7 @@ import React from "react";
 import logo from "../../assets/logo.png";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Logout } from "../../utils/onlineStatusUpdate";
+import { Logout } from "../../utils/Logout";
 
 function NavbarAdmin() {
   const dispatch = useDispatch();
