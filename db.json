@@ -20,25 +20,6 @@
       "isOnline": true
     },
     {
-      "name": "Nisam Mohd",
-      "email": "nisamalr007@gmail.com",
-      "password": "nisam123",
-      "role": "customer",
-      "createdAt": "2026-09-04T11:58:51.620Z",
-      "id": "_BXweQO_HDI",
-      "isOnline": false,
-      "address": {
-        "name": "Nisam Mohd",
-        "phone": "8921993625",
-        "address": "neospace",
-        "city": "ramanattukara",
-        "state": "Kerala",
-        "zip": "673635",
-        "country": "India"
-      },
-      "isBlocked": false
-    },
-    {
       "name": "sinan v",
       "email": "sinanv@gmail.com",
       "password": "sinanv123",
@@ -434,7 +415,7 @@
       "id": "xg_jtgkBLrk"
     },
     {
-      "userId": "_BXweQO_HDI",
+      "userId": null,
       "items": [
         {
           "productId": "2",
@@ -485,7 +466,7 @@
       "id": "sv1qLlyBykY"
     },
     {
-      "userId": "_BXweQO_HDI",
+      "userId": null,
       "items": [
         {
           "productId": "3",
@@ -593,7 +574,7 @@
       "id": "AHQvzdBRXDY"
     },
     {
-      "userId": "_BXweQO_HDI",
+      "userId": null,
       "items": [
         {
           "productId": "3",
@@ -623,7 +604,7 @@
   "carts": [],
   "wishlists": [
     {
-      "userId": "_BXweQO_HDI",
+      "userId": null,
       "productId": "3",
       "title": "PS6 + console x 1",
       "price": 32999,
@@ -634,7 +615,7 @@
       "id": "TbpQWOkh1dU"
     },
     {
-      "userId": "_BXweQO_HDI",
+      "userId": null,
       "productId": "4",
       "title": "PS6 Neon lightning effect + console x 1",
       "price": 34999,
