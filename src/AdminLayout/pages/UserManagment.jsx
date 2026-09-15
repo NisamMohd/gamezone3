@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { customerList } from "../redux/thunks/customerThunk";
 import { toggleBlockuser } from "../redux/thunks/blockuserThunk";
+import { EyeOff, Eye } from "lucide-react";
 
 function UserManagement() {
   const { items, loading } = useSelector((state) => state.users);
@@ -16,11 +17,13 @@ function UserManagement() {
   };
 
   const handleBlock = (item) => {
-    dispatch(toggleBlockuser({
-      userId: item.id,
-      isBlocked : !item.isBlocked
-    }))
-  }
+    dispatch(
+      toggleBlockuser({
+        userId: item.id,
+        isBlocked: !item.isBlocked,
+      }),
+    );
+  };
 
   if (loading) return <div className="text-white p-4">Loading...</div>;
 
@@ -59,16 +62,16 @@ function UserManagement() {
                 key={item.id}
                 className="border-b border-slate-700/50 hover:bg-cyan-500/5 transition-colors duration-150"
               >
-                <td className="px-4 py-3 flex gap-2 items-center">
+                <td className="px-4 py-3 flex gap-2 items-center text-slate-300">
                   <span
-                    className={`h-2 w-2  rounded-full ${item.isOnline === true ? "bg-green-600" : "bg-red-600"} animate-pulse`}
+                    className={`h-2 w-2  rounded-full ${item.isOnline === true ? "bg-green-600" : "bg-red-600"} animate-pulse `}
                   />
                   {item.id}
                 </td>
-                <td className="px-4 py-3">{item.name}</td>
+                <td className="px-4 py-3 text-slate-300">{item.name}</td>
                 <td className="px-4 py-3 text-slate-300">{item.email}</td>
-                <td className="px-4 py-3">{item.role}</td>
-                <td className="px-4 py-3">
+                <td className="px-4 py-3 text-slate-300">{item.role}</td>
+                <td className="px-4 py-3 text-slate-300">
                   {item.isBlocked
                     ? "blocked"
                     : item.isOnline
@@ -77,10 +80,7 @@ function UserManagement() {
                 </td>
                 <td className="px-4 py-3">
                   <button
-                    className="px-4 py-1  clip-btn"
-                    style={{
-                      background: "linear-gradient(120deg, #00E5FF, #1010fa)",
-                    }}
+                    className="text-cyan-400 hover:text-pink-400 clip-btn px-3 py-1 border border-cyan-400/50 hover:border-pink-400/50 hover:bg-pink-400/10 transition-colors"
                     onClick={handleView}
                   >
                     View
@@ -88,20 +88,16 @@ function UserManagement() {
                 </td>
                 <td className="px-3 py-2 flex gap-2">
                   <button
-                    className="px-4 py-1  clip-btn"
-                    style={{
-                      background: "linear-gradient(120deg, #f5e887, #ff9d09)",
-                    }}
                     onClick={() => handleBlock(item)}
+                    className={`clip-btn px-3 py-1 border ${
+                      item.isBlocked
+                        ? "text-pink-400 hover:text-cyan-400  border-pink-400/50 hover:border-cyan-400/50 hover:bg-cyan-400/10 transition-colors"
+                        : "text-cyan-400 hover:text-pink-400  border-cyan-400/50 hover:border-pink-400/50 hover:bg-pink-400/10 transition-colors"
+                    }`}
                   >
-                    { item.isBlocked ? "unblock" : "block"}
+                    <span className="flex items-center gap-1">{item.isBlocked ? <Eye size={16} /> : <EyeOff size={16} />} Block</span>
                   </button>
-                  <button
-                    className="px-4 py-1  clip-btn"
-                    style={{
-                      background: "linear-gradient(120deg, #ff6955, #fe0202)",
-                    }}
-                  >
+                  <button className="text-cyan-400 hover:text-pink-400 clip-btn px-3 py-1 border border-cyan-400/50 hover:border-pink-400/50 hover:bg-pink-400/10 transition-colors">
                     Delete
                   </button>
                 </td>
