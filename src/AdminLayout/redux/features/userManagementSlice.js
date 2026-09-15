@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { customerList } from "../thunks/customerThunk";
 import { toggleBlockuser } from "../thunks/blockuserThunk";
+import { deleteUser } from "../thunks/deleteUserThunk";
 
 const userManagementSlice = createSlice({
   name: "users",
@@ -26,6 +27,12 @@ const userManagementSlice = createSlice({
         );
       })
 
+      //Delete User
+      .addCase(deleteUser.fulfilled, (state, action) => {
+        state.items = state.items.filter(
+          (item) => String(item.id) !== String(action.payload)
+        )
+      })
       // handles pending and rejected actions
       .addMatcher(
         (action) =>
