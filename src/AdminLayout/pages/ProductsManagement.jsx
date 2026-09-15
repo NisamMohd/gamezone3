@@ -144,7 +144,7 @@ export default function ProductsManagement() {
 
       <div className="relative max-w-[1200px] mx-auto px-4 py-6">
         {/* PAGE TITLE */}
-        <div className="flex justify-between sticky top-30 z-40 grid-bg">
+        <div className="flex justify-between sticky top-25 z-40 bg-black">
           <div className="mb-6 flex-wrap">
             <p className="font-tech text-[11px] tracking-[0.2em] text-cyan-400 mb-1">
               ADMIN CONSOLE
