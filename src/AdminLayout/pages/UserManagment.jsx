@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { customerList } from "../redux/thunks/customerThunk";
 import { toggleBlockuser } from "../redux/thunks/blockuserThunk";
 import { EyeOff, Eye } from "lucide-react";
+import { deleteUser } from "../redux/thunks/deleteUserThunk";
 
 function UserManagement() {
   const { items, loading } = useSelector((state) => state.users);
@@ -97,7 +98,10 @@ function UserManagement() {
                   >
                     <span className="flex items-center gap-1">{item.isBlocked ? <Eye size={16} /> : <EyeOff size={16} />} Block</span>
                   </button>
-                  <button className="text-cyan-400 hover:text-pink-400 clip-btn px-3 py-1 border border-cyan-400/50 hover:border-pink-400/50 hover:bg-pink-400/10 transition-colors">
+                  <button
+                    className="text-cyan-400 hover:text-pink-400 clip-btn px-3 py-1 border border-cyan-400/50 hover:border-pink-400/50 hover:bg-pink-400/10 transition-colors"
+                    onClick={() => dispatch(deleteUser(item.id))}
+                  >
                     Delete
                   </button>
                 </td>
