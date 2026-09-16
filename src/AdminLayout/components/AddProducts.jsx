@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { addProduct } from '../redux/thunks/addProductThunk'
 
 function AddProducts() {
 
@@ -22,8 +23,22 @@ function AddProducts() {
     })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault()
+
+     try {
+      await dispatch(addProduct(formData)).unwrap()
+      setFormData({
+        title: '',
+        image: '',
+        category: '',
+        price: '',
+        stock: '',
+        isDisabled: false
+      })
+    } catch (err) {
+      console.error('Failed to add product:', err)
+    }
   }
 
   return (
