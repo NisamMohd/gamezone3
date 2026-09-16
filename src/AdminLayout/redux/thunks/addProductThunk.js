@@ -1,8 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../../services/api";
 
-export const addProduct =
-  ("adminProducts/addProduct",
+export const addProduct =createAsyncThunk(
+    "adminProducts/addProduct",
   async (productData, { rejectWithValue }) => {
     try {
       const res = await api.post(`/products`, productData);
