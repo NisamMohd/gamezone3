@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { IndianRupee, Package, EyeOff, Trash2, Plus } from "lucide-react";
 import { fetchProducts } from "../redux/thunks/adminProductsThunk";
 import { toggleDisable } from "../redux/thunks/toggleIsDisabledThunk";
+import { useNavigate } from "react-router-dom";
 
 const themeStyles = `
   @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -59,6 +60,7 @@ const Backdrop = () => (
 export default function ProductsManagement() {
   const { items, status } = useSelector((state) => state.adminProducts);
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
@@ -167,6 +169,7 @@ export default function ProductsManagement() {
               }}
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
+              onClick={() => navigate("../addproducts")}
             >
               <span className="flex gap-1 items-center">
                 Add
