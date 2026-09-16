@@ -20,6 +20,7 @@ import UserRoutes from "./UserLayout/services/UserRoutes";
 import UserManagement from "./AdminLayout/pages/UserManagment"
 import ProductsManagement from "./AdminLayout/pages/ProductsManagement";
 import OrderDetails from "./AdminLayout/pages/OrderDetails";
+import AddProducts from "./AdminLayout/components/AddProducts"
 function App() {
   return (
     <Routes>
@@ -56,6 +57,7 @@ function App() {
           <Route index element={<Dashboard />} />
           <Route path="usermanagment" element={<UserManagement/>} />
           <Route path="productmanagement" element={<ProductsManagement/>} />
+          <Route path="addproducts" element={<AddProducts/>} />
           <Route path="orderdetails" element={<OrderDetails/>} />
         </Route>
       </Route>
