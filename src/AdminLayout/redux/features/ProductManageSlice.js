@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchProducts } from "../thunks/adminProductsThunk";
 import { toggleDisable } from "../thunks/toggleIsDisabledThunk";
+import { addProduct } from "../thunks/addProductThunk";
 
 const ProductManageSlice = createSlice({
   name: "adminProducts",
@@ -18,7 +19,7 @@ const ProductManageSlice = createSlice({
         state.items = action.payload;
       })
 
-      //TOGGLE DISABLE
+      // TOGGLE DISABLE
       .addCase(toggleDisable.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.items = state.items.map((product) =>
@@ -26,6 +27,12 @@ const ProductManageSlice = createSlice({
             ? action.payload
             : product,
         );
+      })
+
+      // ADD PRODUCT TO DB
+      .addCase(addProduct.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.items = [...state.items, action.payload]
       })
 
       // HANDLE PENDING STATE
@@ -38,6 +45,7 @@ const ProductManageSlice = createSlice({
         },
       )
 
+      // HANDLE REJECTED STATE
       .addMatcher(
         (action) =>
           action.type.startsWith("adminProducts/") &&
