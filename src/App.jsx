@@ -21,6 +21,7 @@ import UserManagement from "./AdminLayout/pages/UserManagment"
 import ProductsManagement from "./AdminLayout/pages/ProductsManagement";
 import OrderDetails from "./AdminLayout/pages/OrderDetails";
 import AddProducts from "./AdminLayout/components/AddProducts"
+import AddUser from "./AdminLayout/components/AddUser";
 function App() {
   return (
     <Routes>
@@ -58,6 +59,7 @@ function App() {
           <Route path="usermanagment" element={<UserManagement/>} />
           <Route path="productmanagement" element={<ProductsManagement/>} />
           <Route path="addproducts" element={<AddProducts/>} />
+          <Route path="adduser" element={<AddUser/>} />
           <Route path="orderdetails" element={<OrderDetails/>} />
         </Route>
       </Route>
