@@ -5,11 +5,13 @@ import { toggleBlockuser } from "../redux/thunks/blockuserThunk";
 import { EyeOff, Eye, Plus } from "lucide-react";
 import { deleteUser } from "../redux/thunks/deleteUserThunk";
 import { div } from "framer-motion/client";
+import { useNavigate } from "react-router-dom";
 
 function UserManagement() {
   const { items, loading } = useSelector((state) => state.users);
   const dispatch = useDispatch();
   const [isHovered, setIsHovered] = useState(false);
+  const navigate = useNavigate()
 
   useEffect(() => {
     dispatch(customerList());
@@ -54,7 +56,7 @@ function UserManagement() {
             }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            onClick={() => navigate("../addproducts")}
+            onClick={() => navigate("../adduser")}
           >
             <span className="flex gap-1 items-center">
               Add
