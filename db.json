@@ -325,6 +325,15 @@
       "price": 7499,
       "stock": 5,
       "isDisabled": false
+    },
+    {
+      "title": "NEW Limited Edition PS5, Spider-Man 2 Edition",
+      "image": "https://i.pinimg.com/1200x/43/b5/ac/43b5ac5f45d17751cb105688c709ea1f.jpg",
+      "category": "playstation",
+      "price": "40000",
+      "stock": "10",
+      "isDisabled": false,
+      "id": "3EWW2Tijuqo"
     }
   ],
   "orders": [
