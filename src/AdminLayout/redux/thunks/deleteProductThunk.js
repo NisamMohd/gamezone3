@@ -11,7 +11,7 @@ export const deleteProduct = createAsyncThunk(
         return rejectWithValue(
             error.response?.data?.message || 
             err.message ||
-            "Failed attempt to Delete user"
+            "Failed attempt to Delete product"
         )
     }
   },
