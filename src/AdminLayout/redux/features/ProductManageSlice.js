@@ -38,6 +38,7 @@ const ProductManageSlice = createSlice({
 
       // DELETE PRODUCT
       .addCase(deleteProduct.fulfilled,(state, action) => {
+        state.status = "succeded"
         state.items = state.items.filter(
           (item) => String(item.id) !== String(action.payload)
         )
