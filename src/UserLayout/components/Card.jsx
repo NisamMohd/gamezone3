@@ -1,7 +1,7 @@
 import React from "react";
 import { IndianRupee, ShoppingCart, Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "../context/ToastContext";
+import { useToast } from "../../context/ToastContext";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../redux/features/thunks/cartThunk";
 import { toggleWishlist } from "../redux/features/thunks/wishlistThunk";

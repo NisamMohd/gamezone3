@@ -4,7 +4,7 @@ import { IndianRupee, Package, EyeOff, Eye, Trash2, Plus } from "lucide-react";
 import { fetchProducts } from "../redux/thunks/adminProductsThunk";
 import { toggleDisable } from "../redux/thunks/toggleIsDisabledThunk";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "../../UserLayout/context/ToastContext";
+import { useToast } from "../../context/ToastContext";
 import { deleteProduct } from "../redux/thunks/deleteProductThunk"
 
 const themeStyles = `

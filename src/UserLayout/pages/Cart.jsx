@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { IndianRupee, ShoppingCart, Minus, Plus, Trash2 } from "lucide-react";
 
-import { useToast } from "../context/ToastContext";
+import { useToast } from "../../context/ToastContext";
 import { decrementQty, fetchCarts, incrementQty, remove, clearCartAsync } from "../redux/features/thunks/cartThunk";
 
 const themeStyles = `

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useToast } from "../context/ToastContext";
+import { useToast } from "../../context/ToastContext";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { Mail, Lock, Gamepad2 } from "lucide-react";
 import { login } from "../../features/thunks/authThunk";

@@ -16,7 +16,7 @@ import {
   AlertCircle,
   RotateCcw,
 } from "lucide-react";
-import { useToast } from "../context/ToastContext";
+import { useToast } from "../../context/ToastContext";
 import { updateUser } from "../../features/authSlice";
 import api from "../../services/api";
 

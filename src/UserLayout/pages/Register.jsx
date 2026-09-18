@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useToast } from "../context/ToastContext";
+import { useToast } from "../../context/ToastContext";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { formValidation } from "../utils/register";
 import { User, Mail, Lock, ShieldCheck, Gamepad2 } from "lucide-react";

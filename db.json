@@ -57,7 +57,7 @@
       "image": "https://i5.walmartimages.com/asr/94cb84a2-2e1f-4688-bc1c-300cf0de9843.5b3b6feb8172bb2dd1ebc78fc3bc2ea0.jpeg",
       "price": 12599,
       "stock": 0,
-      "isDisabled": false
+      "isDisabled": true
     },
     {
       "id": "2",
@@ -75,7 +75,7 @@
       "image": "https://i.pinimg.com/736x/38/fc/8b/38fc8bed8af35de6e2b7c86a2bde70f0.jpg",
       "price": 32999,
       "stock": 4,
-      "isDisabled": false
+      "isDisabled": true
     },
     {
       "id": "4",
@@ -102,7 +102,7 @@
       "image": "https://i.pinimg.com/736x/fd/88/ac/fd88ac67d6d2b89121d2e608fdfad66f.jpg",
       "price": 49999,
       "stock": 1,
-      "isDisabled": false
+      "isDisabled": true
     },
     {
       "id": "7",

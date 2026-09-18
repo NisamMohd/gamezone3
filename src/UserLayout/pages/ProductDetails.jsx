@@ -15,7 +15,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { addToCart } from "../redux/features/thunks/cartThunk";
 import { toggleWishlist, fetchWishlist } from "../redux/features/thunks/wishlistThunk";
-import { useToast } from "../context/ToastContext";
+import { useToast } from "../../context/ToastContext";
 
 function ProductDetails() {
   const { products, loading, error } = useSelector((state) => state.products);

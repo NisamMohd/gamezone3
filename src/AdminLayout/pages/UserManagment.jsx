@@ -4,9 +4,8 @@ import { customerList } from "../redux/thunks/customerThunk";
 import { toggleBlockuser } from "../redux/thunks/blockuserThunk";
 import { EyeOff, Eye, Plus } from "lucide-react";
 import { deleteUser } from "../redux/thunks/deleteUserThunk";
-import { div } from "framer-motion/client";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "../../UserLayout/context/ToastContext";
+import { useToast } from "../../context/ToastContext";
 
 function UserManagement() {
   const { items, loading } = useSelector((state) => state.users);

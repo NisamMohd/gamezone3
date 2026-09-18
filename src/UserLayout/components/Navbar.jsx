@@ -17,7 +17,7 @@ import {
   Sliders,
 } from "lucide-react";
 import logo from "../../assets/logo.png";
-import { useToast } from "../context/ToastContext";
+import { useToast } from "../../context/ToastContext";
 import api from "../../services/api";
 import { Logout } from "../../utils/Logout";
 
