@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { fetchProducts } from "../thunks/adminProductsThunk";
 import { toggleDisable } from "../thunks/toggleIsDisabledThunk";
 import { addProduct } from "../thunks/addProductThunk";
+import { deleteProduct } from "../thunks/deleteProductThunk";
 
 const ProductManageSlice = createSlice({
   name: "adminProducts",
@@ -33,6 +34,13 @@ const ProductManageSlice = createSlice({
       .addCase(addProduct.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.items = [...state.items, action.payload]
+      })
+
+      // DELETE PRODUCT
+      .addCase(deleteProduct.fulfilled,(state, action) => {
+        state.items = state.items.filter(
+          (item) => String(item.id) !== String(action.payload)
+        )
       })
 
       // HANDLE PENDING STATE
