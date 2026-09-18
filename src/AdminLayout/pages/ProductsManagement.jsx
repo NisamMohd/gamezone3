@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { IndianRupee, Package, EyeOff, Trash2, Plus } from "lucide-react";
+import { IndianRupee, Package, EyeOff, Eye, Trash2, Plus } from "lucide-react";
 import { fetchProducts } from "../redux/thunks/adminProductsThunk";
 import { toggleDisable } from "../redux/thunks/toggleIsDisabledThunk";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "../../UserLayout/context/ToastContext";
+import { deleteProduct } from "../redux/thunks/deleteProductThunk"
 
 const themeStyles = `
   @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -60,8 +62,9 @@ const Backdrop = () => (
 export default function ProductsManagement() {
   const { items, status } = useSelector((state) => state.adminProducts);
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     dispatch(fetchProducts());
@@ -155,8 +158,7 @@ export default function ProductsManagement() {
               Manage Products
             </h1>
             <p className="text-sm text-gray-400 mt-1 font-body">
-              {items.length} product{items.length !== 1 ? "s" : ""} in
-              catalog
+              {items.length} product{items.length !== 1 ? "s" : ""} in catalog
             </p>
           </div>
           <div className="items-center">
@@ -236,20 +238,46 @@ export default function ProductsManagement() {
                       type="button"
                       className={`flex items-center gap-1.5 text-sm font-medium transition ${
                         item.isDisabled
-                          ? "text-cyan-400 hover:text-gray-400"
+                          ? "text-cyan-400 hover:text-cyan-300"
                           : "text-gray-400 hover:text-cyan-400"
                       }`}
                       onClick={() => {
                         dispatch(toggleDisable(item))
+                          .unwrap()
+                          .then(() =>
+                            toast.success(
+                              item.isDisabled
+                                ? "Product Restored"
+                                : "Product Hidden",
+                              `${item.title} is now ${item.isDisabled ? "visible" : "hidden"}.`,
+                            ),
+                          )
+                          .catch((err) =>
+                            toast.error(
+                              "Update Failed",
+                              err || "Could not update product status.",
+                            ),
+                          );
                       }}
                     >
-                      <EyeOff size={16} />
-                      Hide
+                      {item.isDisabled ? (
+                        <Eye size={16} />
+                      ) : (
+                        <EyeOff size={16} />
+                      )}
+                      {item.isDisabled ? "Show" : "Hide"}
                     </button>
 
-                    <button 
+                    <button
                       className="flex items-center gap-1.5 text-sm font-medium text-gray-400 hover:text-pink-400 transition"
                       type="button"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        dispatch(deleteProduct(item.id))
+                          .unwrap()
+                          .then(() => toast.success("Product Deleted"))
+                          .catch((err) => toast.error("Can't delete Product", err || "Operation failed"))
+                      }}
                     >
                       <Trash2 size={16} />
                       Delete
