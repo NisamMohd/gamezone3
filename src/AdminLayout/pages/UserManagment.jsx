@@ -6,12 +6,14 @@ import { EyeOff, Eye, Plus } from "lucide-react";
 import { deleteUser } from "../redux/thunks/deleteUserThunk";
 import { div } from "framer-motion/client";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "../../UserLayout/context/ToastContext";
 
 function UserManagement() {
   const { items, loading } = useSelector((state) => state.users);
   const dispatch = useDispatch();
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate()
+  const { toast } = useToast()
 
   useEffect(() => {
     dispatch(customerList());
@@ -27,7 +29,14 @@ function UserManagement() {
         userId: item.id,
         isBlocked: !item.isBlocked,
       }),
-    );
+    )
+      .unwrap()
+      .then(() => toast.success(
+        item.isBlocked
+        ? "User unblocked successfully"
+        : "User blocked successfully"
+      ))
+      .catch((err) => toast.error('Update failed',err || "could not block user"))
   };
 
   if (loading) return <div className="text-white p-4">Loading...</div>;
@@ -144,7 +153,12 @@ function UserManagement() {
                     </button>
                     <button
                       className="text-cyan-400 hover:text-pink-400 clip-btn px-3 py-1 border border-cyan-400/50 hover:border-pink-400/50 hover:bg-pink-400/10 transition-colors"
-                      onClick={() => dispatch(deleteUser(item.id))}
+                      onClick={() => 
+                        dispatch(deleteUser(item.id))
+                          .unwrap()
+                          .then(() => toast.success("User Deleted"))
+                          .catch((err) => toast.error(err || 'Operation failed'))
+                      }
                     >
                       Delete
                     </button>
