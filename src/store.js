@@ -6,6 +6,7 @@ import orderReducer from './UserLayout/redux/features/orderSlice'
 import authReducer from './features/authSlice'
 import UserManagmentReducer from "./AdminLayout/redux/features/userManagementSlice";
 import productManageReducer from "./AdminLayout/redux/features/ProductManageSlice"
+import ordersListReducer from "./AdminLayout/redux/features/orderDetailsSlice"
 
 export const store = configureStore({
     reducer: {
@@ -16,6 +17,6 @@ export const store = configureStore({
         auth: authReducer,
         users: UserManagmentReducer,
         adminProducts : productManageReducer,
-
+        orderList : ordersListReducer
     }
 })
