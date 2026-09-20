@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { customerList } from "../thunks/customerThunk";
 import { toggleBlockuser } from "../thunks/blockuserThunk";
 import { deleteUser } from "../thunks/deleteUserThunk";
+import { addUser } from "../thunks/addUserThunk";
 
 const userManagementSlice = createSlice({
   name: "users",
@@ -17,6 +18,12 @@ const userManagementSlice = createSlice({
       .addCase(customerList.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.items = action.payload;
+      })
+
+      // Add User
+      .addCase(addUser.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.items.push(action.payload);
       })
 
       //Block Usere

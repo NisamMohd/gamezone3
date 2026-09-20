@@ -20,13 +20,24 @@
       "isOnline": true
     },
     {
+      "name": "moosa",
+      "email": "sarji@gmail.com",
+      "password": "sarji123",
+      "role": "customer",
+      "createdAt": "2026-09-10T04:48:59.706Z",
+      "id": "n8rF63Yl7hs",
+      "isOnline": false,
+      "isBlocked": false
+    },
+    {
       "name": "sinan v",
       "email": "sinanv@gmail.com",
-      "password": "sinanv123",
+      "password": "sinan123",
       "role": "customer",
-      "createdAt": "2026-09-10T04:48:18.545Z",
-      "id": "xn20212Kp6I",
+      "createdAt": "2026-09-10T04:48:59.706Z",
       "isOnline": false,
+      "isBlocked": false,
+      "id": "JCDhuJpkjko",
       "address": {
         "name": "sinan v",
         "phone": "8954632145",
@@ -35,18 +46,27 @@
         "state": "Kerala",
         "zip": "673635",
         "country": "India"
-      },
-      "isBlocked": false
+      }
     },
     {
-      "name": "moosa sarji",
-      "email": "sarji@gmail.com",
-      "password": "sarji123",
+      "name": "nisam",
+      "email": "nisam@gmail.com",
+      "password": "nisam123",
       "role": "customer",
-      "createdAt": "2026-09-10T04:48:59.706Z",
-      "id": "n8rF63Yl7hs",
+      "createdAt": "2026-09-20T15:35:04.706Z",
       "isOnline": false,
-      "isBlocked": false
+      "isBlocked": false,
+      "id": "lvf3Ua_SiFM"
+    },
+    {
+      "name": "shamil",
+      "email": "shamil@gmail.com",
+      "password": "shamil123",
+      "role": "customer",
+      "createdAt": "2026-09-20T16:31:48.396Z",
+      "isOnline": false,
+      "isBlocked": false,
+      "id": "qHQggoGhYTE"
     }
   ],
   "products": [
@@ -57,7 +77,7 @@
       "image": "https://i5.walmartimages.com/asr/94cb84a2-2e1f-4688-bc1c-300cf0de9843.5b3b6feb8172bb2dd1ebc78fc3bc2ea0.jpeg",
       "price": 12599,
       "stock": 0,
-      "isDisabled": true
+      "isDisabled": false
     },
     {
       "id": "2",
@@ -83,7 +103,7 @@
       "title": "PS6 Neon lightning effect + console x 1",
       "image": "https://i.pinimg.com/736x/b5/91/eb/b591eb5785f75999986f21ea0ea13310.jpg",
       "price": 34999,
-      "stock": 10,
+      "stock": 8,
       "isDisabled": false
     },
     {
@@ -92,7 +112,7 @@
       "title": "Sony PS6 Special Edition + special Edition Console",
       "image": "https://i.pinimg.com/736x/b6/27/38/b62738c3ba2aba4b3294dafbf6da9050.jpg",
       "price": 74599,
-      "stock": 9,
+      "stock": 8,
       "isDisabled": false
     },
     {
@@ -137,7 +157,7 @@
       "title": "PlayStation 5 white",
       "image": "https://i.pinimg.com/736x/b4/6b/92/b46b92edaeaebd9d923ab1ba3303179c.jpg",
       "price": 22000,
-      "stock": 4,
+      "stock": 3,
       "isDisabled": false
     },
     {
@@ -274,7 +294,7 @@
       "image": "https://i.pinimg.com/736x/7a/98/65/7a9865ff1b77a1208a0d3cacbc1bb6af.jpg",
       "description": "A premium collection of **PlayStation DualSense Wireless Controller accessories including headset, charging gear, and gaming essentials. Perfect setup for PlayStation gamers",
       "price": 5599,
-      "stock": 3,
+      "stock": 2,
       "isDisabled": false
     },
     {
@@ -313,7 +333,7 @@
       "image": "https://i.pinimg.com/1200x/23/3c/49/233c499b9f8313213262c2d44ab9e518.jpg",
       "description": "Dispatched within 2 business days via DHL Express. Estimated delivery after dispatch: • 1-3 business days (NSW, VIC, ACT, QLD, SA) • 1-4 business days (WA, TAS, NT) Delivery timeframes are estimates and may vary for remote areas or during peak periods. No delivery to PO Boxes and Parcel Locker. Please note that this item is located outside Australia. Product complies with Australian standards. Kingston Fury RGB Beast 16GB DDR5 RGB Desktop UDIMM RAM Kit 2x 8GB - 5600MT/s - CL40 - DIMM Intel XMP Kingston FURY Beast DDR5 RGB Memory up to 6000MT/s* Kingston FURY™ Beast DDR5 RGB lets you overclock in style on next-gen gaming platforms with cutting-edge technology. Experience the superior speed advancements of DDR5 with double the banks and double the burst length. Vibrant RGB lighting customisa",
       "price": 5999,
-      "stock": 7,
+      "stock": 6,
       "isDisabled": false
     },
     {
@@ -331,7 +351,7 @@
       "image": "https://i.pinimg.com/1200x/43/b5/ac/43b5ac5f45d17751cb105688c709ea1f.jpg",
       "category": "playstation",
       "price": "40000",
-      "stock": "10",
+      "stock": 9,
       "isDisabled": false,
       "id": "3EWW2Tijuqo"
     }
@@ -424,22 +444,14 @@
       "id": "xg_jtgkBLrk"
     },
     {
-      "userId": null,
+      "userId": "JCDhuJpkjko",
       "items": [
         {
-          "productId": "2",
-          "title": "PS5 Slim + console x 1",
-          "price": 24999,
+          "productId": "4",
+          "title": "PS6 Neon lightning effect + console x 1",
+          "price": 34999,
           "quantity": 1,
-          "image": "https://i.pinimg.com/1200x/89/47/5d/89475d9a656d38564cd6d02ce9abd48d.jpg",
-          "category": ""
-        },
-        {
-          "productId": "3",
-          "title": "PS6 + console x 1",
-          "price": 32999,
-          "quantity": 2,
-          "image": "https://i.pinimg.com/736x/38/fc/8b/38fc8bed8af35de6e2b7c86a2bde70f0.jpg",
+          "image": "https://i.pinimg.com/736x/b5/91/eb/b591eb5785f75999986f21ea0ea13310.jpg",
           "category": ""
         },
         {
@@ -451,65 +463,27 @@
           "category": ""
         },
         {
-          "productId": "23",
-          "title": "ASUS ROG Strix GeForce RTX 4090 OC Edition 24GB GDDR6X High‑Performance GPU",
-          "price": 4999,
+          "productId": "25",
+          "title": "Ultimate PlayStation Gaming Accessories Kit",
+          "price": 5599,
           "quantity": 1,
-          "image": "https://i.pinimg.com/736x/75/1b/66/751b665a59b34dffe195e04057aab0c3.jpg",
+          "image": "https://i.pinimg.com/736x/7a/98/65/7a9865ff1b77a1208a0d3cacbc1bb6af.jpg",
           "category": ""
-        }
-      ],
-      "shippingAddress": {
-        "name": "Nisam Mohd",
-        "phone": "8921993625",
-        "address": "neospace",
-        "city": "ramanattukara",
-        "state": "Kerala",
-        "zip": "673635",
-        "country": "India"
-      },
-      "totalAmount": 117996,
-      "paymentMethod": "Cash on Delivery",
-      "status": "Order Confirmed",
-      "createdAt": "2026-09-05T15:53:53.436Z",
-      "id": "sv1qLlyBykY"
-    },
-    {
-      "userId": null,
-      "items": [
+        },
         {
-          "productId": "3",
-          "title": "PS6 + console x 1",
-          "price": 32999,
+          "productId": "3EWW2Tijuqo",
+          "title": "NEW Limited Edition PS5, Spider-Man 2 Edition",
+          "price": "40000",
           "quantity": 1,
-          "image": "https://i.pinimg.com/736x/38/fc/8b/38fc8bed8af35de6e2b7c86a2bde70f0.jpg",
+          "image": "https://i.pinimg.com/1200x/43/b5/ac/43b5ac5f45d17751cb105688c709ea1f.jpg",
           "category": ""
-        }
-      ],
-      "shippingAddress": {
-        "name": "Nisam Mohd",
-        "phone": "8921993625",
-        "address": "neospace",
-        "city": "ramanattukara",
-        "state": "Kerala",
-        "zip": "673635",
-        "country": "India"
-      },
-      "totalAmount": 32999,
-      "paymentMethod": "Cash on Delivery",
-      "status": "Order Confirmed",
-      "createdAt": "2026-09-08T09:34:28.066Z",
-      "id": "OSXhReeT_jY"
-    },
-    {
-      "userId": "xn20212Kp6I",
-      "items": [
+        },
         {
-          "productId": "2",
-          "title": "PS5 Slim + console x 1",
-          "price": 24999,
+          "productId": "29",
+          "title": "Kingston Fury RGB Beast 16GB DDR5 RGB Desktop UDIMM RAM Kit 2x 8GB - 5600MT/s - CL40 - DIMM Intel XMP [KF556C40BBAK2-16]",
+          "price": 5999,
           "quantity": 1,
-          "image": "https://i.pinimg.com/1200x/89/47/5d/89475d9a656d38564cd6d02ce9abd48d.jpg",
+          "image": "https://i.pinimg.com/1200x/23/3c/49/233c499b9f8313213262c2d44ab9e518.jpg",
           "category": ""
         }
       ],
@@ -522,118 +496,14 @@
         "zip": "673635",
         "country": "India"
       },
-      "totalAmount": 24999,
+      "totalAmount": 108597,
       "paymentMethod": "Cash on Delivery",
       "status": "Order Confirmed",
-      "createdAt": "2026-09-11T04:09:59.797Z",
-      "id": "etOf7JxUrso"
-    },
-    {
-      "userId": "xn20212Kp6I",
-      "items": [
-        {
-          "productId": "2",
-          "title": "PS5 Slim + console x 1",
-          "price": 24999,
-          "quantity": 1,
-          "image": "https://i.pinimg.com/1200x/89/47/5d/89475d9a656d38564cd6d02ce9abd48d.jpg",
-          "category": "playstation"
-        }
-      ],
-      "shippingAddress": {
-        "name": "sinan v",
-        "phone": "8954632145",
-        "address": "neospace",
-        "city": "ramanattukara",
-        "state": "Kerala",
-        "zip": "673635",
-        "country": "India"
-      },
-      "totalAmount": 24999,
-      "paymentMethod": "Cash on Delivery",
-      "status": "Order Confirmed",
-      "createdAt": "2026-09-11T04:10:19.673Z",
-      "id": "VFv8qgthhqQ"
-    },
-    {
-      "userId": "xn20212Kp6I",
-      "items": [
-        {
-          "productId": "2",
-          "title": "PS5 Slim + console x 1",
-          "price": 24999,
-          "quantity": 1,
-          "image": "https://i.pinimg.com/1200x/89/47/5d/89475d9a656d38564cd6d02ce9abd48d.jpg",
-          "category": "playstation"
-        }
-      ],
-      "shippingAddress": {
-        "name": "sinan v",
-        "phone": "8954632145",
-        "address": "neospace",
-        "city": "ramanattukara",
-        "state": "Kerala",
-        "zip": "673635",
-        "country": "India"
-      },
-      "totalAmount": 24999,
-      "paymentMethod": "Cash on Delivery",
-      "status": "Order Confirmed",
-      "createdAt": "2026-09-11T04:10:40.144Z",
-      "id": "AHQvzdBRXDY"
-    },
-    {
-      "userId": null,
-      "items": [
-        {
-          "productId": "3",
-          "title": "PS6 + console x 1",
-          "price": 32999,
-          "quantity": 1,
-          "image": "https://i.pinimg.com/736x/38/fc/8b/38fc8bed8af35de6e2b7c86a2bde70f0.jpg",
-          "category": "playstation"
-        }
-      ],
-      "shippingAddress": {
-        "name": "Nisam Mohd",
-        "phone": "8921993625",
-        "address": "neospace",
-        "city": "ramanattukara",
-        "state": "Kerala",
-        "zip": "673635",
-        "country": "India"
-      },
-      "totalAmount": 32999,
-      "paymentMethod": "UPI / QR Code",
-      "status": "Order Confirmed",
-      "createdAt": "2026-09-14T06:37:43.177Z",
-      "id": "-ftudMOTpss"
+      "createdAt": "2026-09-20T16:11:37.033Z",
+      "id": "T0XOPeBFAVc"
     }
   ],
   "carts": [],
-  "wishlists": [
-    {
-      "userId": null,
-      "productId": "3",
-      "title": "PS6 + console x 1",
-      "price": 32999,
-      "image": "https://i.pinimg.com/736x/38/fc/8b/38fc8bed8af35de6e2b7c86a2bde70f0.jpg",
-      "category": "playstation",
-      "stock": 8,
-      "description": "",
-      "id": "TbpQWOkh1dU"
-    },
-    {
-      "userId": null,
-      "productId": "4",
-      "title": "PS6 Neon lightning effect + console x 1",
-      "price": 34999,
-      "image": "https://i.pinimg.com/736x/b5/91/eb/b591eb5785f75999986f21ea0ea13310.jpg",
-      "category": "playstation",
-      "stock": 10,
-      "description": "",
-      "id": "EedI1nEBmbA"
-    }
-  ],
+  "wishlists": [],
   "$schema": "./node_modules/json-server/schema.json"
 }

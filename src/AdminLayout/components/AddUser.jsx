@@ -3,11 +3,13 @@ import { User } from "lucide-react";
 import { formValidate } from "../utils/userFormValidate";
 import { useToast } from "../../context/ToastContext";
 import { useDispatch } from "react-redux";
-import { register } from "../../features/thunks/authThunk";
+import { useNavigate } from "react-router-dom";
+import { addUser } from "../redux/thunks/addUserThunk";
 
 function AddUser() {
   const { toast } = useToast();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -28,10 +30,13 @@ function AddUser() {
       toast.error(isFormValid.message);
       return;
     }
-    dispatch(register(formData))
+    dispatch(addUser(formData))
       .unwrap()
-      .then(()=>toast.success("User Added Successfully"))
-      .catch((err) => toast.error("Can't Add User", `${err}`))
+      .then(() => {
+        toast.success("User Added Successfully");
+        navigate("/admin/usermanagment");
+      })
+      .catch((err) => toast.error("Can't Add User", `${err}`));
   };
 
   return (
