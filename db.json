@@ -17,7 +17,7 @@
         "zip": "678601",
         "country": "India"
       },
-      "isOnline": true
+      "isOnline": false
     },
     {
       "name": "moosa",
@@ -77,6 +77,16 @@
       "isOnline": false,
       "isBlocked": false,
       "id": "B00NX_CqTm8"
+    },
+    {
+      "name": "dasappan",
+      "email": "dasappan@gmail.com",
+      "password": "dasappan123",
+      "role": "customer",
+      "createdAt": "2026-09-20T20:14:23.623Z",
+      "isOnline": false,
+      "isBlocked": false,
+      "id": "KKJJTQ2grEg"
     }
   ],
   "products": [
@@ -364,6 +374,16 @@
       "stock": 9,
       "isDisabled": false,
       "id": "3EWW2Tijuqo"
+    },
+    {
+      "title": "ASUS GeForce RTX 5060 Ti ",
+      "image": "https://i.pinimg.com/736x/d2/b6/50/d2b65049e81890ce9453bc94b857ed73.jpg",
+      "category": "accessories",
+      "price": "45900",
+      "stock": "10",
+      "description": "ASUS GeForce RTX 5060 Ti TUF GAMING OC 16GB, Grafikkarte DLSS 5, 3x DisplayPort, 1x HDMI 2.1",
+      "isDisabled": false,
+      "id": "2StX1-Cc5tQ"
     }
   ],
   "orders": [
