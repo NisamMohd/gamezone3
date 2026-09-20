@@ -76,6 +76,7 @@ function Wishlists() {
   const user = useSelector((state) => state.auth.user); 
   const { toast } = useToast();
   const { items, status } = useSelector((state) => state.wishlist);
+  const cartItems = useSelector((state) => state.cart.items || []);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -85,33 +86,43 @@ function Wishlists() {
     }
   }, [user?.id, dispatch]);
 
-  const handleAddToCart = (item) => {
+  const handleAddToCart = async (item) => {
     if (!user) {
       navigate("/login");
       return;
     }
 
-    if (item.stock === 0) {
-      toast.error("Out of Stock", "This equipment is currently out of stock.");
+    const prodId = item.productId || item.id;
+    const stockLimit = Number(item.stock !== undefined ? item.stock : 10);
+    const existingInCart = cartItems.find((ci) => String(ci.productId) === String(prodId));
+    const currentQty = existingInCart ? Number(existingInCart.quantity) : 0;
+
+    if (stockLimit <= 0 || currentQty + 1 > stockLimit) {
+      toast.error("Not Enough Stock", "Not enough stock available");
       return;
     }
 
     const product = {
-      id: item.productId || item.id,
+      id: prodId,
       title: item.title,
       price: item.price,
       image: item.image,
       category: item.category,
-      stock: item.stock !== undefined ? item.stock : 10,
+      stock: stockLimit,
     };
 
-    dispatch(
-      addToCart({
-        userId: user.id,
-        product,
-      })
-    );
-    toast.cartAdd("Added to Cart", item.title);
+    try {
+      await dispatch(
+        addToCart({
+          userId: user.id,
+          product,
+          quantity: 1,
+        })
+      ).unwrap();
+      toast.cartAdd("Added to Cart", item.title);
+    } catch (err) {
+      toast.error("Not Enough Stock", err || "Not enough stock available");
+    }
   };
 
   const handleMoveAllToCart = () => {

@@ -15,11 +15,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { addToCart } from "../redux/features/thunks/cartThunk";
 import { toggleWishlist, fetchWishlist } from "../redux/features/thunks/wishlistThunk";
+import { fetchProducts } from "../redux/features/thunks/productThunks";
 import { useToast } from "../../context/ToastContext";
 
 function ProductDetails() {
   const { products, loading, error } = useSelector((state) => state.products);
   const { items: wishlistItems } = useSelector((state) => state.wishlist);
+  const cartItems = useSelector((state) => state.cart.items || []);
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -29,6 +31,23 @@ function ProductDetails() {
   const [qty, setQty] = useState(1);
 
   const item = products.find((product) => product.id.toString() === id);
+  const availableStock = item ? Number(item.stock ?? 0) : 0;
+
+  useEffect(() => {
+    if (!products || products.length === 0) {
+      dispatch(fetchProducts());
+    }
+  }, [dispatch, products]);
+
+  useEffect(() => {
+    if (availableStock <= 0) {
+      setQty(0);
+    } else if (qty > availableStock) {
+      setQty(availableStock);
+    } else if (qty === 0 && availableStock > 0) {
+      setQty(1);
+    }
+  }, [availableStock]);
 
   const isWishlisted = Boolean(
     user &&
@@ -61,25 +80,51 @@ function ProductDetails() {
     }
   };
 
-  const handleAddToCart = () => {
+  const handleDecreaseQty = () => {
+    if (availableStock <= 0) return;
+    setQty((q) => Math.max(1, q - 1));
+  };
+
+  const handleIncreaseQty = () => {
+    if (availableStock <= 0 || qty >= availableStock) {
+      toast.error("Not Enough Stock", "Not enough stock available");
+      return;
+    }
+    setQty((q) => q + 1);
+  };
+
+  const handleAddToCart = async () => {
     if (!user) {
       toast.info("Authentication Required", "Please log in to add items to your cart.");
       navigate("/login");
       return;
     }
 
-    if (item.stock === 0) {
-      toast.error("Out of Stock", "This item is currently out of stock.");
+    if (availableStock <= 0) {
+      toast.error("Not Enough Stock", "Not enough stock available");
       return;
     }
 
-    dispatch(
-      addToCart({
-        userId: user.id,
-        product: item,
-      }),
-    );
-    toast.cartAdd("Added to Cart", item.title);
+    const existingInCart = cartItems.find((ci) => String(ci.productId) === String(item.id));
+    const currentCartQty = existingInCart ? Number(existingInCart.quantity) : 0;
+
+    if (currentCartQty + qty > availableStock) {
+      toast.error("Not Enough Stock", "Not enough stock available");
+      return;
+    }
+
+    try {
+      await dispatch(
+        addToCart({
+          userId: user.id,
+          product: item,
+          quantity: qty,
+        })
+      ).unwrap();
+      toast.cartAdd("Added to Cart", `${qty > 1 ? `${qty}x ` : ""}${item.title}`);
+    } catch (err) {
+      toast.error("Not Enough Stock", err || "Not enough stock available");
+    }
   };
 
   const handleBuyNow = () => {
@@ -88,8 +133,8 @@ function ProductDetails() {
       navigate("/login");
       return;
     }
-    if (item.stock === 0) {
-      toast.error("Item Out of Stock", "This gear is currently out of stock.");
+    if (availableStock <= 0 || qty > availableStock) {
+      toast.error("Not Enough Stock", "Not enough stock available");
       return;
     }
     const directItem = {
@@ -227,8 +272,20 @@ function ProductDetails() {
             </h1>
 
             <div className="flex items-center gap-2 mt-3">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 stock-dot" />
-              <span className="text-emerald-400 text-sm font-medium">In Stock</span>
+              {availableStock > 0 ? (
+                <>
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 stock-dot" />
+                  <span className="text-emerald-400 text-sm font-medium">In Stock</span>
+                  <span className="font-tech text-xs text-gray-500">
+                    ({availableStock} available)
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span className="w-2 h-2 rounded-full bg-pink-500" />
+                  <span className="text-pink-400 text-sm font-medium">Out of Stock</span>
+                </>
+              )}
               <span className="text-gray-600">•</span>
               <span className="font-tech text-xs text-gray-500">
                 SKU-{item.id.toString().padStart(4, "0")}
@@ -264,16 +321,26 @@ function ProductDetails() {
             <div className="flex flex-wrap items-center gap-3 mt-8">
               <div className="flex items-center border border-white/15 clip-btn overflow-hidden">
                 <button
-                  onClick={() => setQty((q) => Math.max(1, q - 1))}
-                  className="p-3 text-gray-300 hover:bg-white/5 transition"
+                  type="button"
+                  onClick={handleDecreaseQty}
+                  className={`p-3 transition ${
+                    qty <= 1 || availableStock <= 0
+                      ? "text-gray-600 cursor-not-allowed"
+                      : "text-gray-300 hover:bg-white/5 cursor-pointer"
+                  }`}
                   aria-label="Decrease quantity"
                 >
                   <Minus size={16} />
                 </button>
                 <span className="w-8 text-center font-tech text-white">{qty}</span>
                 <button
-                  onClick={() => setQty((q) => q + 1)}
-                  className="p-3 text-gray-300 hover:bg-white/5 transition"
+                  type="button"
+                  onClick={handleIncreaseQty}
+                  className={`p-3 transition cursor-pointer ${
+                    qty >= availableStock || availableStock <= 0
+                      ? "text-gray-500 hover:text-pink-400"
+                      : "text-gray-300 hover:bg-white/5"
+                  }`}
                   aria-label="Increase quantity"
                 >
                   <Plus size={16} />
@@ -296,22 +363,37 @@ function ProductDetails() {
             </div>
 
             <div className="flex gap-3 mt-4">
-              <button 
-                onClick={handleAddToCart}
-                className="clip-btn flex-1 flex items-center justify-center gap-2 px-6 py-3.5 border border-cyan-400/60 text-cyan-300 font-display font-600 text-lg tracking-wide hover:bg-cyan-400/10 transition">
-                <ShoppingCart size={18} />
-                Add to Cart
-              </button>
+              {availableStock <= 0 ? (
+                <button
+                  type="button"
+                  disabled
+                  className="clip-btn flex-1 flex items-center justify-center gap-2 px-6 py-3.5 border border-white/10 bg-white/5 text-gray-500 font-display font-600 text-lg tracking-wide cursor-not-allowed"
+                >
+                  <ShoppingCart size={18} className="opacity-40" />
+                  Out of Stock
+                </button>
+              ) : (
+                <>
+                  <button 
+                    type="button"
+                    onClick={handleAddToCart}
+                    className="clip-btn flex-1 flex items-center justify-center gap-2 px-6 py-3.5 border border-cyan-400/60 text-cyan-300 font-display font-600 text-lg tracking-wide hover:bg-cyan-400/10 transition cursor-pointer"
+                  >
+                    <ShoppingCart size={18} />
+                    Add to Cart
+                  </button>
 
-              <button
-                type="button"
-                onClick={handleBuyNow}
-                className="clip-btn flex-1 flex items-center justify-center gap-2 px-6 py-3.5 font-display font-600 text-lg tracking-wide text-black transition hover:brightness-110 cursor-pointer"
-                style={{ background: "linear-gradient(120deg, #00E5FF, #FF3D8A)" }}
-              >
-                <Zap size={18} />
-                Buy Now
-              </button>
+                  <button
+                    type="button"
+                    onClick={handleBuyNow}
+                    className="clip-btn flex-1 flex items-center justify-center gap-2 px-6 py-3.5 font-display font-600 text-lg tracking-wide text-black transition hover:brightness-110 cursor-pointer"
+                    style={{ background: "linear-gradient(120deg, #00E5FF, #FF3D8A)" }}
+                  >
+                    <Zap size={18} />
+                    Buy Now
+                  </button>
+                </>
+              )}
             </div>
 
             {/* TRUST STRIP */}

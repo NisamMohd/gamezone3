@@ -15,53 +15,83 @@ export function calculatedTotal(items){
 
 export const addToCart = createAsyncThunk(
   "carts/addToCarts",
-  async ({ product, userId }, { getState }) => {
-    const { items } = getState().cart;
+  async ({ product, userId, quantity = 1 }, { getState, rejectWithValue }) => {
+    try {
+      const state = getState();
+      const { items } = state.cart;
+      const products = state.products?.products || [];
+      const prod = products.find((p) => String(p.id) === String(product.id)) || product;
+      const availableStock = Number(
+        prod.stock !== undefined ? prod.stock : product.stock !== undefined ? product.stock : 0
+      );
 
-    
-    const existing = items.find(
-      (i) => i.productId === product.id
-    );
+      const existing = items.find(
+        (i) => String(i.productId) === String(product.id)
+      );
 
-    console.log("EXISTING:", existing);
+      const currentQty = existing ? Number(existing.quantity) : 0;
+      const addAmount = Number(quantity) || 1;
+      const targetQty = currentQty + addAmount;
 
-    if (existing) {
-      console.log("PATCHING:", existing.id);
+      if (availableStock <= 0 || targetQty > availableStock) {
+        return rejectWithValue("Not enough stock available");
+      }
 
-      const res = await api.patch(`/carts/${existing.id}`, {
-        quantity: existing.quantity + 1
+      if (existing) {
+        const res = await api.patch(`/carts/${existing.id}`, {
+          quantity: targetQty,
+        });
+        return res.data;
+      }
+
+      const res = await api.post("/carts", {
+        userId,
+        productId: product.id,
+        title: product.title,
+        price: product.price,
+        image: product.image,
+        category: product.category || "",
+        quantity: addAmount,
       });
 
-
       return res.data;
+    } catch (err) {
+      return rejectWithValue(
+        err.response?.data?.message || err.message || "Failed to add to cart"
+      );
     }
-
-    console.log("CREATING NEW CART ITEM");
-
-    const res = await api.post("/carts", {
-      userId,
-      productId: product.id,
-      title: product.title,
-      price: product.price,
-      image: product.image,
-      category: product.category || "",
-      quantity: 1
-    });
-
-    return res.data;
   }
 );
 
 export const incrementQty = createAsyncThunk(
   "carts/incrementQty",
-  async (item) => {
-    const res = await api.patch(`/carts/${item.id}`, {
-      quantity: item.quantity + 1
-    });
+  async (item, { getState, rejectWithValue }) => {
+    try {
+      const state = getState();
+      const products = state.products?.products || [];
+      const product = products.find((p) => String(p.id) === String(item.productId));
+      const availableStock = product
+        ? Number(product.stock !== undefined ? product.stock : 0)
+        : item.stock !== undefined
+        ? Number(item.stock)
+        : Infinity;
 
-    return res.data;
+      if (Number(item.quantity) >= availableStock || availableStock <= 0) {
+        return rejectWithValue("Not enough stock available");
+      }
+
+      const res = await api.patch(`/carts/${item.id}`, {
+        quantity: Number(item.quantity) + 1,
+      });
+
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(
+        err.response?.data?.message || err.message || "Failed to increment"
+      );
+    }
   }
-)
+);
 
 
 export const decrementQty = createAsyncThunk(

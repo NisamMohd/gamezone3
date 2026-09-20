@@ -45,8 +45,14 @@ const cartSlice = createSlice({
                     if(index != -1){
                         state.items[index] = action.payload;
                     }else{
-                    state.items.push(action.payload)
+                        state.items.push(action.payload)
                     }
+                    state.total = calculatedTotal(state.items);
+            })
+
+            .addCase(addToCart.rejected, (state, action) => {
+                state.status = "succeeded";
+                state.error = action.payload || action.error?.message;
             })
 
             //Increment Qty
@@ -67,7 +73,7 @@ const cartSlice = createSlice({
                     })
 
             .addCase(incrementQty.rejected, (state, action) => {
-                    state.status = "failed";
+                    state.status = "succeeded";
                     state.error = action.payload || action.error.message;
                     })
 

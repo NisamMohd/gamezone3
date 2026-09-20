@@ -5,6 +5,8 @@ import { IndianRupee, ShoppingCart, Minus, Plus, Trash2 } from "lucide-react";
 
 import { useToast } from "../../context/ToastContext";
 import { decrementQty, fetchCarts, incrementQty, remove, clearCartAsync } from "../redux/features/thunks/cartThunk";
+import { fetchProducts } from "../redux/features/thunks/productThunks";
+import api from "../../services/api";
 
 const themeStyles = `
   @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -62,7 +64,8 @@ function Cart() {
   const user = useSelector((state) => state.auth.user);
   const { toast } = useToast();
 
-  const { items, status, total } = useSelector((state) => state.cart);
+  const { items = [], status, total } = useSelector((state) => state.cart);
+  const { products = [] } = useSelector((state) => state.products);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -72,6 +75,71 @@ function Cart() {
       dispatch(fetchCarts(user.id));
     }
   }, [user?.id, dispatch]);
+
+  useEffect(() => {
+    if (!products || products.length === 0) {
+      dispatch(fetchProducts());
+    }
+  }, [dispatch, products]);
+
+  // Auto-clamp any cart items that exceed available stock
+  useEffect(() => {
+    if (!items || items.length === 0 || !products || products.length === 0) return;
+
+    items.forEach(async (item) => {
+      const prod = products.find((p) => String(p.id) === String(item.productId));
+      if (prod) {
+        const stock = Number(prod.stock ?? 0);
+        if (stock > 0 && Number(item.quantity) > stock) {
+          try {
+            await api.patch(`/carts/${item.id}`, { quantity: stock });
+            if (user?.id) dispatch(fetchCarts(user.id));
+          } catch (err) {
+            console.error("Failed to clamp cart item quantity:", err);
+          }
+        }
+      }
+    });
+  }, [items, products, user?.id, dispatch]);
+
+  const handleIncrement = (item) => {
+    const prod = products.find((p) => String(p.id) === String(item.productId));
+    const availableStock = prod
+      ? Number(prod.stock ?? 0)
+      : item.stock !== undefined
+      ? Number(item.stock)
+      : Infinity;
+
+    if (item.quantity >= availableStock || availableStock <= 0) {
+      toast.error("Not Enough Stock", "Not enough stock available");
+      return;
+    }
+
+    dispatch(incrementQty(item));
+  };
+
+  const handleDecrement = (item) => {
+    if (item.quantity <= 1) return;
+    dispatch(decrementQty(item));
+  };
+
+  const handlePlaceOrder = () => {
+    const problematicItem = items.find((item) => {
+      const prod = products.find((p) => String(p.id) === String(item.productId));
+      const stock = prod ? Number(prod.stock ?? 0) : 0;
+      return stock <= 0 || item.quantity > stock;
+    });
+
+    if (problematicItem) {
+      toast.error(
+        "Not Enough Stock",
+        `"${problematicItem.title}" exceeds available stock. Please adjust quantity before checkout.`
+      );
+      return;
+    }
+
+    navigate("/checkout");
+  };
 
   const handleClearCart = () => {
     if (items.length === 0) return;
@@ -212,119 +280,161 @@ function Cart() {
         <div className="flex flex-col lg:flex-row gap-4 items-start">
           {/* LEFT SIDE */}
           <div className="w-full lg:flex-1">
-            {items.map((item) => (
-              <div
-                key={item.id}
-                className="
-                  relative
-                  clip-panel
-                  bg-[#0B0F17]
-                  border
-                  border-white/10
-                  mb-3
-                  p-5
-                  hover:border-cyan-400/30
-                  transition
-                "
-              >
-                <span className="corner corner-tl" />
-                <span className="corner corner-br" />
+            {items.map((item) => {
+              const prod = products.find((p) => String(p.id) === String(item.productId));
+              const availableStock = prod
+                ? Number(prod.stock ?? 0)
+                : item.stock !== undefined
+                ? Number(item.stock)
+                : 0;
+              const isOutOfStock = availableStock <= 0;
+              const isAtMaxStock = item.quantity >= availableStock && availableStock > 0;
 
-                <div className="flex gap-5">
-                  {/* PRODUCT IMAGE */}
-                  <div className="w-36 h-36 shrink-0 flex items-center justify-center bg-white/[0.02] border border-white/5">
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="max-w-full max-h-full object-contain p-3"
-                    />
-                  </div>
+              return (
+                <div
+                  key={item.id}
+                  className="
+                    relative
+                    clip-panel
+                    bg-[#0B0F17]
+                    border
+                    border-white/10
+                    mb-3
+                    p-5
+                    hover:border-cyan-400/30
+                    transition
+                  "
+                >
+                  <span className="corner corner-tl" />
+                  <span className="corner corner-br" />
 
-                  {/* PRODUCT INFORMATION */}
-                  <div className="flex-1 min-w-0 font-body">
-                    <h2 className="text-base font-medium text-gray-200">
-                      {item.title}
-                    </h2>
-
-                    <p className="text-sm text-gray-500 mt-2 line-clamp-2">
-                      {item.description}
-                    </p>
-
-                    {/* PRICE */}
-                    <div className="flex items-center mt-4">
-                      <IndianRupee
-                        size={16}
-                        className="text-white"
-                        strokeWidth={2.5}
+                  <div className="flex gap-5">
+                    {/* PRODUCT IMAGE */}
+                    <div className="w-36 h-36 shrink-0 flex items-center justify-center bg-white/[0.02] border border-white/5">
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        className="max-w-full max-h-full object-contain p-3"
                       />
-
-                      <span className="font-display font-700 text-lg text-white">
-                        {item.price}
-                      </span>
                     </div>
 
-                    {/* QUANTITY + REMOVE */}
-                    <div className="flex items-center gap-6 mt-5">
-                      {/* QUANTITY */}
-                      <div className="flex items-center border border-white/15">
-                        <button
-                          onClick={() => dispatch(decrementQty(item))}
-                          className="w-9 h-9 flex items-center justify-center text-gray-300 hover:bg-white/5 transition"
-                        >
-                          <Minus size={15} />
-                        </button>
+                    {/* PRODUCT INFORMATION */}
+                    <div className="flex-1 min-w-0 font-body">
+                      <h2 className="text-base font-medium text-gray-200">
+                        {item.title}
+                      </h2>
 
-                        <span
-                          className="
-                            w-10
-                            h-9
-                            flex
-                            items-center
-                            justify-center
-                            border-l
-                            border-r
-                            border-white/15
-                            text-sm
-                            font-tech
-                            text-white
-                          "
-                        >
-                          {item.quantity}
-                        </span>
+                      <p className="text-sm text-gray-500 mt-2 line-clamp-2">
+                        {item.description}
+                      </p>
 
-                        <button
-                          onClick={() => dispatch(incrementQty(item))}
-                          className="w-9 h-9 flex items-center justify-center text-gray-300 hover:bg-white/5 transition"
-                        >
-                          <Plus size={15} />
-                        </button>
+                      {/* STOCK STATUS PILL */}
+                      <div className="flex items-center gap-2 mt-2">
+                        {isOutOfStock ? (
+                          <span className="text-[11px] font-tech text-rose-400 bg-rose-500/10 border border-rose-500/30 px-2 py-0.5 rounded">
+                            Out of Stock
+                          </span>
+                        ) : isAtMaxStock ? (
+                          <span className="text-[11px] font-tech text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded">
+                            Max Stock Reached ({availableStock})
+                          </span>
+                        ) : (
+                          <span className="text-[11px] font-tech text-gray-400">
+                            Stock: {availableStock}
+                          </span>
+                        )}
                       </div>
 
-                      {/* REMOVE */}
-                      <button
-                        onClick={() => {
-                          dispatch(remove(item.id));
-                          toast.cartRemove("Removed from Cart", item.title);
-                        }}
-                        className="
-                          flex
-                          items-center
-                          gap-1.5
-                          text-sm
-                          font-medium
-                          text-gray-400
-                          hover:text-pink-400
-                          transition
-                        "
-                      >
-                        <Trash2 size={16} />
-                        Remove
-                      </button>
+                      {/* PRICE */}
+                      <div className="flex items-center mt-3">
+                        <IndianRupee
+                          size={16}
+                          className="text-white"
+                          strokeWidth={2.5}
+                        />
+
+                        <span className="font-display font-700 text-lg text-white">
+                          {item.price}
+                        </span>
+                      </div>
+
+                      {/* QUANTITY + REMOVE */}
+                      <div className="flex items-center gap-6 mt-5">
+                        {/* QUANTITY */}
+                        <div className="flex items-center border border-white/15">
+                          <button
+                            type="button"
+                            onClick={() => handleDecrement(item)}
+                            className={`w-9 h-9 flex items-center justify-center transition ${
+                              item.quantity <= 1
+                                ? "text-gray-600 cursor-not-allowed"
+                                : "text-gray-300 hover:bg-white/5 cursor-pointer"
+                            }`}
+                            aria-label="Decrease quantity"
+                          >
+                            <Minus size={15} />
+                          </button>
+
+                          <span
+                            className="
+                              w-10
+                              h-9
+                              flex
+                              items-center
+                              justify-center
+                              border-l
+                              border-r
+                              border-white/15
+                              text-sm
+                              font-tech
+                              text-white
+                            "
+                          >
+                            {item.quantity}
+                          </span>
+
+                          <button
+                            type="button"
+                            onClick={() => handleIncrement(item)}
+                            className={`w-9 h-9 flex items-center justify-center transition cursor-pointer ${
+                              isAtMaxStock || isOutOfStock
+                                ? "text-gray-500 hover:text-pink-400"
+                                : "text-gray-300 hover:bg-white/5"
+                            }`}
+                            aria-label="Increase quantity"
+                          >
+                            <Plus size={15} />
+                          </button>
+                        </div>
+
+                        {/* REMOVE */}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            dispatch(remove(item.id));
+                            toast.cartRemove("Removed from Cart", item.title);
+                          }}
+                          className="
+                            flex
+                            items-center
+                            gap-1.5
+                            text-sm
+                            font-medium
+                            text-gray-400
+                            hover:text-pink-400
+                            transition
+                            cursor-pointer
+                          "
+                        >
+                          <Trash2 size={16} />
+                          Remove
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* RIGHT PRICE SUMMARY */}
@@ -378,7 +488,8 @@ function Cart() {
               {/* BUY BUTTON */}
               <div className="px-5 pb-5">
                 <button
-                  onClick={() => navigate("/checkout")}
+                  type="button"
+                  onClick={handlePlaceOrder}
                   className="
                     clip-btn
                     w-full
@@ -390,6 +501,7 @@ function Cart() {
                     text-sm
                     transition
                     hover:brightness-110
+                    cursor-pointer
                   "
                   style={{
                     background: "linear-gradient(120deg, #00E5FF, #FF3D8A)",

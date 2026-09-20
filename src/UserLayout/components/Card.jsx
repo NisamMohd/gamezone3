@@ -15,6 +15,7 @@ function Card({ value }) {
   const dispatch = useDispatch();
 
   const wishlistItems = useSelector((state) => state.wishlist.items);
+  const cartItems = useSelector((state) => state.cart.items || []);
   const isWishlisted = Boolean(
     user &&
       wishlistItems.some(
@@ -40,19 +41,37 @@ function Card({ value }) {
     dispatch(toggleWishlist({ product: item, userId: user.id }));
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (!user) {
       navigate("/login");
       return;
     }
 
-    dispatch(
-      addToCart({
-        userId: user.id,
-        product: item,
-      }),
-    );
-    toast.cartAdd("Added to Cart", item.title);
+    const availableStock = Number(item.stock ?? 0);
+    if (availableStock <= 0) {
+      toast.error("Not Enough Stock", "Not enough stock available");
+      return;
+    }
+
+    const existingInCart = cartItems.find((ci) => String(ci.productId) === String(item.id));
+    const currentQty = existingInCart ? Number(existingInCart.quantity) : 0;
+    if (currentQty + 1 > availableStock) {
+      toast.error("Not Enough Stock", "Not enough stock available");
+      return;
+    }
+
+    try {
+      await dispatch(
+        addToCart({
+          userId: user.id,
+          product: item,
+          quantity: 1,
+        }),
+      ).unwrap();
+      toast.cartAdd("Added to Cart", item.title);
+    } catch (err) {
+      toast.error("Not Enough Stock", err || "Not enough stock available");
+    }
   };
 
   return (
