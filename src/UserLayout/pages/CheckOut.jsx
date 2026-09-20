@@ -173,6 +173,13 @@ function CheckOut() {
           "Order Placed Successfully!",
           "Your gaming equipment order has been confirmed and saved to server."
         );
+
+        // If purchased via direct "Buy Now" from ProductDetails, redirect to products page
+        if (directBuyItem) {
+          dispatch(resetOrderStatus());
+          navigate("/products");
+          return;
+        }
       } else {
         const errorMsg = resultAction.payload || "Could not process order.";
         toast.error("Order Failed", errorMsg);

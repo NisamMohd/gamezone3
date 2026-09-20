@@ -17,7 +17,7 @@
         "zip": "678601",
         "country": "India"
       },
-      "isOnline": false
+      "isOnline": true
     },
     {
       "name": "moosa",
@@ -45,7 +45,7 @@
       "role": "customer",
       "createdAt": "2026-09-10T04:48:59.706Z",
       "isOnline": false,
-      "isBlocked": false,
+      "isBlocked": true,
       "id": "JCDhuJpkjko",
       "address": {
         "name": "sinan v",
@@ -75,7 +75,16 @@
       "createdAt": "2026-09-20T16:31:48.396Z",
       "isOnline": false,
       "isBlocked": false,
-      "id": "qHQggoGhYTE"
+      "id": "qHQggoGhYTE",
+      "address": {
+        "name": "shamil",
+        "phone": "5689416578",
+        "address": "neospace",
+        "city": "ramanattukara",
+        "state": "Kerala",
+        "zip": "673635",
+        "country": "India"
+      }
     },
     {
       "name": "padayappa",
@@ -85,7 +94,16 @@
       "createdAt": "2026-09-20T19:07:45.578Z",
       "isOnline": false,
       "isBlocked": false,
-      "id": "B00NX_CqTm8"
+      "id": "B00NX_CqTm8",
+      "address": {
+        "name": "padayappa",
+        "phone": "9877455728",
+        "address": "neospace",
+        "city": "ramanattukara",
+        "state": "Kerala",
+        "zip": "673635",
+        "country": "India"
+      }
     },
     {
       "name": "dasappan",
@@ -95,7 +113,16 @@
       "createdAt": "2026-09-20T20:14:23.623Z",
       "isOnline": false,
       "isBlocked": false,
-      "id": "KKJJTQ2grEg"
+      "id": "KKJJTQ2grEg",
+      "address": {
+        "name": "dasappan",
+        "phone": "9647592165",
+        "address": "neospace",
+        "city": "ramanattukara",
+        "state": "Kerala",
+        "zip": "673635",
+        "country": "India"
+      }
     }
   ],
   "products": [
@@ -222,7 +249,7 @@
       "title": "POPeArt NAVY FAS-830 controller x 1",
       "image": "https://i.pinimg.com/1200x/0f/60/b7/0f60b776411fd2d35b6ff987cba7ec5f.jpg",
       "price": 7499,
-      "stock": 7,
+      "stock": 4,
       "isDisabled": false
     },
     {
@@ -294,7 +321,7 @@
       "title": "Asus Prime GeForce RTX 5060 Ti",
       "image": "https://i.pinimg.com/736x/5a/b7/7f/5ab77f258d01975ebf523e760882c96f.jpg",
       "price": 42999,
-      "stock": 3,
+      "stock": 2,
       "isDisabled": false
     },
     {
@@ -313,7 +340,7 @@
       "image": "https://i.pinimg.com/1200x/94/e8/ec/94e8ece378b24b9f966b8b66501d9250.jpg",
       "description": "A beautiful gaming headset with microphone, gaming headphones stereo 7.1 surround sound PS4 headset 50mm Drivers, 3.5mm audio jack over ear wired headphones for PC, Switch, Xbox, PS4, PS5, Laptop.",
       "price": 4999,
-      "stock": 6,
+      "stock": 5,
       "isDisabled": false
     },
     {
@@ -333,7 +360,7 @@
       "image": "https://i.pinimg.com/1200x/57/71/2f/57712f7c1014b09b3a76437adb471a98.jpg",
       "description": "Turn up the bass without the wires! 🎶 The JBL Tune 720BT delivers 50hrs of playtime, deep JBL Pure Bass, and all-day comfort. Perfect for workouts, travel, or just jamming out. Pin now to upgrade your sound!",
       "price": 5299,
-      "stock": 10,
+      "stock": 8,
       "isDisabled": false
     },
     {
@@ -342,7 +369,7 @@
       "title": "Thrustmaster Ferrari Red Legend | Racing Game Wheel | PC/PS3",
       "image": "https://i.pinimg.com/1200x/12/1d/da/121ddaace20845f6549dc8e10745ef9c.jpg",
       "price": 8499,
-      "stock": 9,
+      "stock": 8,
       "isDisabled": false
     },
     {
@@ -352,7 +379,7 @@
       "image": "https://i.pinimg.com/736x/71/10/f1/7110f1fa46cc882ce8096000312f36eb.jpg",
       "description": "The HyperX QuadCast is a versatile and high-quality USB microphone designed to cater to the needs of content creators, streamers, and gamers alike. With its sleek and modern design, this microphone not only looks great but also delivers exceptional audio performance.",
       "price": 11499,
-      "stock": 2,
+      "stock": 1,
       "isDisabled": false
     },
     {
@@ -362,7 +389,7 @@
       "image": "https://i.pinimg.com/1200x/23/3c/49/233c499b9f8313213262c2d44ab9e518.jpg",
       "description": "Dispatched within 2 business days via DHL Express. Estimated delivery after dispatch: • 1-3 business days (NSW, VIC, ACT, QLD, SA) • 1-4 business days (WA, TAS, NT) Delivery timeframes are estimates and may vary for remote areas or during peak periods. No delivery to PO Boxes and Parcel Locker. Please note that this item is located outside Australia. Product complies with Australian standards. Kingston Fury RGB Beast 16GB DDR5 RGB Desktop UDIMM RAM Kit 2x 8GB - 5600MT/s - CL40 - DIMM Intel XMP Kingston FURY Beast DDR5 RGB Memory up to 6000MT/s* Kingston FURY™ Beast DDR5 RGB lets you overclock in style on next-gen gaming platforms with cutting-edge technology. Experience the superior speed advancements of DDR5 with double the banks and double the burst length. Vibrant RGB lighting customisa",
       "price": 6499,
-      "stock": 6,
+      "stock": 4,
       "isDisabled": false
     },
     {
@@ -380,7 +407,7 @@
       "image": "https://i.pinimg.com/1200x/43/b5/ac/43b5ac5f45d17751cb105688c709ea1f.jpg",
       "category": "playstation",
       "price": 59990,
-      "stock": 9,
+      "stock": 8,
       "isDisabled": false,
       "id": "3EWW2Tijuqo"
     },
@@ -389,7 +416,7 @@
       "image": "https://i.pinimg.com/736x/d2/b6/50/d2b65049e81890ce9453bc94b857ed73.jpg",
       "category": "accessories",
       "price": 44999,
-      "stock": 10,
+      "stock": 9,
       "description": "ASUS GeForce RTX 5060 Ti TUF GAMING OC 16GB, Grafikkarte DLSS 5, 3x DisplayPort, 1x HDMI 2.1",
       "isDisabled": false,
       "id": "2StX1-Cc5tQ"
@@ -497,6 +524,208 @@
       "status": "Order Confirmed",
       "createdAt": "2026-09-20T20:44:41.335Z",
       "id": "uEaiXWy3dzU"
+    },
+    {
+      "userId": "qHQggoGhYTE",
+      "items": [
+        {
+          "productId": "3EWW2Tijuqo",
+          "title": "NEW Limited Edition PS5, Spider-Man 2 Edition",
+          "price": 59990,
+          "quantity": 1,
+          "image": "https://i.pinimg.com/1200x/43/b5/ac/43b5ac5f45d17751cb105688c709ea1f.jpg",
+          "category": "playstation"
+        },
+        {
+          "productId": "28",
+          "title": "Hyper x quadcast",
+          "price": 11499,
+          "quantity": 1,
+          "image": "https://i.pinimg.com/736x/71/10/f1/7110f1fa46cc882ce8096000312f36eb.jpg",
+          "category": "accessories"
+        },
+        {
+          "productId": "26",
+          "title": "JBL Tune 720BT - Wireless",
+          "price": 5299,
+          "quantity": 1,
+          "image": "https://i.pinimg.com/1200x/57/71/2f/57712f7c1014b09b3a76437adb471a98.jpg",
+          "category": "accessories"
+        }
+      ],
+      "shippingAddress": {
+        "name": "shamil",
+        "phone": "5689416578",
+        "address": "neospace",
+        "city": "ramanattukara",
+        "state": "Kerala",
+        "zip": "673635",
+        "country": "India"
+      },
+      "totalAmount": 76788,
+      "paymentMethod": "Cash on Delivery",
+      "status": "Order Confirmed",
+      "createdAt": "2026-09-20T20:48:45.743Z",
+      "id": "9A5S21CAYTg"
+    },
+    {
+      "userId": "qHQggoGhYTE",
+      "items": [
+        {
+          "productId": "14",
+          "title": "POPeArt NAVY FAS-830 controller x 1",
+          "price": 7499,
+          "quantity": 3,
+          "image": "https://i.pinimg.com/1200x/0f/60/b7/0f60b776411fd2d35b6ff987cba7ec5f.jpg",
+          "category": "console"
+        }
+      ],
+      "shippingAddress": {
+        "name": "shamil",
+        "phone": "5689416578",
+        "address": "neospace",
+        "city": "ramanattukara",
+        "state": "Kerala",
+        "zip": "673635",
+        "country": "India"
+      },
+      "totalAmount": 22497,
+      "paymentMethod": "Cash on Delivery",
+      "status": "Order Confirmed",
+      "createdAt": "2026-09-20T20:48:59.480Z",
+      "id": "hQrCr_qkOmU"
+    },
+    {
+      "userId": "B00NX_CqTm8",
+      "items": [
+        {
+          "productId": "27",
+          "title": "Thrustmaster Ferrari Red Legend | Racing Game Wheel | PC/PS3",
+          "price": 8499,
+          "quantity": 1,
+          "image": "https://i.pinimg.com/1200x/12/1d/da/121ddaace20845f6549dc8e10745ef9c.jpg",
+          "category": "accessories"
+        },
+        {
+          "productId": "29",
+          "title": "Kingston Fury RGB Beast 16GB DDR5 RGB Desktop UDIMM RAM Kit 2x 8GB - 5600MT/s - CL40 - DIMM Intel XMP [KF556C40BBAK2-16]",
+          "price": 6499,
+          "quantity": 1,
+          "image": "https://i.pinimg.com/1200x/23/3c/49/233c499b9f8313213262c2d44ab9e518.jpg",
+          "category": "accessories"
+        },
+        {
+          "productId": "2StX1-Cc5tQ",
+          "title": "ASUS GeForce RTX 5060 Ti ",
+          "price": 44999,
+          "quantity": 1,
+          "image": "https://i.pinimg.com/736x/d2/b6/50/d2b65049e81890ce9453bc94b857ed73.jpg",
+          "category": "accessories"
+        }
+      ],
+      "shippingAddress": {
+        "name": "padayappa",
+        "phone": "9877455728",
+        "address": "neospace",
+        "city": "ramanattukara",
+        "state": "Kerala",
+        "zip": "673635",
+        "country": "India"
+      },
+      "totalAmount": 59997,
+      "paymentMethod": "Cash on Delivery",
+      "status": "Order Confirmed",
+      "createdAt": "2026-09-20T20:54:56.403Z",
+      "id": "xySwtumXSLY"
+    },
+    {
+      "userId": "B00NX_CqTm8",
+      "items": [
+        {
+          "productId": "24",
+          "title": "Mac Gaming Headset",
+          "price": 4999,
+          "quantity": 1,
+          "image": "https://i.pinimg.com/1200x/94/e8/ec/94e8ece378b24b9f966b8b66501d9250.jpg",
+          "category": "accessories"
+        }
+      ],
+      "shippingAddress": {
+        "name": "padayappa",
+        "phone": "9877455728",
+        "address": "neospace",
+        "city": "ramanattukara",
+        "state": "Kerala",
+        "zip": "673635",
+        "country": "India"
+      },
+      "totalAmount": 4999,
+      "paymentMethod": "Cash on Delivery",
+      "status": "Order Confirmed",
+      "createdAt": "2026-09-20T20:55:09.529Z",
+      "id": "KNLN7FsZokw"
+    },
+    {
+      "userId": "KKJJTQ2grEg",
+      "items": [
+        {
+          "productId": "22",
+          "title": "Asus Prime GeForce RTX 5060 Ti",
+          "price": 42999,
+          "quantity": 1,
+          "image": "https://i.pinimg.com/736x/5a/b7/7f/5ab77f258d01975ebf523e760882c96f.jpg",
+          "category": "accessories"
+        }
+      ],
+      "shippingAddress": {
+        "name": "dasappan",
+        "phone": "9647592165",
+        "address": "neospace",
+        "city": "ramanattukara",
+        "state": "Kerala",
+        "zip": "673635",
+        "country": "India"
+      },
+      "totalAmount": 42999,
+      "paymentMethod": "Cash on Delivery",
+      "status": "Order Confirmed",
+      "createdAt": "2026-09-20T20:56:27.480Z",
+      "id": "E8y8Zy03GM4"
+    },
+    {
+      "userId": "KKJJTQ2grEg",
+      "items": [
+        {
+          "productId": "26",
+          "title": "JBL Tune 720BT - Wireless",
+          "price": 5299,
+          "quantity": 1,
+          "image": "https://i.pinimg.com/1200x/57/71/2f/57712f7c1014b09b3a76437adb471a98.jpg",
+          "category": "accessories"
+        },
+        {
+          "productId": "29",
+          "title": "Kingston Fury RGB Beast 16GB DDR5 RGB Desktop UDIMM RAM Kit 2x 8GB - 5600MT/s - CL40 - DIMM Intel XMP [KF556C40BBAK2-16]",
+          "price": 6499,
+          "quantity": 1,
+          "image": "https://i.pinimg.com/1200x/23/3c/49/233c499b9f8313213262c2d44ab9e518.jpg",
+          "category": "accessories"
+        }
+      ],
+      "shippingAddress": {
+        "name": "dasappan",
+        "phone": "9647592165",
+        "address": "neospace",
+        "city": "ramanattukara",
+        "state": "Kerala",
+        "zip": "673635",
+        "country": "India"
+      },
+      "totalAmount": 11798,
+      "paymentMethod": "Cash on Delivery",
+      "status": "Order Confirmed",
+      "createdAt": "2026-09-20T20:56:45.253Z",
+      "id": "wVuBWmQNij0"
     }
   ],
   "carts": [],

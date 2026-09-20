@@ -10,7 +10,16 @@ import {
   Tooltip,
   CartesianGrid,
 } from "recharts";
-import { BarChart3, Filter, User, Package, RotateCcw } from "lucide-react";
+import {
+  BarChart3,
+  Filter,
+  User,
+  Package,
+  RotateCcw,
+  TrendingUp,
+  IndianRupee,
+  ShoppingBag,
+} from "lucide-react";
 import { customerList } from "../redux/thunks/customerThunk";
 import { fetchProducts } from "../redux/thunks/adminProductsThunk";
 
@@ -44,12 +53,32 @@ const MONTH_ABBR = [
   "Dec",
 ];
 
-// Custom Cyberpunk Tooltip for Recharts
-function CustomTooltip({ active, payload, label }) {
+const formatCurrency = (val) => {
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 0,
+  }).format(val || 0);
+};
+
+const formatCompactCurrency = (val) => {
+  if (!val || val === 0) return "₹0";
+  if (val >= 10000000) return `₹${(val / 10000000).toFixed(1)}Cr`;
+  if (val >= 100000) return `₹${(val / 100000).toFixed(1)}L`;
+  if (val >= 1000) return `₹${(val / 1000).toFixed(1)}k`;
+  return `₹${val}`;
+};
+
+// Custom Cyberpunk Tooltip for Recharts showing both Revenue and Orders
+function CustomTooltip({ active, payload, label, chartMetric = "orders" }) {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
+    const isRev = chartMetric === "revenue";
+    const ordersVal = data.orders ?? 0;
+    const revenueVal = data.revenue ?? 0;
+
     return (
-      <div className="bg-[#0B0F17]/95 border border-cyan-400/50 p-3 rounded-lg shadow-xl shadow-cyan-500/10 backdrop-blur-md font-body text-xs">
+      <div className="bg-[#0B0F17]/95 border border-cyan-400/50 p-3 rounded-lg shadow-xl shadow-cyan-500/10 backdrop-blur-md font-body text-xs min-w-[180px]">
         <p className="font-tech text-cyan-400 uppercase tracking-widest text-[11px] mb-0.5">
           {data.name || label}
         </p>
@@ -61,12 +90,54 @@ function CustomTooltip({ active, payload, label }) {
         {!data.weekday && data.dateRange && (
           <p className="text-gray-400 text-[11px] mb-1">{data.dateRange}</p>
         )}
-        <div className="flex items-center gap-2 pt-1 border-t border-white/10">
-          <span className="w-2 h-2 rounded-full bg-cyan-400" />
-          <span className="text-gray-300">Orders:</span>
-          <span className="font-display font-700 text-sm text-white">
-            {payload[0].value}
-          </span>
+        <div className="space-y-1.5 pt-1.5 border-t border-white/10">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-1.5">
+              <span
+                className={`w-2 h-2 rounded-full ${
+                  isRev
+                    ? "bg-emerald-400 shadow-[0_0_6px_#34d399]"
+                    : "bg-emerald-400/60"
+                }`}
+              />
+              <span className={isRev ? "text-white font-semibold" : "text-gray-400"}>
+                Revenue:
+              </span>
+            </div>
+            <span
+              className={`font-mono ${
+                isRev
+                  ? "text-emerald-300 font-bold text-sm"
+                  : "text-gray-300 font-medium"
+              }`}
+            >
+              {formatCurrency(revenueVal)}
+            </span>
+          </div>
+
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-1.5">
+              <span
+                className={`w-2 h-2 rounded-full ${
+                  !isRev
+                    ? "bg-cyan-400 shadow-[0_0_6px_#22d3ee]"
+                    : "bg-cyan-400/60"
+                }`}
+              />
+              <span className={!isRev ? "text-white font-semibold" : "text-gray-400"}>
+                Orders:
+              </span>
+            </div>
+            <span
+              className={`font-mono ${
+                !isRev
+                  ? "text-cyan-300 font-bold text-sm"
+                  : "text-gray-300 font-medium"
+              }`}
+            >
+              {ordersVal}
+            </span>
+          </div>
         </div>
       </div>
     );
@@ -96,6 +167,7 @@ export default function OrderChart() {
   }, [dispatch, reduxUsers?.length, reduxProducts?.length]);
 
   const now = new Date();
+  const [chartMetric, setChartMetric] = useState("orders"); // 'orders' or 'revenue'
   const [viewMode, setViewMode] = useState("weekly"); // 'weekly' or 'monthly'
   const [selectedYear, setSelectedYear] = useState(now.getFullYear());
   const [selectedWeeklyMonth, setSelectedWeeklyMonth] = useState(now.getMonth()); // 0-11
@@ -184,6 +256,53 @@ export default function OrderChart() {
     );
   }, [reduxProducts, uniqueOrders]);
 
+  // Helper to compute order revenue respecting product filter
+  const calculateOrderRevenue = useMemo(() => {
+    return (order) => {
+      if (!order) return 0;
+
+      if (selectedProduct !== "all") {
+        if (!Array.isArray(order.items)) return 0;
+        const targetProdObj = availableProducts.find(
+          (p) => p.id === selectedProduct
+        );
+        const targetTitle = targetProdObj?.title?.toLowerCase();
+
+        return order.items.reduce((sum, item) => {
+          if (!item) return sum;
+          const matchId =
+            item.productId &&
+            String(item.productId) === String(selectedProduct);
+          const matchTitle =
+            targetTitle &&
+            item.title &&
+            item.title.toLowerCase() === targetTitle;
+          if (matchId || matchTitle) {
+            const p = Number(item.price) || 0;
+            const q = Number(item.quantity) || 1;
+            return sum + p * q;
+          }
+          return sum;
+        }, 0);
+      }
+
+      if (order.totalAmount !== undefined && order.totalAmount !== null) {
+        const val = Number(order.totalAmount);
+        if (!isNaN(val)) return val;
+      }
+
+      if (Array.isArray(order.items)) {
+        return order.items.reduce((sum, item) => {
+          const p = Number(item?.price) || 0;
+          const q = Number(item?.quantity) || 1;
+          return sum + p * q;
+        }, 0);
+      }
+
+      return 0;
+    };
+  }, [selectedProduct, availableProducts]);
+
   // Filter orders according to selected user and product
   const filteredOrders = useMemo(() => {
     return uniqueOrders.filter((order) => {
@@ -265,7 +384,7 @@ export default function OrderChart() {
     return new Date(selectedYear, activeMonthlyMonthIndex + 1, 0).getDate();
   }, [selectedYear, activeMonthlyMonthIndex]);
 
-  // Aggregate orders for Weekly view (Summary of 4-5 weeks)
+  // Aggregate orders and revenue for Weekly view (Summary of 4-5 weeks)
   const weeklySummaryData = useMemo(() => {
     const month = Number(selectedWeeklyMonth);
     const daysInMonth = new Date(selectedYear, month + 1, 0).getDate();
@@ -276,24 +395,28 @@ export default function OrderChart() {
         label: "W1 (1-7)",
         name: `Week 1 (${shortMonth} 1 - 7)`,
         orders: 0,
+        revenue: 0,
         dateRange: `${shortMonth} 1 - 7`,
       },
       {
         label: "W2 (8-14)",
         name: `Week 2 (${shortMonth} 8 - 14)`,
         orders: 0,
+        revenue: 0,
         dateRange: `${shortMonth} 8 - 14`,
       },
       {
         label: "W3 (15-21)",
         name: `Week 3 (${shortMonth} 15 - 21)`,
         orders: 0,
+        revenue: 0,
         dateRange: `${shortMonth} 15 - 21`,
       },
       {
         label: "W4 (22-28)",
         name: `Week 4 (${shortMonth} 22 - 28)`,
         orders: 0,
+        revenue: 0,
         dateRange: `${shortMonth} 22 - 28`,
       },
     ];
@@ -303,6 +426,7 @@ export default function OrderChart() {
         label: `W5 (29-${daysInMonth})`,
         name: `Week 5 (${shortMonth} 29 - ${daysInMonth})`,
         orders: 0,
+        revenue: 0,
         dateRange: `${shortMonth} 29 - ${daysInMonth}`,
       });
     }
@@ -317,16 +441,29 @@ export default function OrderChart() {
         d.getMonth() === month
       ) {
         const day = d.getDate();
-        if (day <= 7) weeks[0].orders += 1;
-        else if (day <= 14) weeks[1].orders += 1;
-        else if (day <= 21) weeks[2].orders += 1;
-        else if (day <= 28) weeks[3].orders += 1;
-        else if (weeks[4]) weeks[4].orders += 1;
+        const rev = calculateOrderRevenue(order);
+
+        if (day <= 7) {
+          weeks[0].orders += 1;
+          weeks[0].revenue += rev;
+        } else if (day <= 14) {
+          weeks[1].orders += 1;
+          weeks[1].revenue += rev;
+        } else if (day <= 21) {
+          weeks[2].orders += 1;
+          weeks[2].revenue += rev;
+        } else if (day <= 28) {
+          weeks[3].orders += 1;
+          weeks[3].revenue += rev;
+        } else if (weeks[4]) {
+          weeks[4].orders += 1;
+          weeks[4].revenue += rev;
+        }
       }
     });
 
     return weeks;
-  }, [filteredOrders, selectedYear, selectedWeeklyMonth]);
+  }, [filteredOrders, selectedYear, selectedWeeklyMonth, calculateOrderRevenue]);
 
   // Aggregate daily data when selecting Week 1, Week 2, Week 3, Week 4, or Week 5 in Weekly Mode
   const weeklyDaysData = useMemo(() => {
@@ -369,6 +506,7 @@ export default function OrderChart() {
         weekday: weekdayName,
         dateRange: `${shortMonth} ${day}`,
         orders: 0,
+        revenue: 0,
       });
     }
 
@@ -386,21 +524,23 @@ export default function OrderChart() {
           const targetIndex = day - startDay;
           if (days[targetIndex]) {
             days[targetIndex].orders += 1;
+            days[targetIndex].revenue += calculateOrderRevenue(order);
           }
         }
       }
     });
 
     return days;
-  }, [filteredOrders, selectedYear, selectedWeeklyMonth, weeklySubFilter]);
+  }, [filteredOrders, selectedYear, selectedWeeklyMonth, weeklySubFilter, calculateOrderRevenue]);
 
-  // Aggregate orders for Monthly view across all 12 months
+  // Aggregate orders and revenue for Monthly view across all 12 months
   const annualMonthlyData = useMemo(() => {
     const months = MONTH_ABBR.map((abbr, idx) => ({
       label: abbr,
       monthIndex: idx,
       name: `${MONTH_NAMES[idx]} ${selectedYear}`,
       orders: 0,
+      revenue: 0,
       dateRange: `${MONTH_NAMES[idx]} ${selectedYear}`,
     }));
 
@@ -413,14 +553,15 @@ export default function OrderChart() {
         const m = d.getMonth();
         if (months[m]) {
           months[m].orders += 1;
+          months[m].revenue += calculateOrderRevenue(order);
         }
       }
     });
 
     return months;
-  }, [filteredOrders, selectedYear]);
+  }, [filteredOrders, selectedYear, calculateOrderRevenue]);
 
-  // Aggregate orders for "All Days" in Monthly view
+  // Aggregate orders and revenue for "All Days" in Monthly view
   const monthlyAllDaysData = useMemo(() => {
     if (monthlyViewType !== "all_days") return [];
     const month = activeMonthlyMonthIndex;
@@ -441,6 +582,7 @@ export default function OrderChart() {
         weekday: weekdayName,
         dateRange: `${shortMonth} ${day}`,
         orders: 0,
+        revenue: 0,
       });
     }
 
@@ -456,12 +598,13 @@ export default function OrderChart() {
         const day = d.getDate();
         if (days[day - 1]) {
           days[day - 1].orders += 1;
+          days[day - 1].revenue += calculateOrderRevenue(order);
         }
       }
     });
 
     return days;
-  }, [filteredOrders, selectedYear, activeMonthlyMonthIndex, monthlyViewType]);
+  }, [filteredOrders, selectedYear, activeMonthlyMonthIndex, monthlyViewType, calculateOrderRevenue]);
 
   // Decide active data based on view mode and sub-filters
   const activeData = useMemo(() => {
@@ -486,41 +629,139 @@ export default function OrderChart() {
     annualMonthlyData,
   ]);
 
-  // Total orders displayed in active period
+  // Total orders and revenue displayed in active period
   const totalPeriodOrders = useMemo(() => {
-    return activeData.reduce((acc, item) => acc + item.orders, 0);
+    return activeData.reduce((acc, item) => acc + (item.orders || 0), 0);
   }, [activeData]);
 
-  // Total month orders in weekly mode
+  const totalPeriodRevenue = useMemo(() => {
+    return activeData.reduce((acc, item) => acc + (item.revenue || 0), 0);
+  }, [activeData]);
+
+  // Total month orders and revenue in weekly mode
   const currentMonthTotalOrders = useMemo(() => {
-    return weeklySummaryData.reduce((acc, item) => acc + item.orders, 0);
+    return weeklySummaryData.reduce((acc, item) => acc + (item.orders || 0), 0);
   }, [weeklySummaryData]);
 
-  // Selected specific month order count in monthly mode
+  const currentMonthTotalRevenue = useMemo(() => {
+    return weeklySummaryData.reduce((acc, item) => acc + (item.revenue || 0), 0);
+  }, [weeklySummaryData]);
+
+  // Selected specific month order count and revenue in monthly mode
   const selectedMonthOrderCount = useMemo(() => {
     if (selectedMonthlyMonth === "all") return null;
     const m = Number(selectedMonthlyMonth);
     return annualMonthlyData[m]?.orders || 0;
   }, [selectedMonthlyMonth, annualMonthlyData]);
 
+  const selectedMonthRevenue = useMemo(() => {
+    if (selectedMonthlyMonth === "all") return null;
+    const m = Number(selectedMonthlyMonth);
+    return annualMonthlyData[m]?.revenue || 0;
+  }, [selectedMonthlyMonth, annualMonthlyData]);
+
   const annualTotalOrders = useMemo(() => {
-    return annualMonthlyData.reduce((acc, item) => acc + item.orders, 0);
+    return annualMonthlyData.reduce((acc, item) => acc + (item.orders || 0), 0);
+  }, [annualMonthlyData]);
+
+  const annualTotalRevenue = useMemo(() => {
+    return annualMonthlyData.reduce((acc, item) => acc + (item.revenue || 0), 0);
   }, [annualMonthlyData]);
 
   // Dynamic Y-axis scale
   const maxOrders = useMemo(() => {
-    const max = Math.max(...activeData.map((d) => d.orders), 0);
+    const max = Math.max(...activeData.map((d) => d.orders || 0), 0);
     return Math.max(max + 1, 4);
   }, [activeData]);
+
+  const maxRevenue = useMemo(() => {
+    const max = Math.max(...activeData.map((d) => d.revenue || 0), 0);
+    if (max === 0) return 10000;
+    return Math.ceil(max * 1.15);
+  }, [activeData]);
+
+  const activePillStyle =
+    chartMetric === "revenue"
+      ? "bg-emerald-500/25 border-emerald-400 text-emerald-300 shadow-[0_0_10px_rgba(16,185,129,0.25)] font-bold"
+      : "bg-cyan-500/25 border-cyan-400 text-cyan-300 shadow-[0_0_10px_rgba(0,229,255,0.25)] font-bold";
 
   return (
     <div className="w-full relative clip-panel bg-[#0B0F17] border border-cyan-500/20 p-4 sm:p-6 shadow-xl shadow-cyan-500/5">
       <span className="corner corner-tl" />
       <span className="corner corner-bl" />
 
-      {/* TOP CONTROLS BAR */}
+      {/* METRIC SELECTION TOGGLE (ORDERS vs REVENUE / SALES) */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 mb-4 border-b border-white/10">
+        <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-1.5 text-xs font-tech uppercase tracking-widest text-gray-400 mr-1">
+            <TrendingUp
+              size={15}
+              className={chartMetric === "revenue" ? "text-emerald-400" : "text-cyan-400"}
+            />
+            <span>Chart Metric:</span>
+          </div>
+
+          <div className="inline-flex rounded clip-btn border border-white/10 bg-black/60 p-0.5 shadow-inner">
+            <button
+              type="button"
+              onClick={() => setChartMetric("orders")}
+              className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-display font-700 tracking-wider transition-all duration-200 cursor-pointer rounded ${
+                chartMetric === "orders"
+                  ? "bg-cyan-500/20 text-cyan-300 border border-cyan-400/60 shadow-[0_0_12px_rgba(0,229,255,0.35)]"
+                  : "text-gray-400 hover:text-white border border-transparent"
+              }`}
+            >
+              <ShoppingBag
+                size={13}
+                className={chartMetric === "orders" ? "text-cyan-400" : "text-gray-400"}
+              />
+              <span>Orders</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setChartMetric("revenue")}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-display font-700 tracking-wider transition-all duration-200 cursor-pointer rounded ${
+                chartMetric === "revenue"
+                  ? "bg-emerald-500/20 text-emerald-300 border border-emerald-400/60 shadow-[0_0_12px_rgba(16,185,129,0.35)]"
+                  : "text-gray-400 hover:text-white border border-transparent"
+              }`}
+            >
+              <IndianRupee
+                size={13}
+                className={chartMetric === "revenue" ? "text-emerald-400" : "text-gray-400"}
+              />
+              <span>Revenue / Sales</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Live metric status indicator */}
+        <div className="flex items-center gap-3 text-xs font-mono text-gray-400">
+          <div className="flex items-center gap-1.5">
+            <span
+              className={`w-2 h-2 rounded-full animate-pulse ${
+                chartMetric === "revenue" ? "bg-emerald-400" : "bg-cyan-400"
+              }`}
+            />
+            <span className="text-gray-300">Live Analytics</span>
+          </div>
+          <span className="text-gray-600">|</span>
+          <span
+            className={`font-semibold ${
+              chartMetric === "revenue" ? "text-emerald-400" : "text-cyan-300"
+            }`}
+          >
+            {chartMetric === "revenue"
+              ? "Sales & Revenue (₹)"
+              : "Order Volume (Count)"}
+          </span>
+        </div>
+      </div>
+
+      {/* TOP CONTROLS BAR (Filters & View Modes) */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-white/10">
-        {/* SELECTORS (Month & Year) */}
+        {/* SELECTORS (Month, Year, User, Product) */}
         <div className="flex flex-wrap items-center gap-2.5">
           <div className="flex items-center gap-1.5 text-cyan-400 font-tech text-xs uppercase tracking-wider mr-1">
             <Filter size={14} />
@@ -694,25 +935,29 @@ export default function OrderChart() {
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 mt-4 mb-3">
         <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 flex-wrap">
           <div className="flex items-center gap-2">
-            <BarChart3 size={17} className="text-cyan-400 shrink-0" />
+            {chartMetric === "revenue" ? (
+              <IndianRupee size={17} className="text-emerald-400 shrink-0" />
+            ) : (
+              <BarChart3 size={17} className="text-cyan-400 shrink-0" />
+            )}
             <h3 className="font-display font-700 text-sm sm:text-base text-white tracking-wide uppercase whitespace-nowrap">
               {viewMode === "weekly"
                 ? weeklySubFilter === "all_weeks"
-                  ? `Weekly Order Trend — ${MONTH_NAMES[selectedWeeklyMonth]} ${selectedYear}`
+                  ? `${chartMetric === "revenue" ? "Weekly Revenue Trend" : "Weekly Order Trend"} — ${MONTH_NAMES[selectedWeeklyMonth]} ${selectedYear}`
                   : weeklySubFilter === "w1"
-                  ? `${MONTH_NAMES[selectedWeeklyMonth]} ${selectedYear} — Week 1 (Days 1–7)`
+                  ? `${MONTH_NAMES[selectedWeeklyMonth]} ${selectedYear} — Week 1 (Days 1–7) ${chartMetric === "revenue" ? "Revenue" : "Orders"}`
                   : weeklySubFilter === "w2"
-                  ? `${MONTH_NAMES[selectedWeeklyMonth]} ${selectedYear} — Week 2 (Days 8–14)`
+                  ? `${MONTH_NAMES[selectedWeeklyMonth]} ${selectedYear} — Week 2 (Days 8–14) ${chartMetric === "revenue" ? "Revenue" : "Orders"}`
                   : weeklySubFilter === "w3"
-                  ? `${MONTH_NAMES[selectedWeeklyMonth]} ${selectedYear} — Week 3 (Days 15–21)`
+                  ? `${MONTH_NAMES[selectedWeeklyMonth]} ${selectedYear} — Week 3 (Days 15–21) ${chartMetric === "revenue" ? "Revenue" : "Orders"}`
                   : weeklySubFilter === "w4"
-                  ? `${MONTH_NAMES[selectedWeeklyMonth]} ${selectedYear} — Week 4 (Days 22–28)`
-                  : `${MONTH_NAMES[selectedWeeklyMonth]} ${selectedYear} — Week 5 (Days 29–${currentWeeklyMonthDays})`
+                  ? `${MONTH_NAMES[selectedWeeklyMonth]} ${selectedYear} — Week 4 (Days 22–28) ${chartMetric === "revenue" ? "Revenue" : "Orders"}`
+                  : `${MONTH_NAMES[selectedWeeklyMonth]} ${selectedYear} — Week 5 (Days 29–${currentWeeklyMonthDays}) ${chartMetric === "revenue" ? "Revenue" : "Orders"}`
                 : monthlyViewType === "all_days"
-                ? `${MONTH_NAMES[activeMonthlyMonthIndex]} ${selectedYear} — All Days (1–${currentMonthlyMonthDays})`
+                ? `${MONTH_NAMES[activeMonthlyMonthIndex]} ${selectedYear} — All Days (1–${currentMonthlyMonthDays}) ${chartMetric === "revenue" ? "Revenue" : "Orders"}`
                 : selectedMonthlyMonth === "all"
-                ? `Monthly Order Trend — Year ${selectedYear}`
-                : `Monthly Trend — ${MONTH_NAMES[selectedMonthlyMonth]} ${selectedYear} Focus`}
+                ? `${chartMetric === "revenue" ? "Monthly Revenue Trend" : "Monthly Order Trend"} — Year ${selectedYear}`
+                : `${chartMetric === "revenue" ? "Monthly Revenue" : "Monthly Trend"} — ${MONTH_NAMES[selectedMonthlyMonth]} ${selectedYear} Focus`}
             </h3>
           </div>
 
@@ -724,7 +969,7 @@ export default function OrderChart() {
                 onClick={() => setWeeklySubFilter("all_weeks")}
                 className={`px-2.5 py-1 text-xs font-mono rounded clip-btn border transition-all whitespace-nowrap cursor-pointer ${
                   weeklySubFilter === "all_weeks"
-                    ? "bg-cyan-500/25 border-cyan-400 text-cyan-300 shadow-[0_0_10px_rgba(0,229,255,0.25)] font-bold"
+                    ? activePillStyle
                     : "border-white/10 text-gray-400 hover:text-white hover:border-white/20 bg-black/40"
                 }`}
               >
@@ -736,7 +981,7 @@ export default function OrderChart() {
                 onClick={() => setWeeklySubFilter("w1")}
                 className={`px-2.5 py-1 text-xs font-mono rounded clip-btn border transition-all whitespace-nowrap cursor-pointer ${
                   weeklySubFilter === "w1"
-                    ? "bg-cyan-500/25 border-cyan-400 text-cyan-300 shadow-[0_0_10px_rgba(0,229,255,0.25)] font-bold"
+                    ? activePillStyle
                     : "border-white/10 text-gray-400 hover:text-white hover:border-white/20 bg-black/40"
                 }`}
               >
@@ -748,7 +993,7 @@ export default function OrderChart() {
                 onClick={() => setWeeklySubFilter("w2")}
                 className={`px-2.5 py-1 text-xs font-mono rounded clip-btn border transition-all whitespace-nowrap cursor-pointer ${
                   weeklySubFilter === "w2"
-                    ? "bg-cyan-500/25 border-cyan-400 text-cyan-300 shadow-[0_0_10px_rgba(0,229,255,0.25)] font-bold"
+                    ? activePillStyle
                     : "border-white/10 text-gray-400 hover:text-white hover:border-white/20 bg-black/40"
                 }`}
               >
@@ -760,7 +1005,7 @@ export default function OrderChart() {
                 onClick={() => setWeeklySubFilter("w3")}
                 className={`px-2.5 py-1 text-xs font-mono rounded clip-btn border transition-all whitespace-nowrap cursor-pointer ${
                   weeklySubFilter === "w3"
-                    ? "bg-cyan-500/25 border-cyan-400 text-cyan-300 shadow-[0_0_10px_rgba(0,229,255,0.25)] font-bold"
+                    ? activePillStyle
                     : "border-white/10 text-gray-400 hover:text-white hover:border-white/20 bg-black/40"
                 }`}
               >
@@ -772,7 +1017,7 @@ export default function OrderChart() {
                 onClick={() => setWeeklySubFilter("w4")}
                 className={`px-2.5 py-1 text-xs font-mono rounded clip-btn border transition-all whitespace-nowrap cursor-pointer ${
                   weeklySubFilter === "w4"
-                    ? "bg-cyan-500/25 border-cyan-400 text-cyan-300 shadow-[0_0_10px_rgba(0,229,255,0.25)] font-bold"
+                    ? activePillStyle
                     : "border-white/10 text-gray-400 hover:text-white hover:border-white/20 bg-black/40"
                 }`}
               >
@@ -785,7 +1030,7 @@ export default function OrderChart() {
                   onClick={() => setWeeklySubFilter("w5")}
                   className={`px-2.5 py-1 text-xs font-mono rounded clip-btn border transition-all whitespace-nowrap cursor-pointer ${
                     weeklySubFilter === "w5"
-                      ? "bg-cyan-500/25 border-cyan-400 text-cyan-300 shadow-[0_0_10px_rgba(0,229,255,0.25)] font-bold"
+                      ? activePillStyle
                       : "border-white/10 text-gray-400 hover:text-white hover:border-white/20 bg-black/40"
                   }`}
                 >
@@ -803,7 +1048,7 @@ export default function OrderChart() {
                 onClick={() => setMonthlyViewType("months")}
                 className={`px-2.5 py-1 text-xs font-mono rounded clip-btn border transition-all whitespace-nowrap cursor-pointer ${
                   monthlyViewType === "months"
-                    ? "bg-cyan-500/25 border-cyan-400 text-cyan-300 shadow-[0_0_10px_rgba(0,229,255,0.25)] font-bold"
+                    ? activePillStyle
                     : "border-white/10 text-gray-400 hover:text-white hover:border-white/20 bg-black/40"
                 }`}
               >
@@ -821,7 +1066,7 @@ export default function OrderChart() {
                 }}
                 className={`px-2.5 py-1 text-xs font-mono rounded clip-btn border transition-all whitespace-nowrap cursor-pointer ${
                   monthlyViewType === "all_days"
-                    ? "bg-cyan-500/25 border-cyan-400 text-cyan-300 shadow-[0_0_10px_rgba(0,229,255,0.25)] font-bold"
+                    ? activePillStyle
                     : "border-white/10 text-gray-400 hover:text-white hover:border-white/20 bg-black/40"
                 }`}
               >
@@ -831,17 +1076,35 @@ export default function OrderChart() {
           )}
         </div>
 
-        {/* ORDER COUNT BADGE */}
-        <div className="flex items-center gap-2 font-mono text-xs text-gray-300 bg-white/[0.02] px-3 py-1 rounded border border-white/5 self-start lg:self-auto shrink-0 flex-wrap">
-          <span>Orders Recorded:</span>
-          <span className="font-bold text-cyan-400 text-sm">
-            {viewMode === "weekly" && weeklySubFilter !== "all_weeks"
+        {/* METRIC BADGE (Revenue & Orders) */}
+        <div className="flex items-center gap-2 font-mono text-xs text-gray-300 bg-white/[0.02] px-3 py-1.5 rounded border border-white/5 self-start lg:self-auto shrink-0 flex-wrap">
+          <span>{chartMetric === "revenue" ? "Revenue Recorded:" : "Orders Recorded:"}</span>
+          <span
+            className={`font-bold text-sm ${
+              chartMetric === "revenue" ? "text-emerald-400" : "text-cyan-400"
+            }`}
+          >
+            {chartMetric === "revenue"
+              ? viewMode === "weekly" && weeklySubFilter !== "all_weeks"
+                ? `${formatCurrency(totalPeriodRevenue)} this week (Month: ${formatCurrency(currentMonthTotalRevenue)})`
+                : viewMode === "monthly" && monthlyViewType === "all_days"
+                ? `${formatCurrency(totalPeriodRevenue)} in ${MONTH_ABBR[activeMonthlyMonthIndex]} ${selectedYear}`
+                : viewMode === "monthly" && selectedMonthlyMonth !== "all"
+                ? `${formatCurrency(selectedMonthRevenue)} in ${MONTH_ABBR[selectedMonthlyMonth]} (Annual: ${formatCurrency(annualTotalRevenue)})`
+                : formatCurrency(totalPeriodRevenue)
+              : viewMode === "weekly" && weeklySubFilter !== "all_weeks"
               ? `${totalPeriodOrders} in this week (Month Total: ${currentMonthTotalOrders})`
               : viewMode === "monthly" && monthlyViewType === "all_days"
               ? `${totalPeriodOrders} in ${MONTH_ABBR[activeMonthlyMonthIndex]} ${selectedYear}`
               : viewMode === "monthly" && selectedMonthlyMonth !== "all"
               ? `${selectedMonthOrderCount} in ${MONTH_ABBR[selectedMonthlyMonth]} (Annual: ${annualTotalOrders})`
               : totalPeriodOrders}
+          </span>
+          <span className="text-gray-600 hidden sm:inline">|</span>
+          <span className="text-[11px] text-gray-400 hidden sm:inline">
+            {chartMetric === "revenue"
+              ? `(${totalPeriodOrders} orders)`
+              : `(${formatCurrency(totalPeriodRevenue)})`}
           </span>
           {selectedUser !== "all" && (
             <span className="text-[10px] text-pink-400 bg-pink-500/10 border border-pink-500/20 px-1.5 py-0.5 rounded font-mono">
@@ -864,9 +1127,14 @@ export default function OrderChart() {
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={activeData}
-            margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+            margin={{
+              top: 10,
+              right: 15,
+              left: chartMetric === "revenue" ? 5 : -20,
+              bottom: 0,
+            }}
           >
-            {/* Cyberpunk Neon Gradient Definition */}
+            {/* Cyberpunk Neon Gradient Definitions */}
             <defs>
               <linearGradient id="cyberpunkOrderBar" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#00E5FF" stopOpacity={0.9} />
@@ -877,12 +1145,25 @@ export default function OrderChart() {
                 <stop offset="0%" stopColor="#FF3D8A" stopOpacity={1} />
                 <stop offset="100%" stopColor="#f70063" stopOpacity={0.8} />
               </linearGradient>
+              <linearGradient id="cyberpunkRevenueBar" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#10B981" stopOpacity={0.95} />
+                <stop offset="60%" stopColor="#059669" stopOpacity={0.75} />
+                <stop offset="100%" stopColor="#047857" stopOpacity={0.6} />
+              </linearGradient>
+              <linearGradient id="highlightRevenueGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#34D399" stopOpacity={1} />
+                <stop offset="100%" stopColor="#10B981" stopOpacity={0.85} />
+              </linearGradient>
             </defs>
 
             {/* Subtle Grid Lines */}
             <CartesianGrid
               strokeDasharray="3 3"
-              stroke="rgba(0, 229, 255, 0.08)"
+              stroke={
+                chartMetric === "revenue"
+                  ? "rgba(16, 185, 129, 0.08)"
+                  : "rgba(0, 229, 255, 0.08)"
+              }
               vertical={false}
             />
 
@@ -895,20 +1176,33 @@ export default function OrderChart() {
 
             <YAxis
               allowDecimals={false}
-              domain={[0, maxOrders]}
+              domain={[0, chartMetric === "revenue" ? maxRevenue : maxOrders]}
+              tickFormatter={
+                chartMetric === "revenue" ? formatCompactCurrency : (v) => v
+              }
+              width={chartMetric === "revenue" ? 55 : 35}
               tick={{ fill: "#94a3b8", fontSize: 11, fontFamily: "JetBrains Mono" }}
               axisLine={{ stroke: "rgba(255,255,255,0.1)" }}
               tickLine={{ stroke: "rgba(255,255,255,0.1)" }}
             />
 
             <Tooltip
-              content={<CustomTooltip />}
-              cursor={{ fill: "rgba(0, 229, 255, 0.05)" }}
+              content={<CustomTooltip chartMetric={chartMetric} />}
+              cursor={{
+                fill:
+                  chartMetric === "revenue"
+                    ? "rgba(16, 185, 129, 0.06)"
+                    : "rgba(0, 229, 255, 0.05)",
+              }}
             />
 
             <Bar
-              dataKey="orders"
-              fill="url(#cyberpunkOrderBar)"
+              dataKey={chartMetric === "revenue" ? "revenue" : "orders"}
+              fill={
+                chartMetric === "revenue"
+                  ? "url(#cyberpunkRevenueBar)"
+                  : "url(#cyberpunkOrderBar)"
+              }
               radius={[4, 4, 0, 0]}
               maxBarSize={activeData.length > 15 ? 24 : 48}
               animationDuration={450}
@@ -919,11 +1213,22 @@ export default function OrderChart() {
                 selectedMonthlyMonth !== "all" &&
                 activeData.map((entry, index) => {
                   const isChosen = index === Number(selectedMonthlyMonth);
+                  const chosenFill =
+                    chartMetric === "revenue"
+                      ? "url(#highlightRevenueGrad)"
+                      : "url(#highlightBarGrad)";
+                  const normalFill =
+                    chartMetric === "revenue"
+                      ? "url(#cyberpunkRevenueBar)"
+                      : "url(#cyberpunkOrderBar)";
+                  const strokeColor =
+                    chartMetric === "revenue" ? "#34D399" : "#00E5FF";
+
                   return (
                     <Cell
                       key={`cell-${index}`}
-                      fill={isChosen ? "url(#highlightBarGrad)" : "url(#cyberpunkOrderBar)"}
-                      stroke={isChosen ? "#00E5FF" : "none"}
+                      fill={isChosen ? chosenFill : normalFill}
+                      stroke={isChosen ? strokeColor : "none"}
                       strokeWidth={isChosen ? 2 : 0}
                       opacity={isChosen ? 1 : 0.45}
                     />
