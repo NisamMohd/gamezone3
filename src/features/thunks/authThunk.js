@@ -15,7 +15,7 @@ export const register = createAsyncThunk(
         name: userinfo.name,
         email: userinfo.email,
         password: userinfo.password,
-        role: "customer",
+        role: userinfo.role || "customer",
         createdAt: new Date().toISOString(), 
         isOnline : true,
         isBlocked : false
