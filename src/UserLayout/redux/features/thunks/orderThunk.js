@@ -9,20 +9,48 @@ export const createOrder = createAsyncThunk(
   "orders/createOrder",
   async (
     { userId, items, shippingAddress, totalAmount, paymentMethod, isDirectBuy },
-    { dispatch, rejectWithValue }
+    { dispatch, getState, rejectWithValue }
   ) => {
     try {
-      // 1. Prepare Order Object
+      // 1. Prepare Order Object with product category for each item
+      const productsInState = getState().products?.items || [];
+      const resolvedItems = await Promise.all(
+        items.map(async (item) => {
+          const prodId = item.productId || item.id;
+          let category = item.category;
+
+          if (!category) {
+            const foundInState = productsInState.find(
+              (p) => String(p.id) === String(prodId)
+            );
+            if (foundInState && foundInState.category) {
+              category = foundInState.category;
+            } else {
+              try {
+                const { data: prodData } = await api.get(`/products/${prodId}`);
+                if (prodData && prodData.category) {
+                  category = prodData.category;
+                }
+              } catch (err) {
+                console.warn(`Could not fetch category for product ${prodId}:`, err);
+              }
+            }
+          }
+
+          return {
+            productId: prodId,
+            title: item.title,
+            price: item.price,
+            quantity: item.quantity || 1,
+            image: item.image,
+            category: category || "",
+          };
+        })
+      );
+
       const orderData = {
         userId,
-        items: items.map((item) => ({
-          productId: item.productId || item.id,
-          title: item.title,
-          price: item.price,
-          quantity: item.quantity || 1,
-          image: item.image,
-          category: item.category || "",
-        })),
+        items: resolvedItems,
         shippingAddress,
         totalAmount,
         paymentMethod: paymentMethod || "Cash on Delivery",

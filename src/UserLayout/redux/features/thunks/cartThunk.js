@@ -44,6 +44,7 @@ export const addToCart = createAsyncThunk(
       title: product.title,
       price: product.price,
       image: product.image,
+      category: product.category || "",
       quantity: 1
     });
 

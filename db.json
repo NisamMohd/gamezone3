@@ -368,92 +368,6 @@
   ],
   "orders": [
     {
-      "userId": "ODYOA6i7HMM",
-      "items": [
-        {
-          "productId": "18",
-          "title": "POPeArt SYPRO-THE-DRAGON x 1",
-          "price": 6499,
-          "quantity": 3,
-          "image": "https://i.pinimg.com/1200x/77/3d/1e/773d1ec9599eb24752bdb8454c5d5aa0.jpg",
-          "category": ""
-        },
-        {
-          "productId": "2",
-          "title": "PS5 Slim + console x 1",
-          "price": 24999,
-          "quantity": 1,
-          "image": "https://i.pinimg.com/1200x/89/47/5d/89475d9a656d38564cd6d02ce9abd48d.jpg",
-          "category": ""
-        }
-      ],
-      "shippingAddress": {
-        "name": "Nisam Mohd",
-        "phone": "8921991635",
-        "address": "bridgeon,kinfra kakkanchery",
-        "city": "ramanattukara",
-        "state": "kerala",
-        "zip": "678601",
-        "country": "India"
-      },
-      "totalAmount": 44496,
-      "paymentMethod": "Cash on Delivery",
-      "status": "Order Confirmed",
-      "createdAt": "2026-08-29T22:58:54.206Z",
-      "id": "2C06JOTtUTs"
-    },
-    {
-      "userId": "ODYOA6i7HMM",
-      "items": [
-        {
-          "productId": "3",
-          "title": "PS6 + console x 1",
-          "price": 32999,
-          "quantity": 2,
-          "image": "https://i.pinimg.com/736x/38/fc/8b/38fc8bed8af35de6e2b7c86a2bde70f0.jpg",
-          "category": ""
-        },
-        {
-          "productId": "12",
-          "title": "Controller PS5 Dual Sense x 1",
-          "price": 4999,
-          "quantity": 1,
-          "image": "https://i.pinimg.com/vwebp/1200x/44/ba/07/44ba070e3ce7f45a73634342bf57191f.webp",
-          "category": ""
-        },
-        {
-          "productId": "14",
-          "title": "POPeArt NAVY FAS-830 controller x 1",
-          "price": 5999,
-          "quantity": 1,
-          "image": "https://i.pinimg.com/1200x/0f/60/b7/0f60b776411fd2d35b6ff987cba7ec5f.jpg",
-          "category": ""
-        },
-        {
-          "productId": "7",
-          "title": "PS5 Gold Edition + Console x 1 + HeadPhone x 1",
-          "price": 52999,
-          "quantity": 1,
-          "image": "https://i.pinimg.com/1200x/66/4e/6c/664e6c53a670bc3498da19bc310ac795.jpg",
-          "category": ""
-        }
-      ],
-      "shippingAddress": {
-        "name": "Nisam Mohd",
-        "phone": "8921991635",
-        "address": "bridgeon,kinfra kakkanchery",
-        "city": "ramanattukara",
-        "state": "kerala",
-        "zip": "678601",
-        "country": "India"
-      },
-      "totalAmount": 129995,
-      "paymentMethod": "Cash on Delivery",
-      "status": "Order Confirmed",
-      "createdAt": "2026-09-04T09:40:56.719Z",
-      "id": "xg_jtgkBLrk"
-    },
-    {
       "userId": "JCDhuJpkjko",
       "items": [
         {
@@ -462,7 +376,7 @@
           "price": 34999,
           "quantity": 1,
           "image": "https://i.pinimg.com/736x/b5/91/eb/b591eb5785f75999986f21ea0ea13310.jpg",
-          "category": ""
+          "category": "playstation"
         },
         {
           "productId": "10",
@@ -470,7 +384,7 @@
           "price": 22000,
           "quantity": 1,
           "image": "https://i.pinimg.com/736x/b4/6b/92/b46b92edaeaebd9d923ab1ba3303179c.jpg",
-          "category": ""
+          "category": "playstation"
         },
         {
           "productId": "25",
@@ -478,7 +392,7 @@
           "price": 5599,
           "quantity": 1,
           "image": "https://i.pinimg.com/736x/7a/98/65/7a9865ff1b77a1208a0d3cacbc1bb6af.jpg",
-          "category": ""
+          "category": "accessories"
         },
         {
           "productId": "3EWW2Tijuqo",
@@ -486,7 +400,7 @@
           "price": "40000",
           "quantity": 1,
           "image": "https://i.pinimg.com/1200x/43/b5/ac/43b5ac5f45d17751cb105688c709ea1f.jpg",
-          "category": ""
+          "category": "playstation"
         },
         {
           "productId": "29",
@@ -494,7 +408,7 @@
           "price": 5999,
           "quantity": 1,
           "image": "https://i.pinimg.com/1200x/23/3c/49/233c499b9f8313213262c2d44ab9e518.jpg",
-          "category": ""
+          "category": "accessories"
         }
       ],
       "shippingAddress": {

@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useMemo, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import {
   ResponsiveContainer,
   BarChart,
@@ -10,7 +10,9 @@ import {
   Tooltip,
   CartesianGrid,
 } from "recharts";
-import { BarChart3, Filter } from "lucide-react";
+import { BarChart3, Filter, User, Package, RotateCcw } from "lucide-react";
+import { customerList } from "../redux/thunks/customerThunk";
+import { fetchProducts } from "../redux/thunks/adminProductsThunk";
 
 const MONTH_NAMES = [
   "January",
@@ -73,9 +75,25 @@ function CustomTooltip({ active, payload, label }) {
 }
 
 export default function OrderChart() {
+  const dispatch = useDispatch();
   const { items: orders = [] } = useSelector(
     (state) => state.orderList || { items: [] }
   );
+  const { items: reduxUsers = [] } = useSelector(
+    (state) => state.users || { items: [] }
+  );
+  const { items: reduxProducts = [] } = useSelector(
+    (state) => state.adminProducts || { items: [] }
+  );
+
+  useEffect(() => {
+    if (!reduxUsers || reduxUsers.length === 0) {
+      dispatch(customerList());
+    }
+    if (!reduxProducts || reduxProducts.length === 0) {
+      dispatch(fetchProducts());
+    }
+  }, [dispatch, reduxUsers?.length, reduxProducts?.length]);
 
   const now = new Date();
   const [viewMode, setViewMode] = useState("weekly"); // 'weekly' or 'monthly'
@@ -84,6 +102,130 @@ export default function OrderChart() {
   const [selectedMonthlyMonth, setSelectedMonthlyMonth] = useState("all"); // 'all' or 0-11
   const [weeklySubFilter, setWeeklySubFilter] = useState("all_weeks"); // 'all_weeks', 'w1', 'w2', 'w3', 'w4', 'w5'
   const [monthlyViewType, setMonthlyViewType] = useState("months"); // 'months' or 'all_days'
+  const [selectedUser, setSelectedUser] = useState("all"); // 'all' or userId
+  const [selectedProduct, setSelectedProduct] = useState("all"); // 'all' or productId/title
+
+  // Deduplicate orders by ID or content to ensure no duplicate orders are counted
+  const uniqueOrders = useMemo(() => {
+    if (!Array.isArray(orders)) return [];
+    const seen = new Set();
+    return orders.filter((order) => {
+      if (!order) return false;
+      const key = order.id || JSON.stringify(order);
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }, [orders]);
+
+  // Unique list of users for dropdown (from Redux users + orders)
+  const availableUsers = useMemo(() => {
+    const userMap = new Map();
+
+    if (Array.isArray(reduxUsers)) {
+      reduxUsers.forEach((u) => {
+        if (u) {
+          const id = String(u.id || u._id || u.name);
+          const name = u.username || u.name || u.email || `User ${id}`;
+          userMap.set(id, { id, name, username: u.username || u.name });
+        }
+      });
+    }
+
+    if (Array.isArray(uniqueOrders)) {
+      uniqueOrders.forEach((o) => {
+        if (o.userId) {
+          const id = String(o.userId);
+          if (!userMap.has(id)) {
+            const name = o.shippingAddress?.name || `User ${id}`;
+            userMap.set(id, { id, name, username: name });
+          }
+        }
+      });
+    }
+
+    return Array.from(userMap.values()).sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
+  }, [reduxUsers, uniqueOrders]);
+
+  // Unique list of products for dropdown (from Redux products + orders)
+  const availableProducts = useMemo(() => {
+    const productMap = new Map();
+
+    if (Array.isArray(reduxProducts)) {
+      reduxProducts.forEach((p) => {
+        if (p) {
+          const id = String(p.id || p._id || p.title);
+          const title = p.title || `Product ${id}`;
+          productMap.set(id, { id, title });
+        }
+      });
+    }
+
+    if (Array.isArray(uniqueOrders)) {
+      uniqueOrders.forEach((o) => {
+        if (Array.isArray(o.items)) {
+          o.items.forEach((item) => {
+            if (item) {
+              const id = String(item.productId || item.id || item.title);
+              const title = item.title || `Product ${id}`;
+              if (!productMap.has(id)) {
+                productMap.set(id, { id, title });
+              }
+            }
+          });
+        }
+      });
+    }
+
+    return Array.from(productMap.values()).sort((a, b) =>
+      a.title.localeCompare(b.title)
+    );
+  }, [reduxProducts, uniqueOrders]);
+
+  // Filter orders according to selected user and product
+  const filteredOrders = useMemo(() => {
+    return uniqueOrders.filter((order) => {
+      // Filter by user (matches userId or user name)
+      if (selectedUser !== "all") {
+        const targetUserObj = availableUsers.find((u) => u.id === selectedUser);
+        const targetUserName = targetUserObj?.name?.toLowerCase();
+
+        const matchesUserId = String(order.userId) === String(selectedUser);
+        const matchesShippingName =
+          targetUserName &&
+          order.shippingAddress?.name?.toLowerCase() === targetUserName;
+
+        if (!matchesUserId && !matchesShippingName) return false;
+      }
+
+      // Filter by product (order items must include matching productId or title)
+      if (selectedProduct !== "all") {
+        const targetProdObj = availableProducts.find(
+          (p) => p.id === selectedProduct
+        );
+        const targetTitle = targetProdObj?.title?.toLowerCase();
+
+        const hasMatchingProduct =
+          Array.isArray(order.items) &&
+          order.items.some((item) => {
+            const matchId =
+              item.productId &&
+              String(item.productId) === String(selectedProduct);
+            const matchTitle =
+              targetTitle &&
+              item.title &&
+              item.title.toLowerCase() === targetTitle;
+            return matchId || matchTitle;
+          });
+
+        if (!hasMatchingProduct) return false;
+      }
+
+      return true;
+    });
+  }, [uniqueOrders, selectedUser, selectedProduct, availableUsers, availableProducts]);
 
   // Available selectable years range (2023 to 2028 + any years from orders)
   const availableYears = useMemo(() => {
@@ -97,7 +239,7 @@ export default function OrderChart() {
       currentYear + 2,
     ]);
 
-    orders.forEach((order) => {
+    uniqueOrders.forEach((order) => {
       if (order.createdAt) {
         const y = new Date(order.createdAt).getFullYear();
         if (!isNaN(y)) yearsSet.add(y);
@@ -105,7 +247,7 @@ export default function OrderChart() {
     });
 
     return Array.from(yearsSet).sort((a, b) => b - a);
-  }, [orders, now]);
+  }, [uniqueOrders, now]);
 
   // Current weekly month total days count
   const currentWeeklyMonthDays = useMemo(() => {
@@ -165,7 +307,7 @@ export default function OrderChart() {
       });
     }
 
-    orders.forEach((order) => {
+    filteredOrders.forEach((order) => {
       if (!order.createdAt) return;
       const d = new Date(order.createdAt);
       if (isNaN(d.getTime())) return;
@@ -184,7 +326,7 @@ export default function OrderChart() {
     });
 
     return weeks;
-  }, [orders, selectedYear, selectedWeeklyMonth]);
+  }, [filteredOrders, selectedYear, selectedWeeklyMonth]);
 
   // Aggregate daily data when selecting Week 1, Week 2, Week 3, Week 4, or Week 5 in Weekly Mode
   const weeklyDaysData = useMemo(() => {
@@ -230,7 +372,7 @@ export default function OrderChart() {
       });
     }
 
-    orders.forEach((order) => {
+    filteredOrders.forEach((order) => {
       if (!order.createdAt) return;
       const d = new Date(order.createdAt);
       if (isNaN(d.getTime())) return;
@@ -250,7 +392,7 @@ export default function OrderChart() {
     });
 
     return days;
-  }, [orders, selectedYear, selectedWeeklyMonth, weeklySubFilter]);
+  }, [filteredOrders, selectedYear, selectedWeeklyMonth, weeklySubFilter]);
 
   // Aggregate orders for Monthly view across all 12 months
   const annualMonthlyData = useMemo(() => {
@@ -262,7 +404,7 @@ export default function OrderChart() {
       dateRange: `${MONTH_NAMES[idx]} ${selectedYear}`,
     }));
 
-    orders.forEach((order) => {
+    filteredOrders.forEach((order) => {
       if (!order.createdAt) return;
       const d = new Date(order.createdAt);
       if (isNaN(d.getTime())) return;
@@ -276,7 +418,7 @@ export default function OrderChart() {
     });
 
     return months;
-  }, [orders, selectedYear]);
+  }, [filteredOrders, selectedYear]);
 
   // Aggregate orders for "All Days" in Monthly view
   const monthlyAllDaysData = useMemo(() => {
@@ -302,7 +444,7 @@ export default function OrderChart() {
       });
     }
 
-    orders.forEach((order) => {
+    filteredOrders.forEach((order) => {
       if (!order.createdAt) return;
       const d = new Date(order.createdAt);
       if (isNaN(d.getTime())) return;
@@ -319,7 +461,7 @@ export default function OrderChart() {
     });
 
     return days;
-  }, [orders, selectedYear, activeMonthlyMonthIndex, monthlyViewType]);
+  }, [filteredOrders, selectedYear, activeMonthlyMonthIndex, monthlyViewType]);
 
   // Decide active data based on view mode and sub-filters
   const activeData = useMemo(() => {
@@ -442,6 +584,68 @@ export default function OrderChart() {
               ))}
             </select>
           </div>
+
+          {/* User Selector (Username / Name) */}
+          <div className="relative">
+            <select
+              value={selectedUser}
+              onChange={(e) => setSelectedUser(e.target.value)}
+              className={`bg-black/60 border text-xs rounded px-3 py-1.5 focus:outline-none font-mono cursor-pointer transition-colors max-w-[140px] sm:max-w-[170px] truncate ${
+                selectedUser !== "all"
+                  ? "border-pink-500 text-pink-300 shadow-[0_0_8px_rgba(255,61,138,0.25)]"
+                  : "border-cyan-500/40 text-cyan-300 focus:border-cyan-400"
+              }`}
+              aria-label="Filter orders by user"
+            >
+              <option value="all" className="bg-slate-900 text-white">
+                All Users
+              </option>
+              {availableUsers.map((u) => (
+                <option key={u.id} value={u.id} className="bg-slate-900 text-white">
+                  {u.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Product Selector (Title) */}
+          <div className="relative">
+            <select
+              value={selectedProduct}
+              onChange={(e) => setSelectedProduct(e.target.value)}
+              className={`bg-black/60 border text-xs rounded px-3 py-1.5 focus:outline-none font-mono cursor-pointer transition-colors max-w-[150px] sm:max-w-[190px] truncate ${
+                selectedProduct !== "all"
+                  ? "border-pink-500 text-pink-300 shadow-[0_0_8px_rgba(255,61,138,0.25)]"
+                  : "border-cyan-500/40 text-cyan-300 focus:border-cyan-400"
+              }`}
+              aria-label="Filter orders by product"
+            >
+              <option value="all" className="bg-slate-900 text-white">
+                All Products
+              </option>
+              {availableProducts.map((p) => (
+                <option key={p.id} value={p.id} className="bg-slate-900 text-white" title={p.title}>
+                  {p.title}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Reset Filters button if any user/product filter is active */}
+          {(selectedUser !== "all" || selectedProduct !== "all") && (
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedUser("all");
+                setSelectedProduct("all");
+              }}
+              className="text-[11px] font-mono text-pink-400 hover:text-pink-300 bg-pink-500/10 border border-pink-500/30 px-2 py-1 rounded transition-all hover:bg-pink-500/20 cursor-pointer flex items-center gap-1"
+              title="Reset user and product filters"
+            >
+              <RotateCcw size={11} />
+              <span>Reset</span>
+            </button>
+          )}
 
           {/* Current Period Info */}
           <div className="text-xs text-gray-400 font-mono hidden sm:inline-block ml-1">
@@ -628,7 +832,7 @@ export default function OrderChart() {
         </div>
 
         {/* ORDER COUNT BADGE */}
-        <div className="flex items-center gap-2 font-mono text-xs text-gray-300 bg-white/[0.02] px-3 py-1 rounded border border-white/5 self-start lg:self-auto shrink-0">
+        <div className="flex items-center gap-2 font-mono text-xs text-gray-300 bg-white/[0.02] px-3 py-1 rounded border border-white/5 self-start lg:self-auto shrink-0 flex-wrap">
           <span>Orders Recorded:</span>
           <span className="font-bold text-cyan-400 text-sm">
             {viewMode === "weekly" && weeklySubFilter !== "all_weeks"
@@ -639,6 +843,19 @@ export default function OrderChart() {
               ? `${selectedMonthOrderCount} in ${MONTH_ABBR[selectedMonthlyMonth]} (Annual: ${annualTotalOrders})`
               : totalPeriodOrders}
           </span>
+          {selectedUser !== "all" && (
+            <span className="text-[10px] text-pink-400 bg-pink-500/10 border border-pink-500/20 px-1.5 py-0.5 rounded font-mono">
+              User: {availableUsers.find((u) => u.id === selectedUser)?.name || selectedUser}
+            </span>
+          )}
+          {selectedProduct !== "all" && (
+            <span
+              className="text-[10px] text-pink-400 bg-pink-500/10 border border-pink-500/20 px-1.5 py-0.5 rounded font-mono max-w-[150px] sm:max-w-[220px] truncate"
+              title={availableProducts.find((p) => p.id === selectedProduct)?.title}
+            >
+              Product: {availableProducts.find((p) => p.id === selectedProduct)?.title || selectedProduct}
+            </span>
+          )}
         </div>
       </div>
 
