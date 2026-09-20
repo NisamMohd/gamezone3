@@ -1,5 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { X, Package, Calendar, CreditCard, Tag } from "lucide-react";
+import React, { useState, useEffect, useMemo } from "react";
+import {
+  X,
+  Package,
+  Calendar,
+  CreditCard,
+  Tag,
+  MapPin,
+  ShoppingBag,
+  Clock,
+  User,
+  CheckCircle2,
+} from "lucide-react";
 import api from "../../services/api";
 
 export default function ViewOrdersModal({ isOpen, onClose, userId, userName }) {
@@ -7,6 +18,28 @@ export default function ViewOrdersModal({ isOpen, onClose, userId, userName }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // Lock background scrolling and listen for Escape key to close
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen, onClose]);
+
+  // Fetch orders when modal opens
   useEffect(() => {
     if (!isOpen || !userId) return;
 
@@ -26,194 +59,296 @@ export default function ViewOrdersModal({ isOpen, onClose, userId, userName }) {
     fetchOrders();
   }, [isOpen, userId]);
 
+  // Total spend calculation
+  const totalSpend = useMemo(() => {
+    return orders.reduce((sum, order) => sum + Number(order.totalAmount || 0), 0);
+  }, [orders]);
+
   if (!isOpen) return null;
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-2 sm:p-4"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-md p-3 sm:p-6 pt-20 sm:pt-24 pb-4 sm:pb-6 overflow-hidden animate-in fade-in duration-200"
       onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-orders-title"
     >
       <div
-        className="clip-panel relative w-full max-w-2xl bg-[#0B0F17] border border-cyan-400/40 p-4 sm:p-6 max-h-[92vh] sm:max-h-[88vh] overflow-y-auto shadow-2xl shadow-cyan-500/10"
+        className="clip-panel relative w-full max-w-3xl bg-[#0B0F17] border border-cyan-400/50 shadow-2xl shadow-cyan-500/15 flex flex-col max-h-full overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         <span className="corner corner-tl" />
         <span className="corner corner-br" />
 
-        {/* HEADER */}
-        <div className="flex items-start justify-between pb-3 sm:pb-4 border-b border-white/10 mb-4 gap-2">
+        {/* 1. FIXED MODAL HEADER (NEVER SCROLLS AWAY / NEVER CUT OFF) */}
+        <div className="shrink-0 px-5 sm:px-6 py-3.5 sm:py-4 border-b border-white/10 bg-[#0B0F17] flex items-center justify-between gap-3">
           <div className="min-w-0 flex-1">
-            <p className="font-tech text-[10px] sm:text-[11px] tracking-[0.2em] text-cyan-400 uppercase">
-              Order History
-            </p>
-            <h2 className="font-display font-700 text-lg sm:text-2xl text-white tracking-wide truncate">
-              {userName ? `${userName}'s Orders` : "User Orders"}
+            <div className="flex items-center gap-2 mb-1 flex-wrap">
+              <span className="font-tech text-[10px] sm:text-[11px] tracking-[0.2em] text-cyan-400 uppercase bg-cyan-500/10 border border-cyan-400/30 px-2 py-0.5 rounded">
+                Order History Archive
+              </span>
+              {!loading && !error && (
+                <span className="text-[11px] font-mono text-gray-400">
+                  {orders.length} {orders.length === 1 ? "Order" : "Orders"} Found
+                </span>
+              )}
+            </div>
+
+            <h2
+              id="modal-orders-title"
+              className="font-display font-700 text-lg sm:text-xl text-white tracking-wide truncate flex items-center gap-2"
+            >
+              <User size={18} className="text-cyan-400 shrink-0" />
+              <span>{userName ? `${userName}'s Orders` : "User Orders"}</span>
             </h2>
-            <p className="text-xs text-gray-400 font-mono mt-0.5">
-              Customer ID: <span className="text-cyan-400">{userId}</span>
-            </p>
+
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-xs text-gray-400 font-mono">
+              <span>
+                Customer ID: <strong className="text-cyan-400">#{userId}</strong>
+              </span>
+              {!loading && orders.length > 0 && (
+                <>
+                  <span className="text-gray-600 hidden sm:inline">•</span>
+                  <span>
+                    Total Spend:{" "}
+                    <strong className="text-emerald-400">
+                      ₹{totalSpend.toLocaleString()}
+                    </strong>
+                  </span>
+                </>
+              )}
+            </div>
           </div>
 
+          {/* CLOSE BUTTON */}
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-pink-500 transition-colors p-1.5 shrink-0 rounded"
+            className="p-2 rounded border border-white/10 hover:border-pink-500/50 text-gray-400 hover:text-pink-400 hover:bg-pink-500/10 transition-all cursor-pointer shrink-0"
             aria-label="Close modal"
+            title="Close (Esc)"
           >
-            <X size={20} />
+            <X size={18} />
           </button>
         </div>
 
-        {/* CONTENT */}
-        {loading && (
-          <div className="py-12 text-center">
-            <div className="w-8 h-8 mx-auto mb-3 rounded-full border-2 border-cyan-400 border-t-transparent animate-spin" />
-            <p className="font-tech text-xs text-cyan-400 tracking-widest uppercase animate-pulse">
-              Retrieving Order Records…
-            </p>
-          </div>
-        )}
-
-        {error && (
-          <div className="p-4 bg-pink-500/10 border border-pink-500/30 text-pink-400 text-sm rounded">
-            {error}
-          </div>
-        )}
-
-        {!loading && !error && orders.length === 0 && (
-          <div className="py-12 text-center text-gray-400">
-            <Package className="w-12 h-12 mx-auto mb-3 opacity-30 text-cyan-400" />
-            <p className="text-base font-medium text-gray-300">No orders found for this user.</p>
-            <p className="text-xs text-gray-500 mt-1">This user has not made any purchases yet.</p>
-          </div>
-        )}
-
-        {!loading && orders.length > 0 && (
-          <div className="space-y-6">
-            <div className="flex items-center justify-between text-xs text-gray-400 font-mono">
-              <span>
-                Total Orders: <strong className="text-cyan-400">{orders.length}</strong>
-              </span>
+        {/* 2. SCROLLABLE CONTENT BODY */}
+        <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 space-y-4">
+          {loading && (
+            <div className="py-14 text-center">
+              <div className="w-9 h-9 mx-auto mb-3 rounded-full border-2 border-cyan-400 border-t-transparent animate-spin" />
+              <p className="font-tech text-xs text-cyan-400 tracking-widest uppercase animate-pulse">
+                Retrieving Order Records…
+              </p>
             </div>
+          )}
 
-            {orders.map((order) => {
-              const formattedDate = order.createdAt
-                ? new Date(order.createdAt).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })
-                : "N/A";
+          {error && (
+            <div className="p-4 bg-pink-500/10 border border-pink-500/30 text-pink-400 text-sm rounded flex items-center justify-between">
+              <span>{error}</span>
+              <button
+                onClick={() => {
+                  setError(null);
+                  setLoading(true);
+                  api
+                    .get(`/orders?userId=${userId}`)
+                    .then((res) => setOrders(res.data || []))
+                    .catch(() => setError("Failed to load user orders."))
+                    .finally(() => setLoading(false));
+                }}
+                className="text-xs underline text-pink-300 hover:text-pink-100 cursor-pointer"
+              >
+                Retry
+              </button>
+            </div>
+          )}
 
-              return (
-                <div
-                  key={order.id}
-                  className="border border-white/15 bg-slate-900/70 p-4 sm:p-5 rounded-lg shadow-md transition hover:border-cyan-400/50"
-                >
-                  {/* ORDER TOP BAR */}
-                  <div className="flex flex-wrap justify-between items-center gap-2 pb-3 border-b border-white/10">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-mono font-bold text-cyan-400">
-                        Order #{order.id}
-                      </span>
-                      <span className="px-2.5 py-0.5 text-[11px] font-semibold rounded bg-cyan-400/10 text-cyan-300 border border-cyan-400/30 uppercase tracking-wide">
-                        {order.status || "Confirmed"}
-                      </span>
+          {!loading && !error && orders.length === 0 && (
+            <div className="py-14 text-center text-gray-400">
+              <Package className="w-12 h-12 mx-auto mb-3 opacity-30 text-cyan-400" />
+              <p className="text-base font-semibold text-gray-300">
+                No orders found for this user
+              </p>
+              <p className="text-xs text-gray-500 mt-1">
+                This customer has not placed any orders yet.
+              </p>
+            </div>
+          )}
+
+          {!loading && !error && orders.length > 0 && (
+            <div className="space-y-4">
+              {orders.map((order, orderIdx) => {
+                const formattedDate = order.createdAt
+                  ? new Date(order.createdAt).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })
+                  : "N/A";
+
+                const itemsCount =
+                  order.items?.reduce(
+                    (sum, i) => sum + (Number(i.quantity) || 1),
+                    0
+                  ) || 0;
+
+                return (
+                  <div
+                    key={order.id || orderIdx}
+                    className="border border-white/10 bg-black/40 hover:border-cyan-400/40 transition-all rounded-lg p-3.5 sm:p-4 shadow-sm"
+                  >
+                    {/* ORDER HEADER */}
+                    <div className="flex flex-wrap justify-between items-center gap-2 pb-2.5 border-b border-white/10">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-xs font-mono font-bold text-cyan-400">
+                          Order #{order.id}
+                        </span>
+                        <span className="px-2 py-0.5 text-[10px] font-semibold rounded bg-cyan-400/10 text-cyan-300 border border-cyan-400/30 uppercase tracking-wide">
+                          {order.status || "Order Confirmed"}
+                        </span>
+                        <span className="text-[11px] font-mono text-gray-500">
+                          ({itemsCount} {itemsCount === 1 ? "item" : "items"})
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-1.5 text-[11px] text-gray-400 font-mono">
+                        <Clock size={12} className="text-cyan-400" />
+                        <span>{formattedDate}</span>
+                      </div>
                     </div>
 
-                    <div className="flex items-center gap-1.5 text-xs text-gray-400 font-mono">
-                      <Calendar size={13} className="text-cyan-400" />
-                      <span>{formattedDate}</span>
-                    </div>
-                  </div>
+                    {/* SHIPPING INFO (IF PRESENT) */}
+                    {order.shippingAddress && (
+                      <div className="py-2 px-2.5 my-2 bg-white/[0.02] border border-white/5 rounded text-[11px] font-mono text-gray-400 flex items-center gap-2 flex-wrap">
+                        <MapPin size={12} className="text-pink-400 shrink-0" />
+                        <span className="text-gray-300">
+                          {order.shippingAddress.name}
+                        </span>
+                        {order.shippingAddress.city && (
+                          <>
+                            <span className="text-gray-600">•</span>
+                            <span>{order.shippingAddress.city}</span>
+                          </>
+                        )}
+                        {order.shippingAddress.phone && (
+                          <>
+                            <span className="text-gray-600">•</span>
+                            <span>Ph: {order.shippingAddress.phone}</span>
+                          </>
+                        )}
+                      </div>
+                    )}
 
-                  {/* ORDER ITEMS LIST */}
-                  <div className="py-3 space-y-3">
-                    {order.items?.map((item, idx) => {
-                      const itemPrice = Number(item.price || 0);
-                      const itemQuantity = Number(item.quantity || 1);
-                      const itemTotal = itemPrice * itemQuantity;
-                      const productId = item.productId || item.id || "N/A";
+                    {/* ORDER ITEMS */}
+                    <div className="py-2.5 space-y-2">
+                      {order.items?.map((item, idx) => {
+                        const itemPrice = Number(item.price || 0);
+                        const itemQuantity = Number(item.quantity || 1);
+                        const itemTotal = itemPrice * itemQuantity;
+                        const productId = item.productId || item.id || "N/A";
 
-                      return (
-                        <div
-                          key={idx}
-                          className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-3 bg-black/40 border border-white/5 rounded hover:border-cyan-400/30 transition"
-                        >
-                          {/* PRODUCT IMAGE & INFO */}
-                          <div className="flex items-center gap-3 min-w-0 flex-1">
-                            {item.image ? (
-                              <img
-                                src={item.image}
-                                alt={item.title}
-                                className="w-14 h-14 sm:w-16 sm:h-16 object-cover rounded bg-black/60 border border-white/10 shrink-0"
-                              />
-                            ) : (
-                              <div className="w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center rounded bg-slate-800 border border-white/10 text-gray-500 shrink-0">
-                                <Package size={22} />
+                        return (
+                          <div
+                            key={idx}
+                            className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 p-2.5 bg-[#0B0F17] border border-white/5 rounded hover:border-cyan-400/20 transition"
+                          >
+                            <div className="flex items-center gap-3 min-w-0 flex-1">
+                              {item.image ? (
+                                <img
+                                  src={item.image}
+                                  alt={item.title}
+                                  className="w-12 h-12 sm:w-14 sm:h-14 object-cover rounded bg-black/60 border border-white/10 shrink-0"
+                                />
+                              ) : (
+                                <div className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded bg-slate-800 border border-white/10 text-gray-500 shrink-0">
+                                  <Package size={20} />
+                                </div>
+                              )}
+
+                              <div className="min-w-0 flex-1">
+                                <h4
+                                  className="text-xs sm:text-sm font-semibold text-white truncate"
+                                  title={item.title}
+                                >
+                                  {item.title}
+                                </h4>
+
+                                <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 mt-1 text-[11px] text-gray-400 font-mono">
+                                  <span className="text-cyan-400/90">
+                                    ID: #{productId}
+                                  </span>
+                                  {item.category && (
+                                    <>
+                                      <span className="text-gray-600">•</span>
+                                      <span className="text-pink-400 capitalize">
+                                        {item.category}
+                                      </span>
+                                    </>
+                                  )}
+                                </div>
                               </div>
-                            )}
+                            </div>
 
-                            <div className="min-w-0 flex-1">
-                              {/* PRODUCT TITLE */}
-                              <h4 className="text-sm font-semibold text-white truncate" title={item.title}>
-                                {item.title}
-                              </h4>
-
-                              {/* PRODUCT ID & ORDER DATE */}
-                              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-[11px] text-gray-400 font-mono">
-                                <span className="flex items-center gap-1 text-cyan-400/90">
-                                  <Tag size={11} />
-                                  Product ID: #{productId}
-                                </span>
-                                <span className="flex items-center gap-1 text-slate-400">
-                                  <Calendar size={11} />
-                                  Date: {formattedDate}
-                                </span>
+                            {/* PRICE & QTY */}
+                            <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center text-xs font-mono shrink-0 pl-14 sm:pl-0">
+                              <div className="text-gray-400 text-[11px]">
+                                ₹{itemPrice.toLocaleString()} ×{" "}
+                                <strong className="text-cyan-300">
+                                  {itemQuantity}
+                                </strong>
+                              </div>
+                              <div className="font-bold text-white text-xs sm:text-sm">
+                                ₹{itemTotal.toLocaleString()}
                               </div>
                             </div>
                           </div>
-
-                          {/* PRICING & QUANTITY DETAILS */}
-                          <div className="flex sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto text-xs font-mono shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-white/5 gap-1">
-                            <div className="text-gray-400">
-                              Price: <span className="text-slate-200">₹{itemPrice.toLocaleString()}</span> × <span className="text-cyan-400 font-bold">{itemQuantity}</span>
-                            </div>
-                            <div className="text-sm font-bold text-white">
-                              Total: <span className="text-cyan-300">₹{itemTotal.toLocaleString()}</span>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-
-                  {/* ORDER FOOTER / SUMMARY */}
-                  <div className="pt-3 border-t border-white/10 flex flex-wrap justify-between items-center text-xs text-gray-400 gap-3">
-                    <div className="flex items-center gap-2">
-                      <CreditCard size={14} className="text-gray-400" />
-                      <span>Method: <strong className="text-slate-300">{order.paymentMethod || "Cash on Delivery"}</strong></span>
+                        );
+                      })}
                     </div>
 
-                    <div className="flex items-center gap-2 font-mono text-sm">
-                      <span className="text-gray-300 font-medium">Order Total:</span>
-                      <span className="text-base font-bold text-cyan-400">
-                        ₹{Number(order.totalAmount || 0).toLocaleString()}
-                      </span>
+                    {/* ORDER FOOTER */}
+                    <div className="pt-2.5 border-t border-white/10 flex flex-wrap justify-between items-center text-xs font-mono text-gray-400 gap-2">
+                      <div className="flex items-center gap-1.5">
+                        <CreditCard size={13} className="text-cyan-400" />
+                        <span>
+                          Method:{" "}
+                          <strong className="text-slate-200 font-medium">
+                            {order.paymentMethod || "Cash on Delivery"}
+                          </strong>
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <span className="text-gray-400">Order Total:</span>
+                        <span className="text-sm sm:text-base font-bold text-emerald-400">
+                          ₹{Number(order.totalAmount || 0).toLocaleString()}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        {/* 3. FIXED MODAL FOOTER */}
+        <div className="shrink-0 px-5 sm:px-6 py-3 border-t border-white/10 bg-black/50 flex items-center justify-between gap-3">
+          <div className="text-xs font-mono text-gray-400 truncate">
+            {!loading && orders.length > 0 && (
+              <span>
+                Total Recorded:{" "}
+                <strong className="text-cyan-400">{orders.length} orders</strong>{" "}
+                (<strong className="text-emerald-400">₹{totalSpend.toLocaleString()}</strong>)
+              </span>
+            )}
           </div>
-        )}
 
-        {/* FOOTER CLOSE BUTTON */}
-        <div className="mt-6 flex justify-end">
           <button
             onClick={onClose}
-            className="clip-btn px-6 py-2 border border-cyan-400/50 text-cyan-300 text-sm font-semibold hover:bg-cyan-400/10 transition"
+            className="clip-btn px-5 py-1.5 border border-cyan-400/50 text-cyan-300 text-xs font-semibold hover:bg-cyan-400/10 hover:border-cyan-300 transition cursor-pointer"
           >
             Close
           </button>
