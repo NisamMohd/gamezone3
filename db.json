@@ -17,7 +17,7 @@
         "zip": "678601",
         "country": "India"
       },
-      "isOnline": false
+      "isOnline": true
     },
     {
       "name": "moosa",
@@ -74,7 +74,7 @@
       "password": "appa1234",
       "role": "customer",
       "createdAt": "2026-09-20T19:07:45.578Z",
-      "isOnline": true,
+      "isOnline": false,
       "isBlocked": false,
       "id": "B00NX_CqTm8"
     }

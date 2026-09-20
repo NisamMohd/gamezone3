@@ -14,6 +14,7 @@ import {
 import { customerList } from "../redux/thunks/customerThunk";
 import { fetchProducts } from "../redux/thunks/adminProductsThunk";
 import { fetchOrderList } from "../redux/thunks/fetchordersThunk";
+import OrderChart from "../components/OrderChart";
 
 function Dashboard() {
   const dispatch = useDispatch();
@@ -46,6 +47,7 @@ function Dashboard() {
       value: totalUsers,
       icon: UserCog,
       color: "text-cyan-400",
+      hcolor: "group-hover:text-cyan-400",
       borderColor: "border-cyan-500/30",
       bgGlow: "rgba(0,229,255,0.06)",
       to: "/admin/usermanagment",
@@ -55,6 +57,7 @@ function Dashboard() {
       value: totalProducts,
       icon: PackageSearch,
       color: "text-pink-400",
+      hcolor: "group-hover:text-pink-400",
       borderColor: "border-pink-500/30",
       bgGlow: "rgba(255,61,138,0.06)",
       to: "/admin/productmanagement",
@@ -64,6 +67,7 @@ function Dashboard() {
       value: totalOrders,
       icon: ClipboardList,
       color: "text-emerald-400",
+      hcolor: "group-hover:text-emerald-400",
       borderColor: "border-emerald-500/30",
       bgGlow: "rgba(52,211,153,0.06)",
       to: "/admin/orderdetails",
@@ -73,6 +77,7 @@ function Dashboard() {
       value: `₹${totalRevenue.toLocaleString()}`,
       icon: IndianRupee,
       color: "text-amber-400",
+      hcolor: "group-hover:text-amber-400",
       borderColor: "border-amber-500/30",
       bgGlow: "rgba(251,191,36,0.06)",
       to: "/admin/orderdetails",
@@ -123,13 +128,18 @@ function Dashboard() {
                 <span className="font-display font-700 text-2xl sm:text-3xl text-white">
                   {stat.value}
                 </span>
-                <span className="text-xs text-gray-500 group-hover:text-cyan-400 flex items-center gap-1 transition-colors">
+                <span className={`text-xs text-gray-500 ${stat.hcolor} flex items-center gap-1 transition-colors`}>
                   View <ArrowRight size={12} />
                 </span>
               </div>
             </Link>
           );
         })}
+      </div>
+
+      {/* ORDER SALES & COUNT GRAPH */}
+      <div className="mt-6">
+        <OrderChart />
       </div>
 
       {/* Quick Action Navigation Grid */}
