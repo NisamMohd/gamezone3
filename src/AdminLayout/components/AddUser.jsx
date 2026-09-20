@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import { User } from "lucide-react";
 import { formValidate } from "../utils/userFormValidate";
 import { useToast } from "../../context/ToastContext";
+import { useDispatch } from "react-redux";
+import { register } from "../../features/thunks/authThunk";
 
 function AddUser() {
   const { toast } = useToast();
+  const dispatch = useDispatch()
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -25,8 +28,10 @@ function AddUser() {
       toast.error(isFormValid.message);
       return;
     }
-    toast.success("User Added Successfully")
-    return;
+    dispatch(register(formData))
+      .unwrap()
+      .then(()=>toast.success("User Added Successfully"))
+      .catch((err) => toast.error("Can't Add User", `${err}`))
   };
 
   return (
