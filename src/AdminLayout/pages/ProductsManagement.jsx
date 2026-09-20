@@ -15,6 +15,7 @@ import {
   AlertTriangle,
   Archive,
   RefreshCw,
+  Edit,
 } from "lucide-react";
 import { fetchProducts } from "../redux/thunks/adminProductsThunk";
 import { toggleDisable } from "../redux/thunks/toggleIsDisabledThunk";
@@ -36,6 +37,11 @@ export default function ProductsManagement() {
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
+
+  // Navigate to Add/Edit Products with product data
+  const handleEdit = (item) => {
+    navigate("../addproducts", { state: { product: item } });
+  };
 
   // Unique categories
   const categories = useMemo(() => {
@@ -249,8 +255,12 @@ export default function ProductsManagement() {
                   : "border-white/10 hover:border-cyan-400/50 hover:shadow-[0_0_15px_rgba(0,229,255,0.1)]"
               }`}
             >
-              {/* Product Image Viewport */}
-              <div className="relative h-44 w-full bg-slate-950/80 border-b border-white/5 p-4 flex items-center justify-center overflow-hidden">
+              {/* Product Image Viewport - Clickable to edit */}
+              <div
+                onClick={() => handleEdit(item)}
+                className="relative h-44 w-full bg-slate-950/80 border-b border-white/5 p-4 flex items-center justify-center overflow-hidden cursor-pointer"
+                title="Click to edit product details"
+              >
                 <img
                   src={item.image}
                   alt={item.title}
@@ -272,11 +282,15 @@ export default function ProductsManagement() {
                 )}
               </div>
 
-              {/* Info Body */}
-              <div className="p-4 flex-1 flex flex-col justify-between">
+              {/* Info Body - Clickable to edit */}
+              <div
+                onClick={() => handleEdit(item)}
+                className="p-4 flex-1 flex flex-col justify-between cursor-pointer"
+                title="Click to edit product details"
+              >
                 <div>
                   <div className="font-tech text-[10px] text-gray-500 mb-1">ID: #{item.id}</div>
-                  <h2 className="text-sm font-medium text-gray-200 line-clamp-2 leading-snug">
+                  <h2 className="text-sm font-medium text-gray-200 group-hover:text-cyan-300 transition-colors line-clamp-2 leading-snug">
                     {item.title}
                   </h2>
                 </div>
@@ -300,26 +314,47 @@ export default function ProductsManagement() {
               </div>
 
               {/* Action Buttons Footer */}
-              <div className="p-3 bg-black/40 border-t border-white/5 grid grid-cols-2 gap-2">
+              <div className="p-3 bg-black/40 border-t border-white/5 grid grid-cols-3 gap-1.5">
                 <button
                   type="button"
-                  onClick={() => handleToggle(item)}
-                  className={`px-2 py-1.5 rounded text-xs font-tech tracking-wider border flex items-center justify-center gap-1.5 transition cursor-pointer ${
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleEdit(item);
+                  }}
+                  className="px-2 py-1.5 rounded text-xs font-tech tracking-wider border border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/20 transition flex items-center justify-center gap-1 cursor-pointer"
+                  title="Edit Product"
+                >
+                  <Edit size={13} />
+                  <span>Edit</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleToggle(item);
+                  }}
+                  className={`px-2 py-1.5 rounded text-xs font-tech tracking-wider border flex items-center justify-center gap-1 transition cursor-pointer ${
                     item.isDisabled
-                      ? "border-cyan-500/40 text-cyan-300 hover:bg-cyan-500/20"
+                      ? "border-purple-500/40 text-purple-300 hover:bg-purple-500/20"
                       : "border-white/10 text-gray-300 hover:text-white hover:bg-white/5"
                   }`}
+                  title={item.isDisabled ? "Make product visible" : "Hide product"}
                 >
-                  {item.isDisabled ? <Eye size={14} /> : <EyeOff size={14} />}
+                  {item.isDisabled ? <Eye size={13} /> : <EyeOff size={13} />}
                   <span>{item.isDisabled ? "Show" : "Hide"}</span>
                 </button>
 
                 <button
                   type="button"
-                  onClick={() => handleDelete(item.id)}
-                  className="px-2 py-1.5 rounded text-xs font-tech tracking-wider border border-pink-500/30 text-pink-400 hover:bg-pink-500/20 transition flex items-center justify-center gap-1.5 cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(item.id);
+                  }}
+                  className="px-2 py-1.5 rounded text-xs font-tech tracking-wider border border-pink-500/30 text-pink-400 hover:bg-pink-500/20 transition flex items-center justify-center gap-1 cursor-pointer"
+                  title="Delete Product"
                 >
-                  <Trash2 size={14} />
+                  <Trash2 size={13} />
                   <span>Delete</span>
                 </button>
               </div>
@@ -343,14 +378,19 @@ export default function ProductsManagement() {
               </thead>
               <tbody className="divide-y divide-white/5 text-xs sm:text-sm font-body">
                 {filteredProducts.map((item) => (
-                  <tr key={item.id} className="hover:bg-cyan-500/5 transition-colors">
+                  <tr
+                    key={item.id}
+                    onClick={() => handleEdit(item)}
+                    className="hover:bg-cyan-500/10 transition-colors cursor-pointer group"
+                    title="Click to edit product"
+                  >
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 bg-slate-950 rounded border border-white/10 p-1 flex items-center justify-center shrink-0">
                           <img src={item.image} alt="" className="max-h-full max-w-full object-contain" />
                         </div>
                         <div>
-                          <p className="font-medium text-gray-200 line-clamp-1">{item.title}</p>
+                          <p className="font-medium text-gray-200 group-hover:text-cyan-300 transition-colors line-clamp-1">{item.title}</p>
                           <p className="font-tech text-[10px] text-gray-500 mt-0.5">ID: {item.id}</p>
                         </div>
                       </div>
@@ -385,8 +425,16 @@ export default function ProductsManagement() {
                         {item.isDisabled ? "Hidden" : "Visible"}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-right">
+                    <td className="px-4 py-3 text-right" onClick={(e) => e.stopPropagation()}>
                       <div className="inline-flex items-center gap-2">
+                        <button
+                          onClick={() => handleEdit(item)}
+                          className="px-2.5 py-1 rounded text-xs font-tech border border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/20 transition cursor-pointer flex items-center gap-1"
+                          title="Edit Product"
+                        >
+                          <Edit size={13} />
+                          <span>Edit</span>
+                        </button>
                         <button
                           onClick={() => handleToggle(item)}
                           className="px-2.5 py-1 rounded text-xs font-tech border border-white/10 text-gray-300 hover:text-cyan-300 hover:border-cyan-400/40 transition cursor-pointer"

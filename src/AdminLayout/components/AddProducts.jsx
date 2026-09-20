@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { addProduct } from "../redux/thunks/addProductThunk";
-import { useNavigate } from "react-router-dom";
+import { editProduct } from "../redux/thunks/editProductThunk";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "../../context/ToastContext";
 import {
   Package,
@@ -14,22 +15,52 @@ import {
   Eye,
   EyeOff,
   FileText,
+  Edit3,
+  Save,
 } from "lucide-react";
 
 function AddProducts() {
-  const [formData, setFormData] = useState({
-    title: "",
-    image: "",
-    category: "playstation",
-    price: "",
-    stock: "",
-    description: "",
-    isDisabled: false,
-  });
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
+
+  const editTarget = location.state?.product;
+  const isEdit = Boolean(editTarget?.id);
+
+  const [formData, setFormData] = useState({
+    title: editTarget?.title || "",
+    image: editTarget?.image || "",
+    category: editTarget?.category || "playstation",
+    price: editTarget?.price ?? "",
+    stock: editTarget?.stock ?? "",
+    description: editTarget?.description || "",
+    isDisabled: Boolean(editTarget?.isDisabled),
+  });
+
+  useEffect(() => {
+    if (editTarget) {
+      setFormData({
+        title: editTarget.title || "",
+        image: editTarget.image || "",
+        category: editTarget.category || "playstation",
+        price: editTarget.price ?? "",
+        stock: editTarget.stock ?? "",
+        description: editTarget.description || "",
+        isDisabled: Boolean(editTarget.isDisabled),
+      });
+    } else {
+      setFormData({
+        title: "",
+        image: "",
+        category: "playstation",
+        price: "",
+        stock: "",
+        description: "",
+        isDisabled: false,
+      });
+    }
+  }, [editTarget]);
 
   const CATEGORY_PRESETS = ["playstation", "xbox", "accessories", "console"];
 
@@ -53,11 +84,30 @@ function AddProducts() {
     }
 
     try {
-      await dispatch(addProduct(formData)).unwrap();
-      toast.success("Product Added", `${formData.title} added to catalog.`);
+      if (isEdit) {
+        const payload = {
+          ...editTarget,
+          ...formData,
+          price: Number(formData.price),
+          stock: Number(formData.stock) || 0,
+        };
+        await dispatch(editProduct({ id: editTarget.id, productData: payload })).unwrap();
+        toast.success("Product Updated", `${formData.title} was successfully updated.`);
+      } else {
+        const payload = {
+          ...formData,
+          price: Number(formData.price),
+          stock: Number(formData.stock) || 0,
+        };
+        await dispatch(addProduct(payload)).unwrap();
+        toast.success("Product Added", `${formData.title} added to catalog.`);
+      }
       navigate("/admin/productmanagement");
     } catch (err) {
-      toast.error("Failed to Add Product", err || "Check server connection.");
+      toast.error(
+        isEdit ? "Failed to Update Product" : "Failed to Add Product",
+        err || "Check server connection."
+      );
     }
   };
 
@@ -74,7 +124,7 @@ function AddProducts() {
           <span>BACK TO PRODUCT CATALOG</span>
         </button>
         <span className="font-tech text-xs text-cyan-400 uppercase tracking-widest">
-          ADMIN CONSOLE // NEW GEAR
+          ADMIN CONSOLE // {isEdit ? "EDIT GEAR" : "NEW GEAR"}
         </span>
       </div>
 
@@ -85,10 +135,17 @@ function AddProducts() {
           <div className="corner corner-tl" />
           <div className="corner corner-br" />
 
-          <h2 className="text-xl font-display font-700 tracking-wider uppercase text-cyan-400 mb-6 flex items-center gap-2">
-            <Package size={20} />
-            <span>Add Catalog Product</span>
-          </h2>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-display font-700 tracking-wider uppercase text-cyan-400 flex items-center gap-2">
+              {isEdit ? <Edit3 size={20} /> : <Package size={20} />}
+              <span>{isEdit ? "Edit Catalog Product" : "Add Catalog Product"}</span>
+            </h2>
+            {isEdit && (
+              <span className="font-tech text-xs px-2.5 py-1 rounded bg-cyan-500/10 border border-cyan-500/30 text-cyan-300">
+                ID: #{editTarget.id}
+              </span>
+            )}
+          </div>
 
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             {/* Title */}
@@ -249,8 +306,8 @@ function AddProducts() {
               type="submit"
               className="mt-3 clip-btn bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-display font-700 py-3 px-6 text-sm tracking-widest uppercase transition shadow-lg shadow-cyan-500/20 flex items-center justify-center gap-2 cursor-pointer"
             >
-              <CheckCircle size={17} />
-              <span>Save & Publish Product</span>
+              {isEdit ? <Save size={17} /> : <CheckCircle size={17} />}
+              <span>{isEdit ? "Update & Save Changes" : "Save & Publish Product"}</span>
             </button>
           </form>
         </div>
@@ -263,7 +320,7 @@ function AddProducts() {
 
             <div className="p-3 bg-black/60 border-b border-white/10 flex justify-between items-center">
               <span className="text-[10px] font-tech text-cyan-400 uppercase tracking-widest">
-                STOREFRONT // LIVE PREVIEW
+                STOREFRONT // {isEdit ? "EDIT PREVIEW" : "LIVE PREVIEW"}
               </span>
               <span
                 className={`text-[10px] font-tech uppercase px-2 py-0.5 rounded border ${

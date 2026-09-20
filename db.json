@@ -133,7 +133,8 @@
       "image": "https://i5.walmartimages.com/asr/94cb84a2-2e1f-4688-bc1c-300cf0de9843.5b3b6feb8172bb2dd1ebc78fc3bc2ea0.jpeg",
       "price": 21999,
       "stock": 0,
-      "isDisabled": false
+      "isDisabled": false,
+      "description": ""
     },
     {
       "id": "2",

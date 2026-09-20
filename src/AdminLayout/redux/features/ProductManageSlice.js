@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { fetchProducts } from "../thunks/adminProductsThunk";
 import { toggleDisable } from "../thunks/toggleIsDisabledThunk";
 import { addProduct } from "../thunks/addProductThunk";
+import { editProduct } from "../thunks/editProductThunk";
 import { deleteProduct } from "../thunks/deleteProductThunk";
 
 const ProductManageSlice = createSlice({
@@ -34,6 +35,16 @@ const ProductManageSlice = createSlice({
       .addCase(addProduct.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.items = [...state.items, action.payload]
+      })
+
+      // EDIT PRODUCT IN DB
+      .addCase(editProduct.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.items = state.items.map((product) =>
+          String(product.id) === String(action.payload.id)
+            ? action.payload
+            : product,
+        );
       })
 
       // DELETE PRODUCT

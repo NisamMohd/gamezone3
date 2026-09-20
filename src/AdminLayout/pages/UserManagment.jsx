@@ -191,7 +191,7 @@ function UserManagement() {
           >
             <option value="all" className="bg-slate-900 text-white">All Roles</option>
             <option value="customer" className="bg-slate-900 text-white">Customers</option>
-            <option value="admin" className="bg-slate-900 text-white">Admins</option>
+            <option value="seller" className="bg-slate-900 text-white">Seller</option>
           </select>
         </div>
 
