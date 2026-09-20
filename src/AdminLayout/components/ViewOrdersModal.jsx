@@ -30,36 +30,36 @@ export default function ViewOrdersModal({ isOpen, onClose, userId, userName }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-2 sm:p-4"
       onClick={onClose}
     >
       <div
-        className="clip-panel relative w-full max-w-2xl bg-[#0B0F17] border border-cyan-400/40 p-6 max-h-[88vh] overflow-y-auto shadow-2xl shadow-cyan-500/10"
+        className="clip-panel relative w-full max-w-2xl bg-[#0B0F17] border border-cyan-400/40 p-4 sm:p-6 max-h-[92vh] sm:max-h-[88vh] overflow-y-auto shadow-2xl shadow-cyan-500/10"
         onClick={(e) => e.stopPropagation()}
       >
         <span className="corner corner-tl" />
         <span className="corner corner-br" />
 
         {/* HEADER */}
-        <div className="flex items-start justify-between pb-4 border-b border-white/10 mb-4">
-          <div>
-            <p className="font-tech text-[11px] tracking-[0.2em] text-cyan-400 uppercase">
+        <div className="flex items-start justify-between pb-3 sm:pb-4 border-b border-white/10 mb-4 gap-2">
+          <div className="min-w-0 flex-1">
+            <p className="font-tech text-[10px] sm:text-[11px] tracking-[0.2em] text-cyan-400 uppercase">
               Order History
             </p>
-            <h2 className="font-display font-700 text-xl sm:text-2xl text-white tracking-wide">
+            <h2 className="font-display font-700 text-lg sm:text-2xl text-white tracking-wide truncate">
               {userName ? `${userName}'s Orders` : "User Orders"}
             </h2>
-            <p className="text-xs text-gray-400 font-mono mt-1">
+            <p className="text-xs text-gray-400 font-mono mt-0.5">
               Customer ID: <span className="text-cyan-400">{userId}</span>
             </p>
           </div>
 
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-pink-500 transition-colors p-1"
+            className="text-gray-400 hover:text-pink-500 transition-colors p-1.5 shrink-0 rounded"
             aria-label="Close modal"
           >
-            <X size={22} />
+            <X size={20} />
           </button>
         </div>
 

@@ -40,9 +40,9 @@ function AddUser() {
   };
 
   return (
-    <div className="w-full h-full text-white">
+    <div className="w-full max-w-2xl mx-auto text-white py-2 sm:py-4">
       <div
-        className="relative w-full h-full bg-zinc-900/80 border border-cyan-500/30 p-8"
+        className="relative w-full bg-zinc-900/80 border border-cyan-500/30 p-4 sm:p-6 md:p-8"
         style={{
           clipPath:
             "polygon(0 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%)",
@@ -52,25 +52,25 @@ function AddUser() {
         <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-cyan-400" />
         <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-pink-500" />
 
-        <h2 className="text-xl font-semibold tracking-widest uppercase text-cyan-400 mb-6 font-[Rajdhani]">
-          <span className="flex gap-1 items-center ">
-            <User size={17} />
+        <h2 className="text-lg sm:text-xl font-semibold tracking-widest uppercase text-cyan-400 mb-6 font-[Rajdhani]">
+          <span className="flex gap-2 items-center">
+            <User size={18} />
             Add User
           </span>
         </h2>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
             <label
               htmlFor="name"
               className="text-xs uppercase tracking-wider text-zinc-400"
             >
-              NAME
+              Name
             </label>
             <input
               id="name"
               name="name"
-              placeholder="name"
+              placeholder="Full name"
               value={formData.name}
               onChange={handleChange}
               className="bg-black/40 border border-cyan-500/40 px-3 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/50 transition-colors"
@@ -87,6 +87,7 @@ function AddUser() {
             <input
               id="email"
               name="email"
+              type="email"
               placeholder="example@mail.com"
               value={formData.email}
               onChange={handleChange}
@@ -104,7 +105,8 @@ function AddUser() {
             <input
               id="password"
               name="password"
-              placeholder="password"
+              type="password"
+              placeholder="Account password"
               value={formData.password}
               onChange={handleChange}
               className="bg-black/40 border border-cyan-500/40 px-3 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/50 transition-colors"
@@ -116,7 +118,7 @@ function AddUser() {
               htmlFor="role"
               className="text-xs uppercase tracking-wider text-zinc-400"
             >
-              ROLE
+              Role
             </label>
             <select
               id="role"
@@ -135,14 +137,14 @@ function AddUser() {
 
           <button
             type="submit"
-            className="mt-4 bg-cyan-500/10 border border-cyan-400 text-cyan-300 uppercase text-sm clip-btn py-2.5 hover:bg-cyan-400 hover:text-black transition-colors"
+            className="mt-4 w-full sm:w-auto self-start px-6 bg-cyan-500/10 border border-cyan-400 text-cyan-300 uppercase text-sm clip-btn py-2.5 hover:bg-cyan-400 hover:text-black transition-colors"
             style={{
               clipPath: "polygon(12px 0, 100% 0, 100% 100%, 0 100%, 0 12px)",
             }}
           >
-            <span className="flex gap-1 mx-2 py-1">
+            <span className="flex gap-1.5 items-center justify-center">
               <User size={16} />
-              ADD USER
+              Add User
             </span>
           </button>
         </form>

@@ -17,7 +17,7 @@
         "zip": "678601",
         "country": "India"
       },
-      "isOnline": true
+      "isOnline": false
     },
     {
       "name": "moosa",
@@ -67,6 +67,16 @@
       "isOnline": false,
       "isBlocked": false,
       "id": "qHQggoGhYTE"
+    },
+    {
+      "name": "padayappa",
+      "email": "padayappa@gmail.com",
+      "password": "appa1234",
+      "role": "customer",
+      "createdAt": "2026-09-20T19:07:45.578Z",
+      "isOnline": true,
+      "isBlocked": false,
+      "id": "B00NX_CqTm8"
     }
   ],
   "products": [
