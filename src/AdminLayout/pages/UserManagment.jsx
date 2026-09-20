@@ -6,20 +6,24 @@ import { EyeOff, Eye, Plus } from "lucide-react";
 import { deleteUser } from "../redux/thunks/deleteUserThunk";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../../context/ToastContext";
+import ViewOrdersModal from "../components/ViewOrdersModal";
 
 function UserManagement() {
   const { items, loading } = useSelector((state) => state.users);
   const dispatch = useDispatch();
   const [isHovered, setIsHovered] = useState(false);
-  const navigate = useNavigate()
-  const { toast } = useToast()
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {
     dispatch(customerList());
   }, [dispatch]);
 
-  const handleView = (e) => {
-    e.preventDefault();
+  const handleView = (item) => {
+    setSelectedUser(item);
+    setIsModalOpen(true);
   };
 
   const handleBlock = (item) => {
@@ -30,12 +34,16 @@ function UserManagement() {
       }),
     )
       .unwrap()
-      .then(() => toast.success(
-        item.isBlocked
-        ? "User unblocked successfully"
-        : "User blocked successfully"
-      ))
-      .catch((err) => toast.error('Update failed',err || "could not block user"))
+      .then(() =>
+        toast.success(
+          item.isBlocked
+            ? "User unblocked successfully"
+            : "User blocked successfully",
+        ),
+      )
+      .catch((err) =>
+        toast.error("Update failed", err || "could not block user"),
+      );
   };
 
   if (loading) return <div className="text-white p-4">Loading...</div>;
@@ -127,7 +135,7 @@ function UserManagement() {
                   <td className="px-4 py-3">
                     <button
                       className="text-cyan-400 hover:text-pink-400 clip-btn px-3 py-1 border border-cyan-400/50 hover:border-pink-400/50 hover:bg-pink-400/10 transition-colors"
-                      onClick={handleView}
+                      onClick={() => handleView(item)}
                     >
                       View
                     </button>
@@ -152,11 +160,13 @@ function UserManagement() {
                     </button>
                     <button
                       className="text-cyan-400 hover:text-pink-400 clip-btn px-3 py-1 border border-cyan-400/50 hover:border-pink-400/50 hover:bg-pink-400/10 transition-colors"
-                      onClick={() => 
+                      onClick={() =>
                         dispatch(deleteUser(item.id))
                           .unwrap()
                           .then(() => toast.success("User Deleted"))
-                          .catch((err) => toast.error(err || 'Operation failed'))
+                          .catch((err) =>
+                            toast.error(err || "Operation failed"),
+                          )
                       }
                     >
                       Delete
@@ -167,6 +177,15 @@ function UserManagement() {
             </tbody>
           </table>
         </div>
+        <ViewOrdersModal
+          isOpen={isModalOpen}
+          onClose={() => {
+            setIsModalOpen(false);
+            setSelectedUser(null);
+          }}
+          userId={selectedUser?.id}
+          userName={selectedUser?.name}
+        />
       </div>
     </div>
   );
