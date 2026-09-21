@@ -27,7 +27,7 @@ function UserManagement() {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all"); // 'all' | 'online' | 'offline' | 'blocked'
-  const [roleFilter, setRoleFilter] = useState("all"); // 'all' | 'customer' | 'admin'
+  const [roleFilter, setRoleFilter] = useState("all"); // 'all' | 'customer' | 'seller'
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
