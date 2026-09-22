@@ -17,18 +17,19 @@ import Admin from "./AdminLayout/pages/Admin";
 import Dashboard from "./AdminLayout/pages/Dashboard";
 import AdminRoute from "./services/AdminRoute";
 import UserRoutes from "./UserLayout/services/UserRoutes";
-import UserManagement from "./AdminLayout/pages/UserManagment"
+import UserManagement from "./AdminLayout/pages/UserManagment";
 import ProductsManagement from "./AdminLayout/pages/ProductsManagement";
 import OrderDetails from "./AdminLayout/pages/OrderDetails";
-import AddProducts from "./AdminLayout/components/AddProducts"
+import AddProducts from "./AdminLayout/components/AddProducts";
 import AddUser from "./AdminLayout/components/AddUser";
+import { Filter } from "lucide-react";
 function App() {
   return (
     <Routes>
       {/* User Routes  */}
 
       {/* MAIN APPLICATION LAYOUT (NAVBAR + OUTLET) */}
-      <Route element={<UserRoutes/>}>
+      <Route element={<UserRoutes />}>
         <Route path="/" element={<Home />}>
           {/* PUBLIC OPEN ACCESS ROUTES */}
           <Route index element={<Index />} />
@@ -57,11 +58,12 @@ function App() {
         <Route path="/admin" element={<Admin />}>
           <Route index element={<Dashboard />} />
           <Route path="dashboard" element={<Dashboard />} />
-          <Route path="usermanagment" element={<UserManagement/>} />
-          <Route path="productmanagement" element={<ProductsManagement/>} />
-          <Route path="addproducts" element={<AddProducts/>} />
-          <Route path="adduser" element={<AddUser/>} />
-          <Route path="orderdetails" element={<OrderDetails/>} />
+          <Route path="usermanagment" element={<UserManagement />} />
+          <Route path="productmanagement" element={<ProductsManagement />} />
+          <Route path="addproducts" element={<AddProducts />} />
+          <Route path="adduser" element={<AddUser />} />
+          <Route path="orderdetails" element={<OrderDetails />} />
+          <Route path="filter" element={<Filter />} />
         </Route>
       </Route>
 

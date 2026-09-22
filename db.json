@@ -123,6 +123,25 @@
         "zip": "673635",
         "country": "India"
       }
+    },
+    {
+      "name": "Kannappan",
+      "email": "kannappan@gmail.com",
+      "password": "kannappan123",
+      "role": "customer",
+      "createdAt": "2026-09-21T10:21:30.961Z",
+      "isOnline": false,
+      "isBlocked": false,
+      "id": "aSjU8syqJC0",
+      "address": {
+        "name": "Kannappan",
+        "phone": "9878684858",
+        "address": "neospace",
+        "city": "ramanattukara",
+        "state": "Kerala",
+        "zip": "673635",
+        "country": "India"
+      }
     }
   ],
   "products": [
@@ -187,7 +206,7 @@
       "title": "PS5 Gold Edition + Console x 1 + HeadPhone x 1",
       "image": "https://i.pinimg.com/1200x/66/4e/6c/664e6c53a670bc3498da19bc310ac795.jpg",
       "price": 64999,
-      "stock": 9,
+      "stock": 8,
       "isDisabled": false
     },
     {
@@ -259,7 +278,7 @@
       "title": "POPeArt IRON_MAN Edition",
       "image": "https://i.pinimg.com/1200x/da/70/49/da70494c93553e2fc44477dbf247978a.jpg",
       "price": 7999,
-      "stock": 1,
+      "stock": 0,
       "isDisabled": false
     },
     {
@@ -295,7 +314,7 @@
       "title": "POPeArt Rainbow console x 1",
       "image": "https://i.pinimg.com/1200x/0f/48/a9/0f48a9e0f0a2526ddce3d08d55b14432.jpg",
       "price": 6999,
-      "stock": 7,
+      "stock": 5,
       "isDisabled": false
     },
     {
@@ -361,7 +380,7 @@
       "image": "https://i.pinimg.com/1200x/57/71/2f/57712f7c1014b09b3a76437adb471a98.jpg",
       "description": "Turn up the bass without the wires! 🎶 The JBL Tune 720BT delivers 50hrs of playtime, deep JBL Pure Bass, and all-day comfort. Perfect for workouts, travel, or just jamming out. Pin now to upgrade your sound!",
       "price": 5299,
-      "stock": 8,
+      "stock": 6,
       "isDisabled": false
     },
     {
@@ -380,7 +399,7 @@
       "image": "https://i.pinimg.com/736x/71/10/f1/7110f1fa46cc882ce8096000312f36eb.jpg",
       "description": "The HyperX QuadCast is a versatile and high-quality USB microphone designed to cater to the needs of content creators, streamers, and gamers alike. With its sleek and modern design, this microphone not only looks great but also delivers exceptional audio performance.",
       "price": 11499,
-      "stock": 1,
+      "stock": 0,
       "isDisabled": false
     },
     {
@@ -421,6 +440,16 @@
       "description": "ASUS GeForce RTX 5060 Ti TUF GAMING OC 16GB, Grafikkarte DLSS 5, 3x DisplayPort, 1x HDMI 2.1",
       "isDisabled": false,
       "id": "2StX1-Cc5tQ"
+    },
+    {
+      "title": "One Piece PS5 Controller ",
+      "image": "https://i.pinimg.com/736x/60/5d/26/605d26d8792e16284353a59319cfbed9.jpg",
+      "category": "console",
+      "price": 6999,
+      "stock": 10,
+      "description": "One Piece PS5 Controller | Custom Anime PlayStation 5 Controller | Straw Hat Gaming Setup",
+      "isDisabled": false,
+      "id": "Ywf_MS3TH_w"
     }
   ],
   "orders": [
@@ -727,6 +756,65 @@
       "status": "Order Confirmed",
       "createdAt": "2026-09-20T20:56:45.253Z",
       "id": "wVuBWmQNij0"
+    },
+    {
+      "userId": "aSjU8syqJC0",
+      "items": [
+        {
+          "productId": "7",
+          "title": "PS5 Gold Edition + Console x 1 + HeadPhone x 1",
+          "price": 64999,
+          "quantity": 1,
+          "image": "https://i.pinimg.com/1200x/66/4e/6c/664e6c53a670bc3498da19bc310ac795.jpg",
+          "category": "playstation"
+        },
+        {
+          "productId": "15",
+          "title": "POPeArt IRON_MAN Edition",
+          "price": 7999,
+          "quantity": 1,
+          "image": "https://i.pinimg.com/1200x/da/70/49/da70494c93553e2fc44477dbf247978a.jpg",
+          "category": "console"
+        },
+        {
+          "productId": "19",
+          "title": "POPeArt Rainbow console x 1",
+          "price": 6999,
+          "quantity": 2,
+          "image": "https://i.pinimg.com/1200x/0f/48/a9/0f48a9e0f0a2526ddce3d08d55b14432.jpg",
+          "category": "console"
+        },
+        {
+          "productId": "26",
+          "title": "JBL Tune 720BT - Wireless",
+          "price": 5299,
+          "quantity": 2,
+          "image": "https://i.pinimg.com/1200x/57/71/2f/57712f7c1014b09b3a76437adb471a98.jpg",
+          "category": "accessories"
+        },
+        {
+          "productId": "28",
+          "title": "Hyper x quadcast",
+          "price": 11499,
+          "quantity": 1,
+          "image": "https://i.pinimg.com/736x/71/10/f1/7110f1fa46cc882ce8096000312f36eb.jpg",
+          "category": "accessories"
+        }
+      ],
+      "shippingAddress": {
+        "name": "Kannappan",
+        "phone": "9878684858",
+        "address": "neospace",
+        "city": "ramanattukara",
+        "state": "Kerala",
+        "zip": "673635",
+        "country": "India"
+      },
+      "totalAmount": 109093,
+      "paymentMethod": "Cash on Delivery",
+      "status": "Order Confirmed",
+      "createdAt": "2026-09-21T10:23:41.112Z",
+      "id": "OZ5ouTAXa5Y"
     }
   ],
   "carts": [],
