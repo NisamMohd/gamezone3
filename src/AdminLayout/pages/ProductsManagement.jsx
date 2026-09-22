@@ -371,7 +371,7 @@ export default function ProductsManagement() {
                   <th className="px-4 py-3">Product</th>
                   <th className="px-4 py-3">Category</th>
                   <th className="px-4 py-3">Price</th>
-                  <th className="px-4 py-3">Stock Status</th>
+                  <th className="px-4 py-3 whitespace-nowrap">Stock Status</th>
                   <th className="px-4 py-3">Visibility</th>
                   <th className="px-4 py-3 text-right">Actions</th>
                 </tr>
@@ -403,9 +403,9 @@ export default function ProductsManagement() {
                     <td className="px-4 py-3 font-display font-700 text-base text-white">
                       ₹{item.price}
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3 whitespace-nowrap">
                       <span
-                        className={`font-tech text-xs px-2.5 py-1 border rounded uppercase ${
+                        className={`font-tech text-xs px-2.5 py-1 border rounded uppercase inline-block whitespace-nowrap ${
                           Number(item.stock) > 0
                             ? "text-emerald-400 border-emerald-500/30 bg-emerald-500/10"
                             : "text-pink-400 border-pink-500/30 bg-pink-500/10"

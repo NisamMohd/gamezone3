@@ -22,7 +22,7 @@ import ProductsManagement from "./AdminLayout/pages/ProductsManagement";
 import OrderDetails from "./AdminLayout/pages/OrderDetails";
 import AddProducts from "./AdminLayout/components/AddProducts";
 import AddUser from "./AdminLayout/components/AddUser";
-import { Filter } from "lucide-react";
+import Filter from "./AdminLayout/components/Filter";
 function App() {
   return (
     <Routes>
